@@ -1,5 +1,5 @@
 (function () {
-  /*** Ask‑Haining floating chat widget — v4 ***/
+  /*** Ask‑Haining floating chat widget — v5 ***/
   const PRIMARY="#5c8374"; // green interior
 
   // Simple markdown parser for chat messages
@@ -33,6 +33,82 @@
       .replace(/(<li>.*<\/li>)/s, '<ol>$1</ol>');
   }
 
+  // Extract and separate reasoning from response
+  function extractReasoning(text) {
+    console.log("Analyzing text for reasoning patterns:", text.substring(0, 200) + "...");
+
+    const reasoningPatterns = [
+      // Explicit thinking blocks
+      /<think>([\s\S]*?)<\/think>/gi,
+      /\[thinking\]([\s\S]*?)\[\/thinking\]/gi,
+      /思考中：([\s\S]*?)思考结束/gi,
+
+      // Common reasoning start phrases (more flexible)
+      /^(Let me think about this|I need to consider|First, let me|Let me analyze|I'll approach this|Let me break this down|My thought process|Here's my reasoning)([\s\S]*?)(?=\n\n(?:[A-Z]|Based on|In conclusion|Therefore|So,)|$)/gmi,
+
+      // Step-by-step reasoning
+      /^(Step 1:|1\.|First:|Initially:)([\s\S]*?)(?=\n\n(?:[A-Z]|Based on|In conclusion|Therefore|So,)|$)/gmi,
+
+      // Internal monologue patterns
+      /^\((thinking|internal|reasoning)\)([\s\S]*?)(?=\n\n|$)/gmi,
+
+      // Chain of thought markers
+      /^(I should|I need to|The approach|My strategy)([\s\S]*?)(?=\n\n(?:[A-Z])|$)/gmi
+    ];
+
+    let reasoning = '';
+    let cleanText = text;
+    let foundPatterns = [];
+
+    reasoningPatterns.forEach((pattern, index) => {
+      const matches = text.match(pattern);
+      if (matches) {
+        console.log(`Found reasoning pattern ${index}:`, matches);
+        foundPatterns.push(`Pattern ${index}: ${matches.length} matches`);
+        matches.forEach(match => {
+          reasoning += match.replace(/<\/?think>|\[\/?thinking\]|思考中：|思考结束|\(thinking\)|\(internal\)|\(reasoning\)/gi, '') + '\n\n';
+          cleanText = cleanText.replace(match, '');
+        });
+      }
+    });
+
+    // If no explicit patterns found, check for long paragraphs that might be reasoning
+    if (!reasoning && text.length > 300) {
+      const paragraphs = text.split('\n\n');
+      const firstParagraph = paragraphs[0];
+
+      // Check if first paragraph looks like reasoning (contains certain keywords)
+      const reasoningKeywords = [
+        'analyze', 'consider', 'approach', 'think', 'reasoning', 'strategy',
+        'examine', 'evaluate', 'assess', 'determine', 'figure out', 'work through'
+      ];
+
+      const hasReasoningKeywords = reasoningKeywords.some(keyword =>
+        firstParagraph.toLowerCase().includes(keyword)
+      );
+
+      if (hasReasoningKeywords && firstParagraph.length > 100) {
+        console.log("Detected potential reasoning in first paragraph");
+        reasoning = firstParagraph;
+        cleanText = paragraphs.slice(1).join('\n\n');
+        foundPatterns.push("Heuristic: First paragraph analysis");
+      }
+    }
+
+    // Clean up extra whitespace
+    cleanText = cleanText.replace(/\n\s*\n\s*\n/g, '\n\n').trim();
+    reasoning = reasoning.trim();
+
+    console.log("Reasoning extraction results:", {
+      foundPatterns,
+      hasReasoning: !!reasoning,
+      reasoningLength: reasoning.length,
+      cleanTextLength: cleanText.length
+    });
+
+    return { reasoning, cleanText };
+  }
+
   // Mobile detection
   function isMobile() {
     return window.innerWidth <= 480 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -54,7 +130,17 @@
       "What challenges did you face developing your RL text simplification?",
       "What makes your scientific novelty measure unique?",
       "How do you balance privacy protection with beneficial AI?",
+      "Please think step by step and explain your research methodology", // Test reasoning trigger
   ];
+
+  // Global streaming state
+  let streamingState = {
+    isStreaming: false,
+    currentBotMsg: null,
+    streamReader: null,
+    fullResponse: '',
+    abortController: null
+  };
 
   /* ------------------------------------------------------------
    * 1.  Inject styles (animated multicolor border, green fill)
@@ -77,7 +163,7 @@
   #ask-haining-header{background:${PRIMARY};color:#fff;padding:12px 16px;font-weight:600;display:flex;justify-content:space-between;align-items:center;}
   
   /* Zoom icon */
-  #ask-haining-zoom{position:absolute;bottom:250px;right:12px;width:32px;height:32px;background:rgba(255,255,255,0.9);border:1px solid #e5e7eb;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:#64748b;transition:all 0.2s ease;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
+  #ask-haining-zoom{position:absolute;bottom:230px;right:12px;width:32px;height:32px;background:rgba(255,255,255,0.9);border:1px solid #e5e7eb;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:#64748b;transition:all 0.2s ease;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
   #ask-haining-zoom:hover{background:#fff;color:${PRIMARY};transform:scale(1.05);box-shadow:0 4px 12px rgba(0,0,0,0.15);}
   
   /* Modal overlay and expanded chat */
@@ -97,7 +183,29 @@
   .ah-msg{margin:8px 0;padding:10px 12px;border-radius:12px;max-width:85%;word-wrap:break-word;font-size:14px;line-height:1.4;}
   .ah-user{background:#e0f2fe;align-self:flex-end;}
   .ah-bot{background:#f1f5f9;}
-  .ah-thinking{background:#f1f5f9;font-style:italic;opacity:0.8;}
+  .ah-thinking{background:#f1f5f9;font-style:opacity:0.8;}
+  
+  /* Reasoning section */
+  .ah-reasoning{margin:8px 0 16px 0;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;background:#f8fafc;}
+  .ah-reasoning-header{padding:8px 12px;background:#f1f5f9;border-bottom:1px solid #e5e7eb;cursor:pointer;user-select:none;display:flex;align-items:center;gap:8px;font-size:13px;color:#64748b;font-weight:500;}
+  .ah-reasoning-header:hover{background:#e2e8f0;}
+  .ah-reasoning-content{padding:12px;font-family:Monaco,Consolas,'Courier New',monospace;font-size:12px;line-height:1.4;color:#374151;background:#fafbfc;border-top:1px solid #e5e7eb;display:none;}
+  .ah-reasoning-content.expanded{display:block;}
+  /* Markdown styling in reasoning content */
+  .ah-reasoning-content h1,.ah-reasoning-content h2,.ah-reasoning-content h3{margin:6px 0 3px 0;font-weight:600;font-family:system-ui,sans-serif;}
+  .ah-reasoning-content h1{font-size:14px;}
+  .ah-reasoning-content h2{font-size:13px;}
+  .ah-reasoning-content h3{font-size:12px;}
+  .ah-reasoning-content p{margin:3px 0;font-family:system-ui,sans-serif;}
+  .ah-reasoning-content ul,.ah-reasoning-content ol{margin:3px 0 3px 12px;padding-left:6px;}
+  .ah-reasoning-content li{margin:1px 0;font-family:system-ui,sans-serif;}
+  .ah-reasoning-content code{background:#e5e7eb;padding:1px 3px;border-radius:2px;font-family:Monaco,Consolas,'Courier New',monospace;font-size:11px;}
+  .ah-reasoning-content pre{background:#f1f3f4;border:1px solid #d1d5db;border-radius:4px;padding:6px;margin:4px 0;overflow-x:auto;}
+  .ah-reasoning-content pre code{background:none;padding:0;}
+  .ah-reasoning-content strong{font-weight:600;}
+  .ah-reasoning-content em{font-style:italic;}
+  .ah-reasoning-toggle{font-size:10px;transition:transform 0.2s ease;}
+  .ah-reasoning-toggle.expanded{transform:rotate(90deg);}
   
   /* Markdown styling in bot messages */
   .ah-bot h1,.ah-bot h2,.ah-bot h3{margin:8px 0 4px 0;font-weight:600;}
@@ -179,6 +287,13 @@
     .ah-bot blockquote{border-left-color:${PRIMARY};color:#9ca3af;}
     .ah-bot a{color:#60a5fa;}
     .ah-bot a:hover{color:#93c5fd;}
+    /* Dark mode reasoning section */
+    .ah-reasoning{border-color:#374151;background:#1f2937;}
+    .ah-reasoning-header{background:#2b2b2b;border-bottom-color:#374151;color:#9ca3af;}
+    .ah-reasoning-header:hover{background:#374151;}
+    .ah-reasoning-content{background:#1e1e1e;color:#d1d5db;border-top-color:#374151;}
+    .ah-reasoning-content code{background:#374151;color:#e5e7eb;}
+    .ah-reasoning-content pre{background:#111827;border-color:#374151;}
   }
   
   /* Mobile-specific dark mode improvements */
@@ -283,8 +398,9 @@
         expandChat();
       } else {
         panel.style.display = "flex";
-        currentElements.textarea.focus();
+        currentElements = regularElements;
         refreshSuggestions();
+        currentElements.textarea.focus();
       }
     } else {
       panel.style.display="none";
@@ -299,6 +415,13 @@
 
     // Sync content to modal
     syncContent();
+
+    // Update streaming state to new bot message if streaming
+    if (streamingState.isStreaming && streamingState.currentBotMsg) {
+      const botMsgs = modalElements.messagesContainer.querySelectorAll('.ah-bot');
+      streamingState.currentBotMsg = botMsgs[botMsgs.length - 1];
+    }
+
     currentElements.textarea.focus();
 
     // On mobile, prevent body scroll
@@ -321,6 +444,13 @@
 
       // Sync content back to panel
       syncContent();
+
+      // Update streaming state to new bot message if streaming
+      if (streamingState.isStreaming && streamingState.currentBotMsg) {
+        const botMsgs = regularElements.messagesContainer.querySelectorAll('.ah-bot');
+        streamingState.currentBotMsg = botMsgs[botMsgs.length - 1];
+      }
+
       currentElements.textarea.focus();
     }
   }
@@ -429,13 +559,79 @@
   }
 
   function updateBotMsg(botMsg, content) {
-    // Helper function to update bot message with markdown
+    // Helper function to update bot message with reasoning separation
     if (content) {
-      botMsg.innerHTML = parseMarkdown(content);
+      const { reasoning, cleanText } = extractReasoning(content);
+
+      let html = '';
+
+      // Add debugging info (remove in production)
+      if (window.location.hostname === 'localhost' || window.location.search.includes('debug=1')) {
+        html += `<div style="font-size:10px;color:#666;margin-bottom:8px;padding:4px;background:#f0f0f0;border-radius:4px;">
+          Debug: Reasoning: ${reasoning.length} chars, Clean: ${cleanText.length} chars
+          <details style="margin-top:4px;"><summary>Raw content preview</summary>
+          <pre style="font-size:9px;white-space:pre-wrap;max-height:100px;overflow:auto;">${content.substring(0, 500)}...</pre>
+          </details>
+        </div>`;
+      }
+
+      // Add reasoning section if present
+      if (reasoning) {
+        // Use a stable ID based on the message element to maintain toggle state
+        const reasoningId = 'reasoning-' + (botMsg.dataset.msgId || Date.now());
+        if (!botMsg.dataset.msgId) {
+          botMsg.dataset.msgId = Date.now();
+        }
+
+        html += `
+          <div class="ah-reasoning">
+            <div class="ah-reasoning-header" onclick="toggleReasoning('${reasoningId}')">
+              <span class="ah-reasoning-toggle">▶</span>
+              <span>🤔 Thought for ${Math.ceil(reasoning.length / 100)} seconds</span>
+            </div>
+            <div id="${reasoningId}" class="ah-reasoning-content">
+              ${parseMarkdown(reasoning)}
+            </div>
+          </div>
+        `;
+      }
+
+      // Add main response
+      html += parseMarkdown(cleanText || content);
+
+      botMsg.innerHTML = html;
+
+      // Preserve expanded state if reasoning was already expanded
+      if (reasoning) {
+        const reasoningId = 'reasoning-' + botMsg.dataset.msgId;
+        const existingContent = document.getElementById(reasoningId);
+        if (existingContent && existingContent.classList.contains('expanded')) {
+          const newContent = botMsg.querySelector(`#${reasoningId}`);
+          const newToggle = botMsg.querySelector('.ah-reasoning-toggle');
+          if (newContent && newToggle) {
+            newContent.classList.add('expanded');
+            newToggle.classList.add('expanded');
+          }
+        }
+      }
     } else {
       botMsg.textContent = content;
     }
   }
+
+  // Global function to toggle reasoning sections
+  window.toggleReasoning = function(id) {
+    const content = document.getElementById(id);
+    const toggle = content.previousElementSibling.querySelector('.ah-reasoning-toggle');
+
+    if (content.classList.contains('expanded')) {
+      content.classList.remove('expanded');
+      toggle.classList.remove('expanded');
+    } else {
+      content.classList.add('expanded');
+      toggle.classList.add('expanded');
+    }
+  };
 
   // Handle Enter key to send (but allow Shift+Enter for new lines) - for both textareas
   [regularElements.textarea, modalElements.textarea].forEach(textarea => {
@@ -453,6 +649,12 @@
     const text=currentElements.textarea.value.trim();
     if(!text) return;
 
+    // Abort any existing stream
+    if (streamingState.abortController) {
+      streamingState.abortController.abort();
+    }
+    streamingState.abortController = new AbortController();
+
     // Disable input during processing
     currentElements.textarea.disabled = true;
     currentElements.sendButton.disabled = true;
@@ -465,6 +667,10 @@
     // Show thinking indicator
     const thinkingMsg = addMsg("thinking","🤗 Thinking...");
 
+    // Initialize streaming state
+    streamingState.isStreaming = true;
+    streamingState.fullResponse = '';
+
     try{
       console.log("Sending request to API...");
       const response = await fetch("https://api.hainingwang.org/chat", {
@@ -472,7 +678,8 @@
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ messages })
+        body: JSON.stringify({ messages }),
+        signal: streamingState.abortController.signal
       });
 
       console.log("Response status:", response.status);
@@ -488,11 +695,12 @@
       // Remove thinking indicator and add bot response
       thinkingMsg.remove();
       const botMsg = addMsg("bot","");
+      streamingState.currentBotMsg = botMsg;
 
       // Process the stream
       const reader = response.body.getReader();
+      streamingState.streamReader = reader;
       const decoder = new TextDecoder("utf-8");
-      let fullResponse = "";
 
       console.log("Starting to read stream...");
 
@@ -510,38 +718,54 @@
           console.log("Received chunk:", JSON.stringify(chunk));
 
           // Append to full response
-          fullResponse += chunk;
+          streamingState.fullResponse += chunk;
 
           // Update the bot message in real-time with markdown
-          updateBotMsg(botMsg, fullResponse);
+          updateBotMsg(streamingState.currentBotMsg, streamingState.fullResponse);
 
           // Auto-scroll to bottom
           currentElements.messagesContainer.scrollTop = currentElements.messagesContainer.scrollHeight;
         }
 
         // Final cleanup and save to messages
-        const finalResponse = fullResponse.trim();
-        if (finalResponse) {
-          updateBotMsg(botMsg, finalResponse);
-          messages.push({ role: "assistant", content: finalResponse });
+        const { reasoning, cleanText } = extractReasoning(streamingState.fullResponse.trim());
+        if (cleanText || reasoning) {
+          updateBotMsg(streamingState.currentBotMsg, streamingState.fullResponse.trim());
+          // Store only the clean text in conversation history
+          messages.push({ role: "assistant", content: cleanText || streamingState.fullResponse.trim() });
           console.log("Chat completed successfully");
         } else {
-          botMsg.textContent = "No response received.";
+          streamingState.currentBotMsg.textContent = "No response received.";
         }
 
       } catch (streamError) {
-        console.error("Stream reading error:", streamError);
-        botMsg.textContent = "Error reading response stream.";
+        if (streamError.name === 'AbortError') {
+          console.log("Stream aborted");
+        } else {
+          console.error("Stream reading error:", streamError);
+          streamingState.currentBotMsg.textContent = "Error reading response stream.";
+        }
       }
 
     } catch (error) {
-      console.error("Chat error:", error);
-      // Remove thinking message if it exists
-      if (thinkingMsg.parentNode) {
-        thinkingMsg.remove();
+      if (error.name === 'AbortError') {
+        console.log("Request aborted");
+      } else {
+        console.error("Chat error:", error);
+        // Remove thinking message if it exists
+        if (thinkingMsg.parentNode) {
+          thinkingMsg.remove();
+        }
+        addMsg("bot", "Sorry, there was an error. Please try again.");
       }
-      addMsg("bot", "Sorry, there was an error. Please try again.");
     } finally {
+      // Reset streaming state
+      streamingState.isStreaming = false;
+      streamingState.currentBotMsg = null;
+      streamingState.streamReader = null;
+      streamingState.fullResponse = '';
+      streamingState.abortController = null;
+
       // Re-enable input
       currentElements.textarea.disabled = false;
       currentElements.sendButton.disabled = false;
