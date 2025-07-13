@@ -2,6 +2,37 @@
   /*** Ask‑Haining floating chat widget — v4 ***/
   const PRIMARY="#5c8374"; // green interior
 
+  // Simple markdown parser for chat messages
+  function parseMarkdown(text) {
+    return text
+      // Code blocks (triple backticks)
+      .replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
+      // Inline code (single backticks)
+      .replace(/`([^`]+)`/g, '<code>$1</code>')
+      // Bold text
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      // Italic text
+      .replace(/\*(.*?)\*/g, '<em>$1</em>')
+      // Headers
+      .replace(/^### (.*$)/gm, '<h3>$1</h3>')
+      .replace(/^## (.*$)/gm, '<h2>$1</h2>')
+      .replace(/^# (.*$)/gm, '<h1>$1</h1>')
+      // Links
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
+      // Line breaks
+      .replace(/\n\n/g, '</p><p>')
+      .replace(/\n/g, '<br>')
+      // Wrap in paragraphs
+      .replace(/^(.+)$/gm, '<p>$1</p>')
+      // Clean up empty paragraphs
+      .replace(/<p><\/p>/g, '')
+      // Lists (basic support)
+      .replace(/^\* (.+)$/gm, '<li>$1</li>')
+      .replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>')
+      .replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
+      .replace(/(<li>.*<\/li>)/s, '<ol>$1</ol>');
+  }
+
   // Sample questions pool
   const SAMPLE_QUESTIONS = [
     "What are your main research interests?",
@@ -42,6 +73,23 @@
   .ah-bot{background:#f1f5f9;}
   .ah-thinking{background:#f1f5f9;font-style:italic;opacity:0.8;}
   
+  /* Markdown styling in bot messages */
+  .ah-bot h1,.ah-bot h2,.ah-bot h3{margin:8px 0 4px 0;font-weight:600;}
+  .ah-bot h1{font-size:18px;border-bottom:1px solid #e5e7eb;}
+  .ah-bot h2{font-size:16px;}
+  .ah-bot h3{font-size:15px;}
+  .ah-bot p{margin:4px 0;}
+  .ah-bot ul,.ah-bot ol{margin:4px 0 4px 16px;padding-left:8px;}
+  .ah-bot li{margin:2px 0;}
+  .ah-bot code{background:#f1f3f4;padding:2px 4px;border-radius:3px;font-family:Monaco,Consolas,'Courier New',monospace;font-size:13px;}
+  .ah-bot pre{background:#f8f9fa;border:1px solid #e9ecef;border-radius:6px;padding:8px;margin:6px 0;overflow-x:auto;}
+  .ah-bot pre code{background:none;padding:0;}
+  .ah-bot blockquote{border-left:3px solid ${PRIMARY};padding-left:12px;margin:6px 0;font-style:italic;color:#666;}
+  .ah-bot strong{font-weight:600;}
+  .ah-bot em{font-style:italic;}
+  .ah-bot a{color:${PRIMARY};text-decoration:underline;}
+  .ah-bot a:hover{color:#4a6b5d;}
+  
   /* Sample questions box */
   #ask-haining-suggestions{padding:12px;border-top:1px solid #e5e7eb;background:#f8fafc;}
   #ask-haining-suggestions h4{margin:0 0 8px 0;font-size:13px;font-weight:600;color:#64748b;}
@@ -67,6 +115,13 @@
     #ask-haining-suggestions{background:#262626;border-color:#374151;}
     .ah-suggestion{background:#374151;color:#d1d5db;border-color:#4b5563;}
     .ah-suggestion:hover{background:${PRIMARY};color:#fff;}
+    /* Dark mode markdown styles */
+    .ah-bot h1{border-bottom-color:#374151;}
+    .ah-bot code{background:#374151;color:#e5e7eb;}
+    .ah-bot pre{background:#1f2937;border-color:#374151;}
+    .ah-bot blockquote{border-left-color:${PRIMARY};color:#9ca3af;}
+    .ah-bot a{color:#60a5fa;}
+    .ah-bot a:hover{color:#93c5fd;}
   }
   `;
   document.head.appendChild(style);
@@ -100,7 +155,7 @@
       ${suggestions}
     </div>
     <form id="ask-haining-input">
-      <textarea rows="2" placeholder="Ask Haining Anything… (Shift+Enter for new line)" required></textarea>
+      <textarea rows="2" placeholder="Type your question… (Enter to send, Shift+Enter for new line)" required></textarea>
       <button type="submit">Send</button>
     </form>
   `;
@@ -156,10 +211,27 @@
   function addMsg(role,content){
     const div=document.createElement("div");
     div.className=`ah-msg ${role==="user"?"ah-user":role==="thinking"?"ah-thinking":"ah-bot"}`;
-    div.textContent=content;
+
+    if (role === "bot" && content) {
+      // Parse markdown for bot messages
+      div.innerHTML = parseMarkdown(content);
+    } else {
+      // Use textContent for user messages and thinking state
+      div.textContent = content;
+    }
+
     messagesContainer.appendChild(div);
     messagesContainer.scrollTop=messagesContainer.scrollHeight;
     return div;
+  }
+
+  function updateBotMsg(botMsg, content) {
+    // Helper function to update bot message with markdown
+    if (content) {
+      botMsg.innerHTML = parseMarkdown(content);
+    } else {
+      botMsg.textContent = content;
+    }
   }
 
   // Handle Enter key to send (but allow Shift+Enter for new lines)
@@ -235,8 +307,8 @@
           // Append to full response
           fullResponse += chunk;
 
-          // Update the bot message in real-time
-          botMsg.textContent = fullResponse;
+          // Update the bot message in real-time with markdown
+          updateBotMsg(botMsg, fullResponse);
 
           // Auto-scroll to bottom
           messagesContainer.scrollTop = messagesContainer.scrollHeight;
@@ -245,7 +317,7 @@
         // Final cleanup and save to messages
         const finalResponse = fullResponse.trim();
         if (finalResponse) {
-          botMsg.textContent = finalResponse;
+          updateBotMsg(botMsg, finalResponse);
           messages.push({ role: "assistant", content: finalResponse });
           console.log("Chat completed successfully");
         } else {
