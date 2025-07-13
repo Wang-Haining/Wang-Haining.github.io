@@ -67,73 +67,107 @@
   function togglePanel(){const open=panel.style.display!=="flex";panel.style.display=open?"flex":"none";if(open) textarea.focus();}
   launcher.onclick=togglePanel;closeBtn.onclick=()=>panel.style.display="none";
 
-  function addMsg(role,content){const div=document.createElement("div");div.className=`ah-msg ${role==="user"?"ah-user":"ah-bot"}`;div.textContent=content;messagesContainer.appendChild(div);messagesContainer.scrollTop=messagesContainer.scrollHeight;}
+  function addMsg(role,content){const div=document.createElement("div");div.className=`ah-msg ${role==="user"?"ah-user":"ah-bot"}`;div.textContent=content;messagesContainer.appendChild(div);messagesContainer.scrollTop=messagesContainer.scrollHeight;return div;}
 
   async function sendChat(){
     const text=textarea.value.trim();
     if(!text) return;
+
+    // Disable input during processing
+    textarea.disabled = true;
+    const sendButton = form.querySelector('button');
+    sendButton.disabled = true;
+    sendButton.textContent = '...';
+
     textarea.value="";
     messages.push({role:"user",content:text});
     addMsg("user",text);
 
-    // placeholder while streaming
-    addMsg("bot","");
-    const placeholder = messagesContainer.lastChild;
+    // Create placeholder for bot response
+    const botMsg = addMsg("bot","");
 
     try{
       console.log("Sending request to API...");
-      const res = await fetch("https://api.hainingwang.org/chat",{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({messages})
+      const response = await fetch("https://api.hainingwang.org/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ messages })
       });
-      
-      console.log("Response status:", res.status);
-      console.log("Response headers:", [...res.headers]);
-      
-      if(!res.ok) {
-        throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+
+      console.log("Response status:", response.status);
+      console.log("Response ok:", response.ok);
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
 
-      if (!res.body) {
-        throw new Error("No response body");
+      if (!response.body) {
+        throw new Error("No response body received");
       }
 
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let answer="";
-      
+      // Process the stream
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder("utf-8");
+      let fullResponse = "";
+
       console.log("Starting to read stream...");
-      
-      while(true){
-        const {value,done} = await reader.read();
-        if(done) {
-          console.log("Stream finished");
-          break;
+
+      try {
+        while (true) {
+          const { done, value } = await reader.read();
+
+          if (done) {
+            console.log("Stream finished");
+            break;
+          }
+
+          // Decode the chunk
+          const chunk = decoder.decode(value, { stream: true });
+          console.log("Received chunk:", JSON.stringify(chunk));
+
+          // Append to full response
+          fullResponse += chunk;
+
+          // Update the bot message in real-time
+          botMsg.textContent = fullResponse;
+
+          // Auto-scroll to bottom
+          messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
-        
-        const chunk = decoder.decode(value, {stream: true});
-        console.log("Received chunk:", chunk.substring(0, 50) + "...");
-        
-        answer += chunk;
-        placeholder.textContent = answer; // live update
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+        // Final cleanup and save to messages
+        const finalResponse = fullResponse.trim();
+        if (finalResponse) {
+          botMsg.textContent = finalResponse;
+          messages.push({ role: "assistant", content: finalResponse });
+          console.log("Chat completed successfully");
+        } else {
+          botMsg.textContent = "No response received.";
+        }
+
+      } catch (streamError) {
+        console.error("Stream reading error:", streamError);
+        botMsg.textContent = "Error reading response stream.";
       }
-      
-      // Final cleanup
-      const finalAnswer = answer.trim();
-      placeholder.textContent = finalAnswer;
-      messages.push({role:"assistant",content:finalAnswer});
-      
-      console.log("Chat completed successfully");
-      
-    }catch(e){
-      console.error("Chat error:", e);
-      placeholder.textContent = "Sorry, there was an error. Please try again.";
+
+    } catch (error) {
+      console.error("Chat error:", error);
+      botMsg.textContent = "Sorry, there was an error. Please try again.";
+    } finally {
+      // Re-enable input
+      textarea.disabled = false;
+      sendButton.disabled = false;
+      sendButton.textContent = 'Send';
+      textarea.focus();
     }
   }
-  
-  form.addEventListener("submit",e=>{e.preventDefault();sendChat();});
+
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+    sendChat();
+  });
 
   /* idle bounce */
   setTimeout(()=>{if(panel.style.display!=="flex"&&!bounced){launcher.classList.add("ah-attention");bounced=true;setTimeout(()=>launcher.classList.remove("ah-attention"),800);}},7000);
