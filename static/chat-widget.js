@@ -69,8 +69,42 @@
 
   function addMsg(role,content){const div=document.createElement("div");div.className=`ah-msg ${role==="user"?"ah-user":"ah-bot"}`;div.textContent=content;messagesContainer.appendChild(div);messagesContainer.scrollTop=messagesContainer.scrollHeight;}
 
-  async function sendChat(){const text=textarea.value.trim();if(!text)return;textarea.value="";messages.push({role:"user",content:text});addMsg("user",text);addMsg("bot","…");const placeholder=messagesContainer.lastChild;try{const res=await fetch("https://api.hainingwang.org/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages})});if(!res.ok) throw new Error("Network error");const data=await res.json();placeholder.textContent=(data.answer||"(no answer)").trim();messages.push({role:"assistant",content:placeholder.textContent});}catch(e){console.error(e);placeholder.textContent="Sorry, there was an error. Please try again.";}}
-  form.addEventListener("submit",e=>{e.preventDefault();sendChat();});
+  async function sendChat(){
+    const text=textarea.value.trim();
+    if(!text) return;
+    textarea.value="";
+    messages.push({role:"user",content:text});
+    addMsg("user",text);
+
+    // placeholder while streaming
+    addMsg("bot","");
+    const placeholder = messagesContainer.lastChild;
+
+    try{
+      const res = await fetch("https://api.hainingwang.org/chat",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({messages})
+      });
+      if(!res.ok) throw new Error("Network error");
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let answer="";
+      while(true){
+        const {value,done} = await reader.read();
+        if(done) break;
+        answer += decoder.decode(value);
+        placeholder.textContent = answer; // live update
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }
+      messages.push({role:"assistant",content:answer.trim()});
+    }catch(e){
+      console.error(e);
+      placeholder.textContent = "Sorry, there was an error. Please try again.";
+    }
+  }
+  form.addEventListener("submit",e=>{e.preventDefault();sendChat();});("submit",e=>{e.preventDefault();sendChat();});
 
   /* idle bounce */
   setTimeout(()=>{if(panel.style.display!=="flex"&&!bounced){launcher.classList.add("ah-attention");bounced=true;setTimeout(()=>launcher.classList.remove("ah-attention"),800);}},7000);
