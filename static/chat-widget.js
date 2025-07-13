@@ -67,6 +67,24 @@
   /* chat panel ----------------------------------------------------*/
   #ask-haining-panel{position:fixed;bottom:96px;right:24px;width:420px;height:600px;max-height:85vh;background:#fff;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,.25);display:flex;flex-direction:column;overflow:hidden;font-family:system-ui,sans-serif;z-index:9999;display:none;}
   #ask-haining-header{background:${PRIMARY};color:#fff;padding:12px 16px;font-weight:600;display:flex;justify-content:space-between;align-items:center;}
+  
+  /* Zoom icon */
+  #ask-haining-zoom{position:absolute;bottom:230px;right:12px;width:32px;height:32px;background:rgba(255,255,255,0.9);border:1px solid #e5e7eb;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:#64748b;transition:all 0.2s ease;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
+  #ask-haining-zoom:hover{background:#fff;color:${PRIMARY};transform:scale(1.05);box-shadow:0 4px 12px rgba(0,0,0,0.15);}
+  
+  /* Modal overlay and expanded chat */
+  #ask-haining-modal{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.6);z-index:10000;display:none;align-items:center;justify-content:center;}
+  #ask-haining-expanded{width:90vw;max-width:800px;height:85vh;background:#fff;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.3);display:flex;flex-direction:column;overflow:hidden;font-family:system-ui,sans-serif;}
+  #ask-haining-expanded #ask-haining-header{background:${PRIMARY};color:#fff;padding:16px 20px;font-weight:600;display:flex;justify-content:space-between;align-items:center;}
+  #ask-haining-expanded #ask-haining-messages{flex:1;padding:16px;overflow-y:auto;scrollbar-width:thin;}
+  #ask-haining-expanded #ask-haining-suggestions{padding:16px;border-top:1px solid #e5e7eb;background:#f8fafc;}
+  #ask-haining-expanded #ask-haining-input{display:flex;border-top:1px solid #e5e7eb;}
+  #ask-haining-expanded #ask-haining-input textarea{flex:1;border:none;padding:16px;resize:none;font:inherit;outline:none;min-height:24px;max-height:120px;}
+  #ask-haining-expanded #ask-haining-input button{border:none;background:${PRIMARY};color:#fff;padding:0 24px;font-weight:600;cursor:pointer;}
+  
+  /* Close button in modal */
+  #ask-haining-modal-close{cursor:pointer;font-size:24px;color:#fff;padding:4px;border-radius:4px;transition:background 0.2s ease;}
+  #ask-haining-modal-close:hover{background:rgba(255,255,255,0.2);}
   #ask-haining-messages{flex:1;padding:12px;overflow-y:auto;scrollbar-width:thin;}
   .ah-msg{margin:8px 0;padding:10px 12px;border-radius:12px;max-width:85%;word-wrap:break-word;font-size:14px;line-height:1.4;}
   .ah-user{background:#e0f2fe;align-self:flex-end;}
@@ -103,7 +121,10 @@
   #ask-haining-input button:disabled{background:#94a3b8;cursor:not-allowed;}
   
   /* responsive width & lower launcher on tall phones */
-  @media (max-width:480px){#ask-haining-panel{width:95vw;right:2.5%;height:80vh;}}
+  @media (max-width:480px){
+    #ask-haining-panel{width:95vw;right:2.5%;height:80vh;}
+    #ask-haining-expanded{width:95vw;height:90vh;}
+  }
   @media (min-height:700px){#ask-haining-launcher{bottom:40px;}}
   /* dark‑mode tweaks */
   @media (prefers-color-scheme: dark){
@@ -115,6 +136,13 @@
     #ask-haining-suggestions{background:#262626;border-color:#374151;}
     .ah-suggestion{background:#374151;color:#d1d5db;border-color:#4b5563;}
     .ah-suggestion:hover{background:${PRIMARY};color:#fff;}
+    #ask-haining-zoom{background:rgba(55,65,81,0.9);border-color:#4b5563;color:#d1d5db;}
+    #ask-haining-zoom:hover{background:#374151;color:${PRIMARY};}
+    /* Dark mode modal */
+    #ask-haining-expanded{background:#1e1e1e;color:#f5f5f5;}
+    #ask-haining-expanded #ask-haining-header{background:#46726a;}
+    #ask-haining-expanded #ask-haining-input textarea{background:#262626;color:#f5f5f5;}
+    #ask-haining-expanded #ask-haining-suggestions{background:#262626;border-color:#374151;}
     /* Dark mode markdown styles */
     .ah-bot h1{border-bottom-color:#374151;}
     .ah-bot code{background:#374151;color:#e5e7eb;}
@@ -155,21 +183,59 @@
       ${suggestions}
     </div>
     <form id="ask-haining-input">
-      <textarea rows="2" placeholder="Type your question… (Enter to send, Shift+Enter for new line)" required></textarea>
+      <textarea rows="2" placeholder="Ask Haining Anything… (Enter to send, Shift+Enter for new line)" required></textarea>
       <button type="submit">Send</button>
     </form>
+    <div id="ask-haining-zoom" title="Expand chat">⛶</div>
   `;
   document.body.appendChild(panel);
+
+  // Create modal for expanded chat
+  const modal = document.createElement("div");
+  modal.id = "ask-haining-modal";
+  modal.innerHTML = `
+    <div id="ask-haining-expanded">
+      <div id="ask-haining-header">Ask&nbsp;Haining <span id="ask-haining-modal-close" title="Close expanded view">×</span></div>
+      <div id="ask-haining-messages"></div>
+      <div id="ask-haining-suggestions">
+        <h4>💡 Try asking:</h4>
+        ${suggestions}
+      </div>
+      <form id="ask-haining-input">
+        <textarea rows="2" placeholder="Type your question… (Enter to send, Shift+Enter for new line)" required></textarea>
+        <button type="submit">Send</button>
+      </form>
+    </div>
+  `;
+  document.body.appendChild(modal);
 
   /* ------------------------------------------------------------
    * 3. Interaction logic
    * ----------------------------------------------------------*/
   const closeBtn=panel.querySelector("#ask-haining-close");
-  const messagesContainer=panel.querySelector("#ask-haining-messages");
-  const suggestionsContainer=panel.querySelector("#ask-haining-suggestions");
-  const form=panel.querySelector("#ask-haining-input");
-  const textarea=form.querySelector("textarea");
-  const sendButton=form.querySelector("button");
+  const zoomBtn=panel.querySelector("#ask-haining-zoom");
+  const modalCloseBtn=modal.querySelector("#ask-haining-modal-close");
+
+  // Get both regular and modal elements
+  const regularElements = {
+    messagesContainer: panel.querySelector("#ask-haining-messages"),
+    suggestionsContainer: panel.querySelector("#ask-haining-suggestions"),
+    form: panel.querySelector("#ask-haining-input"),
+    textarea: panel.querySelector("textarea"),
+    sendButton: panel.querySelector("button")
+  };
+
+  const modalElements = {
+    messagesContainer: modal.querySelector("#ask-haining-messages"),
+    suggestionsContainer: modal.querySelector("#ask-haining-suggestions"),
+    form: modal.querySelector("#ask-haining-input"),
+    textarea: modal.querySelector("textarea"),
+    sendButton: modal.querySelector("button")
+  };
+
+  // Current active elements (switch between regular and modal)
+  let currentElements = regularElements;
+  let isExpanded = false;
   let messages=[];
   let bounced=false;
 
@@ -177,36 +243,85 @@
     const open=panel.style.display!=="flex";
     panel.style.display=open?"flex":"none";
     if(open) {
-      textarea.focus();
+      currentElements.textarea.focus();
       // Refresh suggestions when opening
       refreshSuggestions();
     }
   }
+
+  function expandChat() {
+    isExpanded = true;
+    panel.style.display = "none";
+    modal.style.display = "flex";
+    currentElements = modalElements;
+
+    // Sync content to modal
+    syncContent();
+    currentElements.textarea.focus();
+  }
+
+  function collapseChat() {
+    isExpanded = false;
+    modal.style.display = "none";
+    panel.style.display = "flex";
+    currentElements = regularElements;
+
+    // Sync content back to panel
+    syncContent();
+    currentElements.textarea.focus();
+  }
+
+  function syncContent() {
+    // Sync messages
+    const sourceMessages = isExpanded ? regularElements.messagesContainer : modalElements.messagesContainer;
+    const targetMessages = isExpanded ? modalElements.messagesContainer : regularElements.messagesContainer;
+    targetMessages.innerHTML = sourceMessages.innerHTML;
+
+    // Sync suggestions
+    const sourceSuggestions = isExpanded ? regularElements.suggestionsContainer : modalElements.suggestionsContainer;
+    const targetSuggestions = isExpanded ? modalElements.suggestionsContainer : regularElements.suggestionsContainer;
+    targetSuggestions.innerHTML = sourceSuggestions.innerHTML;
+
+    // Re-attach suggestion click handlers
+    attachSuggestionHandlers();
+
+    // Scroll to bottom
+    targetMessages.scrollTop = targetMessages.scrollHeight;
+  }
+
   launcher.onclick=togglePanel;
   closeBtn.onclick=()=>panel.style.display="none";
+  zoomBtn.onclick=expandChat;
+  modalCloseBtn.onclick=collapseChat;
+
+  // Close modal when clicking outside
+  modal.onclick=(e)=>{
+    if(e.target === modal) collapseChat();
+  };
 
   function refreshSuggestions() {
     const newSuggestions = getRandomQuestions().map(q =>
       `<div class="ah-suggestion">${q}</div>`
     ).join('');
-    suggestionsContainer.innerHTML = `<h4>💡 Try asking:</h4>${newSuggestions}`;
+    currentElements.suggestionsContainer.innerHTML = `<h4>💡 Try asking:</h4>${newSuggestions}`;
 
-    // Re-attach click handlers
-    suggestionsContainer.querySelectorAll('.ah-suggestion').forEach(suggestion => {
-      suggestion.onclick = () => {
-        textarea.value = suggestion.textContent;
-        textarea.focus();
-      };
+    attachSuggestionHandlers();
+  }
+
+  function attachSuggestionHandlers() {
+    // Attach to both regular and modal if they exist
+    [regularElements, modalElements].forEach(elements => {
+      elements.suggestionsContainer.querySelectorAll('.ah-suggestion').forEach(suggestion => {
+        suggestion.onclick = () => {
+          currentElements.textarea.value = suggestion.textContent;
+          currentElements.textarea.focus();
+        };
+      });
     });
   }
 
   // Initial suggestion click handlers
-  suggestionsContainer.querySelectorAll('.ah-suggestion').forEach(suggestion => {
-    suggestion.onclick = () => {
-      textarea.value = suggestion.textContent;
-      textarea.focus();
-    };
-  });
+  attachSuggestionHandlers();
 
   function addMsg(role,content){
     const div=document.createElement("div");
@@ -220,8 +335,8 @@
       div.textContent = content;
     }
 
-    messagesContainer.appendChild(div);
-    messagesContainer.scrollTop=messagesContainer.scrollHeight;
+    currentElements.messagesContainer.appendChild(div);
+    currentElements.messagesContainer.scrollTop=currentElements.messagesContainer.scrollHeight;
     return div;
   }
 
@@ -234,26 +349,28 @@
     }
   }
 
-  // Handle Enter key to send (but allow Shift+Enter for new lines)
-  textarea.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      if (!textarea.disabled && textarea.value.trim()) {
-        sendChat();
+  // Handle Enter key to send (but allow Shift+Enter for new lines) - for both textareas
+  [regularElements.textarea, modalElements.textarea].forEach(textarea => {
+    textarea.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        if (!textarea.disabled && textarea.value.trim()) {
+          sendChat();
+        }
       }
-    }
+    });
   });
 
   async function sendChat(){
-    const text=textarea.value.trim();
+    const text=currentElements.textarea.value.trim();
     if(!text) return;
 
     // Disable input during processing
-    textarea.disabled = true;
-    sendButton.disabled = true;
-    sendButton.textContent = '...';
+    currentElements.textarea.disabled = true;
+    currentElements.sendButton.disabled = true;
+    currentElements.sendButton.textContent = '...';
 
-    textarea.value="";
+    currentElements.textarea.value="";
     messages.push({role:"user",content:text});
     addMsg("user",text);
 
@@ -311,7 +428,7 @@
           updateBotMsg(botMsg, fullResponse);
 
           // Auto-scroll to bottom
-          messagesContainer.scrollTop = messagesContainer.scrollHeight;
+          currentElements.messagesContainer.scrollTop = currentElements.messagesContainer.scrollHeight;
         }
 
         // Final cleanup and save to messages
@@ -338,19 +455,22 @@
       addMsg("bot", "Sorry, there was an error. Please try again.");
     } finally {
       // Re-enable input
-      textarea.disabled = false;
-      sendButton.disabled = false;
-      sendButton.textContent = 'Send';
-      textarea.focus();
+      currentElements.textarea.disabled = false;
+      currentElements.sendButton.disabled = false;
+      currentElements.sendButton.textContent = 'Send';
+      currentElements.textarea.focus();
 
       // Refresh suggestions after each conversation
       refreshSuggestions();
     }
   }
 
-  form.addEventListener("submit", e => {
-    e.preventDefault();
-    sendChat();
+  // Handle form submission for both forms
+  [regularElements.form, modalElements.form].forEach(form => {
+    form.addEventListener("submit", e => {
+      e.preventDefault();
+      sendChat();
+    });
   });
 
   /* idle bounce */
