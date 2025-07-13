@@ -100,7 +100,7 @@
       ${suggestions}
     </div>
     <form id="ask-haining-input">
-      <textarea rows="2" placeholder="Type your question… (Enter to send, Shift+Enter for new line)" required></textarea>
+      <textarea rows="2" placeholder="Ask Haining Anything… (Shift+Enter for new line)" required></textarea>
       <button type="submit">Send</button>
     </form>
   `;
