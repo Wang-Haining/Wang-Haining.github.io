@@ -75,7 +75,7 @@
   #ask-haining-header{background:${PRIMARY};color:#fff;padding:12px 16px;font-weight:600;display:flex;justify-content:space-between;align-items:center;}
   
   /* Zoom icon */
-  #ask-haining-zoom{position:absolute;bottom:140px;right:12px;width:32px;height:32px;background:rgba(255,255,255,0.9);border:1px solid #e5e7eb;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:#64748b;transition:all 0.2s ease;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
+  #ask-haining-zoom{position:absolute;bottom:230px;right:12px;width:32px;height:32px;background:rgba(255,255,255,0.9);border:1px solid #e5e7eb;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:#64748b;transition:all 0.2s ease;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
   #ask-haining-zoom:hover{background:#fff;color:${PRIMARY};transform:scale(1.05);box-shadow:0 4px 12px rgba(0,0,0,0.15);}
   
   /* Modal overlay and expanded chat */
