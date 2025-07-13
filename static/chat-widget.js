@@ -40,18 +40,20 @@
 
   // Sample questions pool
   const SAMPLE_QUESTIONS = [
-    "What are your main research interests?",
-    "Can you summarize your recent publications?",
-    "How do you approach AI applications in healthcare?",
-    "What's your perspective on large language models?",
-    "Tell me about your work on medication records",
-    "How do you make scientific content accessible?",
-    "What tools do you use for biomedical informatics?",
-    "What's your experience with natural language processing?",
-    "How do you see AI transforming healthcare?",
-    "What advice do you have for PhD students?",
-    "Can you explain your research methodology?",
-    "What collaborations are you most excited about?"
+      "How does your work address the accessibility crisis in scientific communication?",
+      "Data science, humanities, and biomedical informatics, really?",
+      "How can your Fairness Evaluation Protocol be model-agnostic?",
+      "How do you envision agentic AI systems transforming current science?",
+      "What methodological innovations have you developed?",
+      "What did you find in the Lu Xun paper?",
+      "Can you explain your research on protecting author privacy?",
+      "What's your philosophy on teaching and curriculum design?",
+      "How will agentic AI transform knowledge management?",
+      "What emerging research directions excite you most?",
+      "How do you ensure reproducibility in your research?",
+      "What challenges did you face developing your RL text simplification?",
+      "What makes your scientific novelty measure unique?",
+      "How do you balance privacy protection with beneficial AI?",
   ];
 
   /* ------------------------------------------------------------
@@ -75,7 +77,7 @@
   #ask-haining-header{background:${PRIMARY};color:#fff;padding:12px 16px;font-weight:600;display:flex;justify-content:space-between;align-items:center;}
   
   /* Zoom icon */
-  #ask-haining-zoom{position:absolute;bottom:230px;right:12px;width:32px;height:32px;background:rgba(255,255,255,0.9);border:1px solid #e5e7eb;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:#64748b;transition:all 0.2s ease;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
+  #ask-haining-zoom{position:absolute;bottom:250px;right:12px;width:32px;height:32px;background:rgba(255,255,255,0.9);border:1px solid #e5e7eb;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:#64748b;transition:all 0.2s ease;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
   #ask-haining-zoom:hover{background:#fff;color:${PRIMARY};transform:scale(1.05);box-shadow:0 4px 12px rgba(0,0,0,0.15);}
   
   /* Modal overlay and expanded chat */
