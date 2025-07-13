@@ -33,6 +33,11 @@
       .replace(/(<li>.*<\/li>)/s, '<ol>$1</ol>');
   }
 
+  // Mobile detection
+  function isMobile() {
+    return window.innerWidth <= 480 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  }
+
   // Sample questions pool
   const SAMPLE_QUESTIONS = [
     "What are your main research interests?",
@@ -56,6 +61,7 @@
   style.textContent=`
   /* launcher button ------------------------------------------------*/
   #ask-haining-launcher{position:fixed;bottom:24px;right:24px;display:flex;align-items:center;gap:8px;padding:10px 18px;background:${PRIMARY};color:#fff;font:600 16px/1.2 system-ui,sans-serif;border-radius:9999px;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.2);z-index:9999;transition:transform .2s ease;position:fixed;}
+  #ask-haining-launcher:active{transform:scale(0.95);}
   #ask-haining-launcher img{width:24px;height:24px;border-radius:50%;object-fit:cover;}
   /* animated border — built with :before pseudo */
   #ask-haining-launcher{position:fixed;overflow:hidden;}
@@ -69,7 +75,7 @@
   #ask-haining-header{background:${PRIMARY};color:#fff;padding:12px 16px;font-weight:600;display:flex;justify-content:space-between;align-items:center;}
   
   /* Zoom icon */
-  #ask-haining-zoom{position:absolute;bottom:230px;right:12px;width:32px;height:32px;background:rgba(255,255,255,0.9);border:1px solid #e5e7eb;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:#64748b;transition:all 0.2s ease;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
+  #ask-haining-zoom{position:absolute;bottom:140px;right:12px;width:32px;height:32px;background:rgba(255,255,255,0.9);border:1px solid #e5e7eb;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:#64748b;transition:all 0.2s ease;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
   #ask-haining-zoom:hover{background:#fff;color:${PRIMARY};transform:scale(1.05);box-shadow:0 4px 12px rgba(0,0,0,0.15);}
   
   /* Modal overlay and expanded chat */
@@ -119,11 +125,32 @@
   #ask-haining-input button{border:none;background:${PRIMARY};color:#fff;padding:0 18px;font-weight:600;cursor:pointer;transition:background 0.2s ease;}
   #ask-haining-input button:hover{background:#4a6b5d;}
   #ask-haining-input button:disabled{background:#94a3b8;cursor:not-allowed;}
+  #ask-haining-input button:active{transform:scale(0.98);}
   
   /* responsive width & lower launcher on tall phones */
   @media (max-width:480px){
     #ask-haining-panel{width:95vw;right:2.5%;height:80vh;}
     #ask-haining-expanded{width:95vw;height:90vh;}
+    /* Hide zoom icon on mobile - auto-expand instead */
+    #ask-haining-zoom{display:none;}
+    /* Larger touch targets on mobile */
+    #ask-haining-launcher{padding:12px 20px;font-size:16px;}
+    #ask-haining-close, #ask-haining-modal-close{font-size:24px;padding:8px;}
+    .ah-suggestion{padding:12px 14px;font-size:14px;margin:6px 0;}
+    #ask-haining-input button{padding:0 24px;font-size:16px;}
+    #ask-haining-input textarea{padding:16px;font-size:16px;}
+    /* Better spacing on mobile */
+    .ah-msg{padding:12px 14px;font-size:15px;margin:10px 0;}
+    #ask-haining-suggestions{padding:16px;}
+  }
+  @media (max-width:768px) and (min-width:481px){
+    /* Tablet optimizations */
+    #ask-haining-panel{width:85vw;right:7.5%;height:75vh;}
+    #ask-haining-expanded{width:90vw;height:85vh;}
+    #ask-haining-zoom{width:36px;height:36px;font-size:18px;}
+    /* Slightly larger touch targets for tablets */
+    .ah-suggestion{padding:10px 12px;font-size:13px;}
+    #ask-haining-input button{padding:0 20px;}
   }
   @media (min-height:700px){#ask-haining-launcher{bottom:40px;}}
   /* dark‑mode tweaks */
@@ -150,6 +177,12 @@
     .ah-bot blockquote{border-left-color:${PRIMARY};color:#9ca3af;}
     .ah-bot a{color:#60a5fa;}
     .ah-bot a:hover{color:#93c5fd;}
+  }
+  
+  /* Mobile-specific dark mode improvements */
+  @media (max-width:480px) and (prefers-color-scheme: dark){
+    #ask-haining-modal{background:rgba(0,0,0,0.8);}
+    .ah-suggestion:active{background:${PRIMARY};color:#fff;transform:scale(0.98);}
   }
   `;
   document.head.appendChild(style);
@@ -183,7 +216,7 @@
       ${suggestions}
     </div>
     <form id="ask-haining-input">
-      <textarea rows="2" placeholder="Ask Haining Anything… (Enter to send, Shift+Enter for new line)" required></textarea>
+      <textarea rows="2" placeholder="Type your question… (Enter to send, Shift+Enter for new line)" required></textarea>
       <button type="submit">Send</button>
     </form>
     <div id="ask-haining-zoom" title="Expand chat">⛶</div>
@@ -241,11 +274,18 @@
 
   function togglePanel(){
     const open=panel.style.display!=="flex";
-    panel.style.display=open?"flex":"none";
+
     if(open) {
-      currentElements.textarea.focus();
-      // Refresh suggestions when opening
-      refreshSuggestions();
+      // On mobile, auto-open in expanded mode
+      if(isMobile()) {
+        expandChat();
+      } else {
+        panel.style.display = "flex";
+        currentElements.textarea.focus();
+        refreshSuggestions();
+      }
+    } else {
+      panel.style.display="none";
     }
   }
 
@@ -258,17 +298,29 @@
     // Sync content to modal
     syncContent();
     currentElements.textarea.focus();
+
+    // On mobile, prevent body scroll
+    if(isMobile()) {
+      document.body.style.overflow = 'hidden';
+    }
   }
 
   function collapseChat() {
     isExpanded = false;
     modal.style.display = "none";
-    panel.style.display = "flex";
-    currentElements = regularElements;
 
-    // Sync content back to panel
-    syncContent();
-    currentElements.textarea.focus();
+    // On mobile, close completely instead of going to panel
+    if(isMobile()) {
+      currentElements = regularElements;
+      document.body.style.overflow = '';
+    } else {
+      panel.style.display = "flex";
+      currentElements = regularElements;
+
+      // Sync content back to panel
+      syncContent();
+      currentElements.textarea.focus();
+    }
   }
 
   function syncContent() {
@@ -294,10 +346,44 @@
   zoomBtn.onclick=expandChat;
   modalCloseBtn.onclick=collapseChat;
 
-  // Close modal when clicking outside
+  // Close modal when clicking outside (but not on mobile for better UX)
   modal.onclick=(e)=>{
-    if(e.target === modal) collapseChat();
+    if(e.target === modal && !isMobile()) {
+      collapseChat();
+    }
   };
+
+  // Mobile-specific improvements
+  if(isMobile()) {
+    // Add swipe-down gesture to close on mobile
+    let startY = 0;
+    let currentY = 0;
+
+    modal.addEventListener('touchstart', (e) => {
+      startY = e.touches[0].clientY;
+    });
+
+    modal.addEventListener('touchmove', (e) => {
+      currentY = e.touches[0].clientY;
+    });
+
+    modal.addEventListener('touchend', (e) => {
+      const diffY = currentY - startY;
+      // If swiped down more than 100px, close modal
+      if(diffY > 100 && e.target === modal) {
+        collapseChat();
+      }
+    });
+
+    // Better keyboard handling on mobile
+    window.addEventListener('resize', () => {
+      if(modal.style.display === 'flex') {
+        // Adjust modal height when keyboard appears
+        const vh = window.innerHeight * 0.01;
+        modal.querySelector('#ask-haining-expanded').style.height = `${window.innerHeight * 0.9}px`;
+      }
+    });
+  }
 
   function refreshSuggestions() {
     const newSuggestions = getRandomQuestions().map(q =>
