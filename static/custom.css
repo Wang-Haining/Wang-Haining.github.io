@@ -2,3 +2,61 @@
 aside {
     background-color: #5c8374 !important;
 }
+
+/* ── Contact page ── */
+.contact-card {
+    max-width: 480px;
+    margin: 1.5em 0;
+}
+
+.contact-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 1em;
+    padding: 1.2em 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.contact-row:last-child {
+    border-bottom: none;
+}
+
+.contact-icon {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #5c8374;
+    color: #fff;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.contact-label {
+    display: block;
+    font-size: 0.75em;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #888;
+    margin-bottom: 0.2em;
+}
+
+.contact-detail {
+    font-size: 0.95em;
+    line-height: 1.6;
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+    .contact-row {
+        border-bottom-color: rgba(255, 255, 255, 0.08);
+    }
+    .contact-icon {
+        background: #46726a;
+    }
+    .contact-label {
+        color: #999;
+    }
+}
