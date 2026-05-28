@@ -1,0 +1,4 @@
+/* Override Flex sidebar background from #333 to green */
+aside {
+    background-color: #5c8374 !important;
+}
