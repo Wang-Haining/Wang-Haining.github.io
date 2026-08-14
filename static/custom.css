@@ -60,3 +60,19 @@ aside {
         color: #999;
     }
 }
+
+/* Open science badges (journal-issued), used in What's New entries */
+.osbadges {
+    display: inline-block;
+    margin-top: 0.35em;
+    line-height: 1;
+}
+.osbadges a {
+    border-bottom: none;
+}
+.osbadges img {
+    height: 28px;
+    width: auto;
+    vertical-align: middle;
+    margin-right: 6px;
+}
