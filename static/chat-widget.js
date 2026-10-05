@@ -1,6 +1,6 @@
 (function () {
   "use strict";
-  /*** Ask Haining: floating chat widget, v6 ***/
+  /*** Ask Haining: floating chat widget, v7 (text + images) ***/
 
   const script = document.currentScript;
   const LOCAL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
@@ -9,6 +9,8 @@
   const MAX_CHARS = 2000;
   const STORE_KEY = "ahw:conversation";
   const SEEN_KEY = "ahw:seen";
+  const MAX_IMAGES = 3;
+  const BOBO = ["/images/bobo/bobo-1.jpg", "/images/bobo/bobo-2.jpg", "/images/bobo/bobo-3.jpg", "/images/bobo/bobo-4.jpg"];
 
   /* ------------------------------------------------------------
    * Question pool, grouped by theme so a draw spans topics.
@@ -158,6 +160,50 @@
     return html;
   }
 
+  // [[bobo]] is the easter-egg token; [[bobo:N]] pins which photo was shown.
+  function pinBobo(text) {
+    return text.replace(/\[\[bobo\]\]/g, () => `[[bobo:${Math.floor(Math.random() * BOBO.length)}]]`);
+  }
+  function renderAnswer(text, streaming) {
+    if (streaming) text = text.replace(/\[\[[a-z:0-9]*\]?$/, ""); // hide a half-streamed token
+    return renderMarkdown(text).replace(/\[\[bobo(?::(\d))?\]\]/g, (_, n) => {
+      const src = BOBO[n !== undefined ? +n % BOBO.length : 0];
+      return `</p><figure class="ahw-bobo"><img src="${src}" alt="Bobo the cat" loading="lazy"></figure><p>`;
+    }).replace(/<p>\s*<\/p>/g, "");
+  }
+  function forApi(text) {
+    return text.replace(/\[\[bobo(?::\d)?\]\]/g, "[photo of Bobo]");
+  }
+
+  /* ------------------------------------------------------------
+   * Images: downscale in the browser before upload.
+   * ----------------------------------------------------------*/
+  function loadImage(file) {
+    return new Promise((resolve, reject) => {
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => resolve({ img, url });
+      img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("unreadable image")); };
+      img.src = url;
+    });
+  }
+  async function prepareImage(file) {
+    const { img, url } = await loadImage(file);
+    const scale = Math.min(1, 1568 / Math.max(img.naturalWidth, img.naturalHeight));
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.round(img.naturalWidth * scale);
+    canvas.height = Math.round(img.naturalHeight * scale);
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    let data = "";
+    for (const q of [0.85, 0.7, 0.55]) {
+      data = canvas.toDataURL("image/jpeg", q).split(",")[1];
+      if (data.length < 1_400_000) break;
+    }
+    return { media_type: "image/jpeg", data, url };
+  }
+
   /* ------------------------------------------------------------
    * Styles
    * ----------------------------------------------------------*/
@@ -213,6 +259,19 @@
   .ahw-send:disabled{opacity:.4;cursor:default;} .ahw-send svg{width:18px;height:18px;}
   .ahw-foot{display:flex;justify-content:space-between;gap:8px;padding:0 16px 10px;font-size:11.5px;color:var(--ahw-muted);}
   .ahw-foot .ahw-count.ahw-over{color:#c0392b;}
+  .ahw-attach{width:36px;height:36px;flex:none;display:grid;place-items:center;border:0;border-radius:12px;background:transparent;color:var(--ahw-muted);cursor:pointer;}
+  .ahw-attach:hover{color:var(--ahw-accent);background:color-mix(in srgb,var(--ahw-accent) 10%,transparent);} .ahw-attach svg{width:19px;height:19px;}
+  .ahw-attach:disabled{opacity:.35;cursor:default;}
+  .ahw-form{padding-left:6px;}
+  .ahw-thumbs{display:flex;gap:8px;padding:0 14px;flex-wrap:wrap;} .ahw-thumbs:empty{display:none;}
+  .ahw-thumb{position:relative;width:56px;height:56px;margin-top:8px;}
+  .ahw-thumb img{width:100%;height:100%;object-fit:cover;border-radius:10px;border:1px solid var(--ahw-line);}
+  .ahw-thumb button{position:absolute;top:-7px;right:-7px;width:20px;height:20px;border-radius:50%;border:0;background:var(--ahw-ink);color:var(--ahw-bg);font-size:13px;line-height:20px;cursor:pointer;padding:0;}
+  .ahw-user-imgs{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;margin-bottom:6px;}
+  .ahw-user-imgs img{max-width:140px;max-height:140px;border-radius:10px;object-fit:cover;}
+  .ahw-user .ahw-imgnote{opacity:.8;font-size:13px;display:block;}
+  .ahw-bobo{margin:.5em 0 .3em;} .ahw-bobo img{display:block;width:100%;max-width:300px;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.15);}
+  #ahw-panel.ahw-drop .ahw-log{outline:2px dashed var(--ahw-accent);outline-offset:-8px;}
   @media (max-width:600px){
     #ahw-launcher{right:14px;bottom:14px;padding:6px 14px 6px 6px;font-size:15px;}
     #ahw-panel,#ahw-panel.ahw-wide{right:0;bottom:0;width:100vw;height:100dvh;border-radius:0;border:0;}
@@ -228,6 +287,7 @@
     narrow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14h6v6M20 10h-6V4M10 14l-7 7M14 10l7-7"/></svg>',
     reset: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>',
     send: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>',
+    clip: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.4 11.1l-8.5 8.5a5.5 5.5 0 0 1-7.8-7.8l8.5-8.5a3.7 3.7 0 0 1 5.2 5.2l-8.5 8.5a1.8 1.8 0 0 1-2.6-2.6l7.8-7.8"/></svg>',
     stop: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="7" y="7" width="10" height="10" rx="2"/></svg>',
     shuffle: '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>',
   };
@@ -260,11 +320,14 @@
       <button type="button" class="ahw-icon ahw-close-btn" title="Close" aria-label="Close">${ICONS.close}</button>
     </header>
     <div class="ahw-log" aria-live="polite"></div>
+    <div class="ahw-thumbs"></div>
     <form class="ahw-form">
+      <button type="button" class="ahw-attach" title="Attach images" aria-label="Attach images">${ICONS.clip}</button>
+      <input type="file" accept="image/*" multiple hidden>
       <textarea rows="1" maxlength="${MAX_CHARS + 200}" placeholder="Ask about research, papers, teaching…" aria-label="Your question"></textarea>
       <button type="submit" class="ahw-send" aria-label="Send">${ICONS.send}</button>
     </form>
-    <div class="ahw-foot"><span>AI answers can be wrong · built on Claude</span><span class="ahw-count"></span></div>`;
+    <div class="ahw-foot"><span>AI answers can be wrong · images are processed by Anthropic, not stored</span><span class="ahw-count"></span></div>`;
 
   document.body.appendChild(launcher);
   document.body.appendChild(panel);
@@ -275,6 +338,10 @@
   const sendBtn = form.querySelector(".ahw-send");
   const wideBtn = panel.querySelector(".ahw-wide-btn");
   const count = panel.querySelector(".ahw-count");
+  const thumbs = panel.querySelector(".ahw-thumbs");
+  const attachBtn = form.querySelector(".ahw-attach");
+  const fileInput = form.querySelector('input[type="file"]');
+  let pending = [];
 
   /* ------------------------------------------------------------
    * State
@@ -286,10 +353,18 @@
   function save() { store.set("sessionStorage", STORE_KEY, messages.slice(-24)); }
   function scrollDown() { log.scrollTop = log.scrollHeight; }
 
-  function addBubble(role, html) {
+  function addBubble(role, html, imgs) {
     const el = document.createElement("div");
     el.className = `ahw-msg ${role === "user" ? "ahw-user" : "ahw-bot"}`;
-    if (role === "user") el.textContent = html; else el.innerHTML = html;
+    if (role === "user") {
+      if (imgs && imgs.length) {
+        const row = document.createElement("div");
+        row.className = "ahw-user-imgs";
+        for (const src of imgs) { const im = document.createElement("img"); im.src = src; im.alt = "Attached image"; row.appendChild(im); }
+        el.appendChild(row);
+      }
+      el.appendChild(document.createTextNode(html));
+    } else el.innerHTML = html;
     log.appendChild(el);
     scrollDown();
     return el;
@@ -314,7 +389,12 @@
   function renderAll() {
     log.innerHTML = "";
     addBubble("bot", renderMarkdown("Hi! I'm an AI assistant that knows Haining's papers, projects, and teaching. What would you like to know?"));
-    for (const m of messages) addBubble(m.role, m.role === "user" ? m.content : renderMarkdown(m.content));
+    for (const m of messages) {
+      if (m.role === "user") {
+        const b = addBubble("user", m.content);
+        if (m.images) { const n = document.createElement("span"); n.className = "ahw-imgnote"; n.textContent = `🖼 ${m.images} image${m.images > 1 ? "s" : ""}`; b.prepend(n); }
+      } else addBubble("bot", renderAnswer(m.content));
+    }
     renderSuggestions(messages.length ? "Keep exploring" : "Try asking");
   }
 
@@ -325,9 +405,10 @@
   }
 
   function updateSend() {
-    const len = input.value.trim().length;
+    const len = input.value.trim().length + pending.length;
     const over = input.value.length > MAX_CHARS;
     sendBtn.disabled = !controller && (len === 0 || over);
+    attachBtn.disabled = !!controller || pending.length >= MAX_IMAGES;
     count.textContent = input.value.length > MAX_CHARS * 0.8 ? `${input.value.length}/${MAX_CHARS}` : "";
     count.classList.toggle("ahw-over", over);
   }
@@ -342,10 +423,13 @@
    * ----------------------------------------------------------*/
   async function ask(question) {
     question = (question || "").trim();
-    if (!question || controller || question.length > MAX_CHARS) return;
+    const imgs = pending;
+    if ((!question && !imgs.length) || controller || question.length > MAX_CHARS) return;
+    if (!question) question = "Please take a look at this image.";
+    pending = []; renderThumbs();
     log.querySelectorAll(".ahw-sugs").forEach((n) => n.remove());
-    addBubble("user", question);
-    messages.push({ role: "user", content: question });
+    addBubble("user", question, imgs.map((i) => i.url));
+    messages.push(imgs.length ? { role: "user", content: question, images: imgs.length } : { role: "user", content: question });
     save();
     input.value = ""; autosize();
 
@@ -354,13 +438,16 @@
     setBusy(true);
     let answer = "";
     let frame = 0;
-    const paint = () => { frame = 0; bubble.innerHTML = renderMarkdown(answer); scrollDown(); };
+    const paint = (done) => { frame = 0; bubble.innerHTML = renderAnswer(answer, !done); scrollDown(); };
 
     try {
       const res = await fetch(ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages }),
+        body: JSON.stringify({
+          messages: messages.map((m) => ({ role: m.role, content: (m.images && m !== messages[messages.length - 1] ? "[image attached] " : "") + forApi(m.content) })),
+          images: imgs.map((i) => ({ media_type: i.media_type, data: i.data })),
+        }),
         signal: controller.signal,
       });
       if (!res.ok || !res.body) {
@@ -375,12 +462,12 @@
         answer += decoder.decode(value, { stream: true });
         if (!frame) frame = requestAnimationFrame(paint);
       }
-      answer += decoder.decode();
-      paint();
+      answer = pinBobo(answer + decoder.decode());
+      paint(true);
     } catch (err) {
       if (err.name === "AbortError") {
-        answer = answer ? answer + " …" : "";
-        if (answer) paint(); else bubble.remove();
+        answer = answer ? pinBobo(answer) + " …" : "";
+        if (answer) paint(true); else bubble.remove();
       } else {
         bubble.innerHTML = renderMarkdown(err.friendly ? err.message : "Sorry, something went wrong. Please try again.");
         answer = "";
@@ -397,6 +484,39 @@
     renderSuggestions("You might also ask");
     input.focus({ preventScroll: true });
   }
+
+  /* ------------------------------------------------------------
+   * Attachments
+   * ----------------------------------------------------------*/
+  function renderThumbs() {
+    thumbs.innerHTML = "";
+    pending.forEach((p, i) => {
+      const t = document.createElement("div");
+      t.className = "ahw-thumb";
+      t.innerHTML = `<img src="${p.url}" alt="Attached image ${i + 1}"><button type="button" aria-label="Remove image">×</button>`;
+      t.querySelector("button").onclick = () => { pending.splice(i, 1); renderThumbs(); };
+      thumbs.appendChild(t);
+    });
+    updateSend();
+  }
+  async function addFiles(files) {
+    for (const f of Array.from(files || [])) {
+      if (pending.length >= MAX_IMAGES) break;
+      if (!/^image\//.test(f.type)) continue;
+      try { pending.push(await prepareImage(f)); } catch (_) { /* skip unreadable files */ }
+    }
+    renderThumbs();
+    input.focus({ preventScroll: true });
+  }
+  attachBtn.addEventListener("click", () => fileInput.click());
+  fileInput.addEventListener("change", () => { addFiles(fileInput.files); fileInput.value = ""; });
+  input.addEventListener("paste", (e) => {
+    const files = Array.from(e.clipboardData ? e.clipboardData.files : []);
+    if (files.length) { e.preventDefault(); addFiles(files); }
+  });
+  panel.addEventListener("dragover", (e) => { if (e.dataTransfer && Array.from(e.dataTransfer.types).includes("Files")) { e.preventDefault(); panel.classList.add("ahw-drop"); } });
+  panel.addEventListener("dragleave", (e) => { if (!panel.contains(e.relatedTarget)) panel.classList.remove("ahw-drop"); });
+  panel.addEventListener("drop", (e) => { e.preventDefault(); panel.classList.remove("ahw-drop"); addFiles(e.dataTransfer && e.dataTransfer.files); });
 
   /* ------------------------------------------------------------
    * Open / close
@@ -429,7 +549,7 @@
   });
   panel.querySelector(".ahw-reset-btn").addEventListener("click", () => {
     if (controller) controller.abort();
-    messages = []; store.del("sessionStorage", STORE_KEY); shown = [];
+    messages = []; store.del("sessionStorage", STORE_KEY); shown = []; pending = []; renderThumbs();
     renderAll();
   });
   panel.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
