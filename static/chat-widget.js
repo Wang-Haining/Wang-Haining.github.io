@@ -1,6 +1,6 @@
 (function () {
   "use strict";
-  /*** Ask Haining: floating chat widget, v9 (text + images, painting palettes) ***/
+  /*** Ask Haining: floating chat widget, v10 (opens large on desktop) ***/
 
   const script = document.currentScript;
   const LOCAL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
@@ -9,6 +9,7 @@
   const MAX_CHARS = 2000;
   const STORE_KEY = "ahw:conversation";
   const SEEN_KEY = "ahw:seen";
+  const WIDE_KEY = "ahw:wide"; // remembers whether the visitor prefers the large panel
   const MAX_IMAGES = 3;
   const BOBO = ["/images/bobo/bobo-1.jpg", "/images/bobo/bobo-2.jpg", "/images/bobo/bobo-3.jpg", "/images/bobo/bobo-4.jpg"];
 
@@ -526,7 +527,11 @@
    * ----------------------------------------------------------*/
   let opened = false;
   function open() {
-    if (!opened) { renderAll(); opened = true; }
+    if (!opened) {
+      // Desktop opens large by default; phones always get the full-screen sheet.
+      if (window.innerWidth > 600) setWide(store.get("localStorage", WIDE_KEY, true) !== false, false);
+      renderAll(); opened = true;
+    }
     else if (!controller) renderSuggestions(messages.length ? "Keep exploring" : "Try asking");
     panel.classList.add("ahw-open");
     panel.setAttribute("aria-hidden", "false");
@@ -561,12 +566,14 @@
   ["mousemove", "scroll", "keydown", "touchstart", "click"].forEach((ev) => window.addEventListener(ev, armIdle, { passive: true }));
   armIdle();
   panel.querySelector(".ahw-close-btn").addEventListener("click", close);
-  wideBtn.addEventListener("click", () => {
-    const wide = panel.classList.toggle("ahw-wide");
+  function setWide(wide, remember) {
+    panel.classList.toggle("ahw-wide", wide);
     wideBtn.innerHTML = wide ? ICONS.narrow : ICONS.wide;
     wideBtn.title = wide ? "Shrink" : "Expand";
     wideBtn.setAttribute("aria-label", wideBtn.title);
-  });
+    if (remember) store.set("localStorage", WIDE_KEY, wide);
+  }
+  wideBtn.addEventListener("click", () => setWide(!panel.classList.contains("ahw-wide"), true));
   panel.querySelector(".ahw-reset-btn").addEventListener("click", () => {
     if (controller) controller.abort();
     messages = []; store.del("sessionStorage", STORE_KEY); shown = []; pending = []; renderThumbs();
