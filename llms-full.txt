@@ -311,8 +311,8 @@ I design learning experiences that bridge theory, computational methods, and rea
 
 ### Courses Taught
 
-* *DSCI-D 590 Biomedical Data Science in Practice*, Indiana University (online, Summer 2025 and Winter Session 2025–26)  
-    - A new course applying AI and biostatistical methods using NIH *All of Us* data. Co-designed and co-taught with Drs. Haixu Tang and Jing Su in the summer; co-taught with Dr. Jingqiong Li in the winter session.
+* *DSCI-D 590 Biomedical Data Science in Practice*, Indiana University (online, Summer and Fall 2025)  
+    - A new course applying AI and biostatistical methods using NIH *All of Us* data. Co-designed and co-taught with Drs. Haixu Tang and Jing Su in the summer; co-taught with Dr. Jingqiong Li in the fall.
 
 * *ILS-Z 604 Music Data Mining*, Indiana University (in person, Fall 2022)  
     - Led lab sessions on machine and deep learning for audio and text analysis.
