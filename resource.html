@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="HandheldFriendly" content="True" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- Palette of the day: colors from famous paintings (via Color Lisa, colorlisa.com). Preview any with ?palette=N. -->
+  <!-- Palette of the hour: colors from famous paintings (via Color Lisa, colorlisa.com). Preview any with ?palette=N. -->
   <script>
   (function () {
     var P = [ // [work, artist, sidebar, chip, accent, hover, accentDark, selection, pop, popInk]
@@ -39,8 +39,8 @@
     ["Hommage à Blériot","Robert Delaunay","#4368b6","#6180c2","#a06707","#c27d09","#e4930a","#e4cd5e","#a06707","#ffffff"],
     ["The Creation of Adam","Michelangelo","#3f7b98","#5e90a8","#5b7e52","#6d9762","#86aa7d","#dccbb8","#cbb396","#244657"]
     ];
-    var d = new Date(), day = Math.floor((d.getTime() - d.getTimezoneOffset() * 60000) / 86400000);
-    var i = ((day % P.length) + P.length) % P.length;
+    var d = new Date(), hour = Math.floor((d.getTime() - d.getTimezoneOffset() * 60000) / 3600000);
+    var i = ((hour % P.length) + P.length) % P.length;
     try { var q = new URLSearchParams(location.search).get("palette"); if (q !== null && P[+q]) i = +q; } catch (e) {}
     var p = P[i], s = document.documentElement.style;
     s.setProperty("--pal-sidebar", p[2]); s.setProperty("--pal-chip", p[3]);
@@ -76,7 +76,7 @@
   <link rel="stylesheet" type="text/css" href="https://hainingwang.org/theme/font-awesome/css/brands.css">
   <link rel="stylesheet" type="text/css" href="https://hainingwang.org/theme/font-awesome/css/solid.css">
 
-  <link rel="stylesheet" type="text/css" href="https://hainingwang.org/static/custom.css?v=7">
+  <link rel="stylesheet" type="text/css" href="https://hainingwang.org/static/custom.css?v=8">
 
   <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
   <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
@@ -127,7 +127,6 @@
         "honorificSuffix": "PhD",
         "url": "https://hainingwang.org/",
         "image": "https://hainingwang.org/images/profile.png",
-        "email": "mailto:hw56@iu.edu",
         "jobTitle": "Postdoctoral Fellow",
         "description": "Haining Wang, PhD, is a postdoctoral fellow in Biostatistics and Health Data Science at Indiana University School of Medicine (IU). Haining builds NLP and large language model methods for real-world health data, and studies research policy, AI fairness in libraries, and stylometry.",
         "worksFor": {
@@ -136,8 +135,7 @@
           "parentOrganization": {"@type": "CollegeOrUniversity", "name": "Indiana University", "url": "https://www.iu.edu/"}
         },
         "affiliation": [
-          {"@type": "Organization", "name": "Indiana University School of Medicine", "url": "https://medicine.iu.edu/"},
-          {"@type": "Organization", "name": "Indiana University Richard M. Fairbanks School of Public Health", "url": "https://fairbanks.indianapolis.iu.edu/"}
+          {"@type": "Organization", "name": "Indiana University School of Medicine", "url": "https://medicine.iu.edu/"}
         ],
         "alumniOf": [
           {"@type": "CollegeOrUniversity", "name": "Indiana University Bloomington", "url": "https://www.indiana.edu/"},
@@ -177,10 +175,10 @@
 <p class="site-name"><a href="https://hainingwang.org/">Haining Wang, Ph.D.</a></p>    <div class="site-roles">
       <p><span>Postdoctoral Fellow</span></p>
       <p><span>Biostatistics & Health Data Science</span></p>
-      <p><span>School of Medicine</span><span>Richard M. Fairbanks School of Public Health</span><span>Indiana University</span></p>
+      <p><span>School of Medicine</span><span>Indiana University</span></p>
     </div>
     <ul class="social">
-      <li><a href="mailto:hw56@iu.edu" title="Email" aria-label="Email" rel="me"><i class="fa-solid fa-envelope" aria-hidden="true"></i></a></li>
+      <li><a href="/contact" title="Email" aria-label="Email" data-email><i class="fa-solid fa-envelope" aria-hidden="true"></i></a></li>
       <li><a href="https://scholar.google.com/citations?user=zvrO0WMAAAAJ" title="Google Scholar" aria-label="Google Scholar" target="_blank" rel="me noopener"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i></a></li>
       <li><a href="https://github.com/Wang-Haining" title="GitHub" aria-label="GitHub" target="_blank" rel="me noopener"><i class="fa-brands fa-github-alt" aria-hidden="true"></i></a></li>
     </ul>
@@ -256,7 +254,7 @@ Built with <a href="http://getpelican.com" target="_blank">Pelican</a> using <a 
 </p></footer>  </main>
 
 
-<script src="/static/site.js?v=3" defer></script>
+<script src="/static/site.js?v=4" defer></script>
 <script src="/static/chat-widget.js?v=10" defer></script>
 </body>
 </html>

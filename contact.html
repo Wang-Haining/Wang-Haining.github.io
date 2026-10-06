@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="HandheldFriendly" content="True" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- Palette of the day: colors from famous paintings (via Color Lisa, colorlisa.com). Preview any with ?palette=N. -->
+  <!-- Palette of the hour: colors from famous paintings (via Color Lisa, colorlisa.com). Preview any with ?palette=N. -->
   <script>
   (function () {
     var P = [ // [work, artist, sidebar, chip, accent, hover, accentDark, selection, pop, popInk]
@@ -39,8 +39,8 @@
     ["Hommage à Blériot","Robert Delaunay","#4368b6","#6180c2","#a06707","#c27d09","#e4930a","#e4cd5e","#a06707","#ffffff"],
     ["The Creation of Adam","Michelangelo","#3f7b98","#5e90a8","#5b7e52","#6d9762","#86aa7d","#dccbb8","#cbb396","#244657"]
     ];
-    var d = new Date(), day = Math.floor((d.getTime() - d.getTimezoneOffset() * 60000) / 86400000);
-    var i = ((day % P.length) + P.length) % P.length;
+    var d = new Date(), hour = Math.floor((d.getTime() - d.getTimezoneOffset() * 60000) / 3600000);
+    var i = ((hour % P.length) + P.length) % P.length;
     try { var q = new URLSearchParams(location.search).get("palette"); if (q !== null && P[+q]) i = +q; } catch (e) {}
     var p = P[i], s = document.documentElement.style;
     s.setProperty("--pal-sidebar", p[2]); s.setProperty("--pal-chip", p[3]);
@@ -76,7 +76,7 @@
   <link rel="stylesheet" type="text/css" href="https://hainingwang.org/theme/font-awesome/css/brands.css">
   <link rel="stylesheet" type="text/css" href="https://hainingwang.org/theme/font-awesome/css/solid.css">
 
-  <link rel="stylesheet" type="text/css" href="https://hainingwang.org/static/custom.css?v=7">
+  <link rel="stylesheet" type="text/css" href="https://hainingwang.org/static/custom.css?v=8">
 
   <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
   <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
@@ -101,20 +101,20 @@
 
 
 <title>Contact | Haining Wang, Indiana University</title>
-  <meta name="description" content="Contact Haining Wang, PhD, Department of Biostatistics and Health Data Science, Indiana University School of Medicine, Indianapolis: hw56@iu.edu.">
+  <meta name="description" content="Contact Haining Wang, PhD, Department of Biostatistics and Health Data Science, Indiana University School of Medicine, Indianapolis.">
   <meta name="author" content="Haining Wang">
   <link rel="canonical" href="https://hainingwang.org/contact">
   <meta property="og:site_name" content="Haining Wang">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Contact | Haining Wang, Indiana University">
-  <meta property="og:description" content="Contact Haining Wang, PhD, Department of Biostatistics and Health Data Science, Indiana University School of Medicine, Indianapolis: hw56@iu.edu.">
+  <meta property="og:description" content="Contact Haining Wang, PhD, Department of Biostatistics and Health Data Science, Indiana University School of Medicine, Indianapolis.">
   <meta property="og:url" content="https://hainingwang.org/contact">
   <meta property="og:image" content="https://hainingwang.org/images/profile.png">
   <meta property="og:image:alt" content="Haining Wang">
   <meta property="og:locale" content="en_US">  <meta name="twitter:card" content="summary">
   <meta name="twitter:site" content="@Haining_Wang_">
   <meta name="twitter:title" content="Contact | Haining Wang, Indiana University">
-  <meta name="twitter:description" content="Contact Haining Wang, PhD, Department of Biostatistics and Health Data Science, Indiana University School of Medicine, Indianapolis: hw56@iu.edu.">
+  <meta name="twitter:description" content="Contact Haining Wang, PhD, Department of Biostatistics and Health Data Science, Indiana University School of Medicine, Indianapolis.">
   <meta name="twitter:image" content="https://hainingwang.org/images/profile.png">
   <script type="application/ld+json">
   {
@@ -127,7 +127,6 @@
         "honorificSuffix": "PhD",
         "url": "https://hainingwang.org/",
         "image": "https://hainingwang.org/images/profile.png",
-        "email": "mailto:hw56@iu.edu",
         "jobTitle": "Postdoctoral Fellow",
         "description": "Haining Wang, PhD, is a postdoctoral fellow in Biostatistics and Health Data Science at Indiana University School of Medicine (IU). Haining builds NLP and large language model methods for real-world health data, and studies research policy, AI fairness in libraries, and stylometry.",
         "worksFor": {
@@ -136,8 +135,7 @@
           "parentOrganization": {"@type": "CollegeOrUniversity", "name": "Indiana University", "url": "https://www.iu.edu/"}
         },
         "affiliation": [
-          {"@type": "Organization", "name": "Indiana University School of Medicine", "url": "https://medicine.iu.edu/"},
-          {"@type": "Organization", "name": "Indiana University Richard M. Fairbanks School of Public Health", "url": "https://fairbanks.indianapolis.iu.edu/"}
+          {"@type": "Organization", "name": "Indiana University School of Medicine", "url": "https://medicine.iu.edu/"}
         ],
         "alumniOf": [
           {"@type": "CollegeOrUniversity", "name": "Indiana University Bloomington", "url": "https://www.indiana.edu/"},
@@ -159,7 +157,7 @@
         "@id": "https://hainingwang.org/contact#webpage",
         "url": "https://hainingwang.org/contact",
         "name": "Contact | Haining Wang, Indiana University",
-        "description": "Contact Haining Wang, PhD, Department of Biostatistics and Health Data Science, Indiana University School of Medicine, Indianapolis: hw56@iu.edu.",
+        "description": "Contact Haining Wang, PhD, Department of Biostatistics and Health Data Science, Indiana University School of Medicine, Indianapolis.",
         "isPartOf": {"@id": "https://hainingwang.org/#website"},        "about": {"@id": "https://hainingwang.org/#person"},        "dateModified": "2026-10-05"
       }
     ]
@@ -177,10 +175,10 @@
 <p class="site-name"><a href="https://hainingwang.org/">Haining Wang, Ph.D.</a></p>    <div class="site-roles">
       <p><span>Postdoctoral Fellow</span></p>
       <p><span>Biostatistics & Health Data Science</span></p>
-      <p><span>School of Medicine</span><span>Richard M. Fairbanks School of Public Health</span><span>Indiana University</span></p>
+      <p><span>School of Medicine</span><span>Indiana University</span></p>
     </div>
     <ul class="social">
-      <li><a href="mailto:hw56@iu.edu" title="Email" aria-label="Email" rel="me"><i class="fa-solid fa-envelope" aria-hidden="true"></i></a></li>
+      <li><a href="/contact" title="Email" aria-label="Email" data-email><i class="fa-solid fa-envelope" aria-hidden="true"></i></a></li>
       <li><a href="https://scholar.google.com/citations?user=zvrO0WMAAAAJ" title="Google Scholar" aria-label="Google Scholar" target="_blank" rel="me noopener"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i></a></li>
       <li><a href="https://github.com/Wang-Haining" title="GitHub" aria-label="GitHub" target="_blank" rel="me noopener"><i class="fa-brands fa-github-alt" aria-hidden="true"></i></a></li>
     </ul>
@@ -205,7 +203,7 @@
   </header>
   <div>
     <div class="contact-card">
-  <div class="contact-row"><span class="contact-icon"><i class="fa-solid fa-envelope" aria-hidden="true"></i></span><div><span class="contact-label">Email</span><span class="contact-detail"><a href="mailto:hw56@iu.edu">hw56@iu.edu</a></span></div></div>
+  <div class="contact-row"><span class="contact-icon"><i class="fa-solid fa-envelope" aria-hidden="true"></i></span><div><span class="contact-label">Email</span><span class="contact-detail"><a class="email-link" data-email href="/contact" aria-label="Email Haining"><svg class="email-svg" viewBox="0 0 5738 1326" role="img" aria-label="Email address" focusable="false"><path fill="currentColor" d="M82 1000V288H164V482L161 582Q196 549 234 526Q273 502 323 502Q400 502 436 550Q471 599 471 692V1000H389V703Q389 635 367 604Q345 573 297 573Q260 573 230 592Q201 611 164 648V1000Z M703 1000 568 514H654L725 795Q733 828 740 861Q747 894 753 933H757Q765 894 772 861Q780 828 788 795L860 514H950L1023 795Q1032 828 1040 861Q1048 894 1055 933H1059Q1067 894 1074 861Q1081 828 1088 795L1159 514H1239L1108 1000H1001L936 740Q927 706 920 672Q913 639 905 596H901Q894 639 886 673Q879 707 870 740L805 1000Z M1497 1012Q1421 1012 1371 985Q1321 958 1288 925L1328 871Q1357 899 1395 922Q1433 944 1489 944Q1548 944 1588 904Q1629 865 1629 798Q1629 732 1592 695Q1555 658 1493 658Q1460 658 1436 668Q1413 678 1384 697L1340 669L1361 362H1680V433H1433L1416 622Q1439 610 1462 603Q1485 596 1514 596Q1569 596 1614 618Q1658 639 1685 683Q1712 727 1712 796Q1712 865 1682 914Q1651 962 1602 987Q1553 1012 1497 1012Z M2021 672Q1990 672 1954 692Q1918 712 1888 756Q1896 849 1932 898Q1967 947 2028 947Q2075 947 2107 908Q2139 870 2139 807Q2139 745 2110 708Q2080 672 2021 672ZM2028 1012Q1966 1012 1916 978Q1866 944 1837 876Q1808 807 1808 705Q1808 577 1842 499Q1877 421 1932 386Q1988 350 2051 350Q2103 350 2140 370Q2178 389 2205 418L2159 469Q2140 446 2112 432Q2084 419 2054 419Q2009 419 1972 444Q1935 470 1912 530Q1888 589 1886 690Q1916 653 1956 632Q1996 610 2035 610Q2118 610 2168 660Q2217 709 2217 807Q2217 868 2191 914Q2165 960 2122 986Q2080 1012 2028 1012Z M2660 1155Q2562 1155 2482 1114Q2402 1073 2355 993Q2308 913 2308 797Q2308 696 2341 614Q2374 533 2432 475Q2491 417 2566 386Q2641 354 2725 354Q2826 354 2900 396Q2973 437 3014 512Q3054 586 3054 685Q3054 773 3024 833Q2993 893 2947 923Q2901 953 2854 953Q2812 953 2784 934Q2755 915 2750 875H2748Q2725 906 2692 926Q2659 946 2626 946Q2574 946 2538 908Q2503 871 2503 802Q2503 762 2517 720Q2531 679 2556 644Q2582 610 2618 589Q2654 568 2698 568Q2750 568 2778 618H2780L2791 577H2846L2807 778Q2794 838 2807 866Q2820 893 2860 893Q2891 893 2920 868Q2949 844 2968 798Q2988 752 2988 688Q2988 610 2958 548Q2927 487 2867 452Q2807 417 2718 417Q2653 417 2592 444Q2530 470 2482 520Q2433 569 2404 638Q2376 708 2376 794Q2376 889 2414 956Q2451 1022 2517 1057Q2583 1092 2666 1092Q2711 1092 2752 1081Q2792 1070 2826 1051L2850 1104Q2806 1129 2759 1142Q2712 1155 2660 1155ZM2642 885Q2663 885 2686 872Q2709 858 2734 827L2763 669Q2749 646 2734 638Q2719 629 2699 629Q2660 629 2632 656Q2604 682 2589 720Q2574 759 2574 797Q2574 844 2594 864Q2613 885 2642 885Z M3186 1000V514H3268V1000ZM3227 414Q3203 414 3188 400Q3172 385 3172 360Q3172 336 3188 321Q3203 306 3227 306Q3251 306 3266 321Q3282 336 3282 360Q3282 385 3266 400Q3251 414 3227 414Z M3574 1012Q3497 1012 3461 964Q3425 915 3425 822V514H3508V811Q3508 879 3530 910Q3551 941 3599 941Q3637 941 3666 922Q3696 902 3730 859V514H3812V1000H3744L3737 924H3734Q3700 964 3662 988Q3624 1012 3574 1012Z M4019 1012Q3994 1012 3976 994Q3959 977 3959 950Q3959 921 3976 904Q3994 886 4019 886Q4043 886 4060 904Q4078 921 4078 950Q4078 977 4060 994Q4043 1012 4019 1012Z M4409 569Q4379 569 4350 584Q4322 598 4302 630Q4281 662 4274 714H4527Q4527 643 4496 606Q4465 569 4409 569ZM4422 1012Q4357 1012 4304 982Q4250 952 4219 894Q4188 837 4188 757Q4188 678 4220 621Q4251 564 4302 533Q4352 502 4408 502Q4502 502 4552 564Q4601 626 4601 730Q4601 743 4600 755Q4599 767 4597 779H4272Q4278 861 4324 903Q4371 945 4432 945Q4467 945 4498 935Q4528 925 4553 908L4583 962Q4551 984 4512 998Q4472 1012 4422 1012Z M4887 1012Q4796 1012 4741 946Q4686 879 4686 758Q4686 679 4716 622Q4745 564 4794 533Q4842 502 4897 502Q4939 502 4970 517Q5001 532 5033 558L5029 475V288H5112V1000H5044L5037 943H5034Q5006 971 4968 992Q4930 1012 4887 1012ZM4905 943Q4969 943 5029 876V622Q4998 594 4970 582Q4941 571 4911 571Q4872 571 4840 594Q4809 618 4790 660Q4771 701 4771 757Q4771 844 4806 894Q4841 943 4905 943Z M5418 1012Q5341 1012 5305 964Q5269 915 5269 822V514H5352V811Q5352 879 5374 910Q5395 941 5443 941Q5481 941 5510 922Q5540 902 5574 859V514H5656V1000H5588L5581 924H5578Q5544 964 5506 988Q5468 1012 5418 1012Z"/></svg></a></span></div></div>
   <div class="contact-row"><span class="contact-icon"><i class="fa-solid fa-location-dot" aria-hidden="true"></i></span><div><span class="contact-label">Office</span><span class="contact-detail">HITS 3077, 410 W 10th St<br>Indianapolis, IN 46202</span></div></div>
   <div class="contact-row"><span class="contact-icon"><i class="fa-solid fa-building-columns" aria-hidden="true"></i></span><div><span class="contact-label">Affiliation</span><span class="contact-detail">Department of Biostatistics &amp; Health Data Science<br>Indiana University School of Medicine</span></div></div>
   <div class="contact-row"><span class="contact-icon"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i></span><div><span class="contact-label">Google Scholar</span><span class="contact-detail"><a href="https://scholar.google.com/citations?user=zvrO0WMAAAAJ" target="_blank" rel="noopener">scholar.google.com</a></span></div></div>
@@ -222,7 +220,7 @@ Built with <a href="http://getpelican.com" target="_blank">Pelican</a> using <a 
 </p></footer>  </main>
 
 
-<script src="/static/site.js?v=3" defer></script>
+<script src="/static/site.js?v=4" defer></script>
 <script src="/static/chat-widget.js?v=10" defer></script>
 </body>
 </html>

@@ -248,6 +248,8 @@ a.pub-title:hover { color: var(--pal-accent, #d9411e) !important; text-decoratio
 .page-contact .contact-row { align-items: center; padding: .9em 0; }
 .page-contact .contact-icon { width: 22px; height: 22px; }
 .page-contact .contact-detail a { overflow-wrap: anywhere; }
+.email-svg { height: 1.326em; width: auto; vertical-align: -.326em; }
+.email-link { display: inline-block; line-height: 1; }
 
 @media (prefers-color-scheme: dark) {
     .page-teaching > div > ul > li, .page-resource > div > ul > li { border-top-color: rgba(255, 255, 255, .09); }

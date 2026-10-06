@@ -95,7 +95,16 @@
     });
   }
 
-  function init() { collapseNews(); setupPubFilter(); markNewsDates(); labelResources(); }
+  // The address never appears in the HTML: links marked data-email get their mailto only when a person interacts.
+  function protectEmail() {
+    var parts = ["hw56", "iu", "edu"];
+    function arm() { this.href = "mailto:" + parts[0] + String.fromCharCode(64) + parts[1] + "." + parts[2]; }
+    document.querySelectorAll("[data-email]").forEach(function (a) {
+      ["mouseenter", "focus", "touchstart", "mousedown"].forEach(function (ev) { a.addEventListener(ev, arm, { passive: true }); });
+    });
+  }
+
+  function init() { collapseNews(); setupPubFilter(); markNewsDates(); labelResources(); protectEmail(); }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
   else init();
 })();

@@ -8,7 +8,7 @@ Haining Wang is on the academic job market in 2026-2027 and is open to faculty a
 - Information science and library and information science (iSchools; responsible AI in libraries and information services; scholarly communication)
 - Science, research, and health policy (science of science, metascience, research funding and public access policy)
 
-Contact: hw56@iu.edu
+Contact: see https://hainingwang.org/contact
 
 ## Highlights
 - Builds language-model methods that read real-world health records (clinical notes, medication histories) across health systems; works on NIH-funded projects (OT2OD038014, U24AA026969, R21AA031370) at Indiana University School of Medicine.
