@@ -39,6 +39,30 @@
     });
     list.insertAdjacentElement("afterend", btn);
   }
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", collapseNews);
-  else collapseNews();
+  /* Research: topic filter (All / NLP / Health / Metascience); state lives in the URL hash. */
+  function setupPubFilter() {
+    var bar = document.querySelector(".pub-filter");
+    if (!bar) return;
+    var chips = Array.prototype.slice.call(bar.querySelectorAll(".pub-chip"));
+    var pubs = Array.prototype.slice.call(document.querySelectorAll("li.pub"));
+    var sections = Array.prototype.slice.call(document.querySelectorAll(".pub-section"));
+    function apply(tag, push) {
+      if (!chips.some(function (c) { return c.dataset.filter === tag; })) tag = "all";
+      chips.forEach(function (c) {
+        var on = c.dataset.filter === tag;
+        c.classList.toggle("is-active", on); c.setAttribute("aria-pressed", String(on));
+      });
+      pubs.forEach(function (li) {
+        li.hidden = tag !== "all" && (" " + li.dataset.tags + " ").indexOf(" " + tag + " ") < 0;
+      });
+      sections.forEach(function (sec) { sec.hidden = !sec.querySelector("li.pub:not([hidden])"); });
+      if (push) history.replaceState(null, "", tag === "all" ? location.pathname + location.search : "#" + tag);
+    }
+    chips.forEach(function (c) { c.addEventListener("click", function () { apply(c.dataset.filter, true); }); });
+    apply((location.hash || "").slice(1) || "all", false);
+  }
+
+  function init() { collapseNews(); setupPubFilter(); }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+  else init();
 })();
