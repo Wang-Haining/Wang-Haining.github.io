@@ -62,7 +62,40 @@
     apply((location.hash || "").slice(1) || "all", false);
   }
 
-  function init() { collapseNews(); setupPubFilter(); }
+  /* Home: wrap each news date "(Mon D, YYYY)" in a span for styling; the text itself is unchanged. */
+  function markNewsDates() {
+    document.querySelectorAll(".page-home > div > ul > li").forEach(function (li) {
+      var n = li.firstChild;
+      while (n && n.nodeType === 3 && !n.textContent.trim()) n = n.nextSibling;
+      if (!n || n.nodeType !== 3) return;
+      var m = n.textContent.match(/^\s*(\([A-Z][a-z]{2}[^)]*\d{4}\))/);
+      if (!m) return;
+      var span = document.createElement("span"); span.className = "news-date"; span.textContent = m[1];
+      n.textContent = n.textContent.slice(n.textContent.indexOf(m[1]) + m[1].length);
+      li.insertBefore(span, n);
+    });
+  }
+
+  /* Resource: label each card with where it lives (GitHub, Zenodo, PyPI, ...). */
+  function labelResources() {
+    var SOURCES = [[/github\.com/, "GitHub", "fa-brands fa-github"], [/zenodo\.org/, "Zenodo", "fa-solid fa-database"],
+                   [/pypi\.org/, "PyPI", "fa-brands fa-python"], [/overleaf\.com/, "Overleaf", "fa-solid fa-file-lines"],
+                   [/huggingface\.co/, "Hugging Face", "fa-solid fa-cube"], [/codeberg\.org/, "Codeberg", "fa-solid fa-code"]];
+    document.querySelectorAll(".page-resource > div > ul > li").forEach(function (li) {
+      var a = li.querySelector("a"); if (!a) return;
+      a.classList.add("res-name");
+      var holder = a.parentNode; // <li> or the <p> Markdown wraps it in
+      var rest = a.nextSibling;
+      if (rest && rest.nodeType === 3) rest.textContent = rest.textContent.replace(/^\s*:\s*/, "");
+      var src = SOURCES.find(function (s) { return s[0].test(a.href); }); if (!src) return;
+      var tag = document.createElement("span"); tag.className = "res-source";
+      tag.innerHTML = '<i class="' + src[2] + '" aria-hidden="true"></i>';
+      tag.appendChild(document.createTextNode(src[1]));
+      holder.insertBefore(tag, holder.firstChild);
+    });
+  }
+
+  function init() { collapseNews(); setupPubFilter(); markNewsDates(); labelResources(); }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
   else init();
 })();
