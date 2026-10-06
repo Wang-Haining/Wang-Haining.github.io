@@ -105,19 +105,19 @@ Haining does NLP with real-world data. A common thread: building computational m
 
 # Website: home and news
 
-Hi 👋, I'm a postdoctoral fellow in the Department of Biostatistics and Health Data Science at Indiana University School of Medicine. I do NLP with real-world data. My research explores cultural and sociotechnical dynamics to help build better AI for everyone 🤗. My representative projects include [auditing AI bias](https://doi.org/10.1057/s41599-026-08465-5), evaluating funding agency policies at the [NIH](https://arxiv.org/pdf/2609.14842) and [NSF](https://arxiv.org/pdf/2609.19552), [protecting whistleblowers](https://hdl.handle.net/2022/33626), and promoting [accessible science](https://rdcu.be/ew0mK).
+Hi 👋, I'm a postdoctoral fellow in the Department of Biostatistics and Health Data Science at the Indiana University School of Medicine. I use NLP and large language models to make sense of real-world data, from patient records to grant portfolios, and I care that the resulting tools work well for everyone. Representative projects include [estimating disease risk from medication lists](https://dualr.hainingwang.org), [auditing LLMs for bias in library services](https://doi.org/10.1057/s41599-026-08465-5), evaluating funding policies at the [NIH](https://arxiv.org/pdf/2609.14842) and [NSF](https://arxiv.org/pdf/2609.19552), [protecting whistleblowers' anonymity](https://hdl.handle.net/2022/33626), and [making scientific abstracts readable for everyone](https://rdcu.be/ew0mK).
 
 ### What's New
 
 * (Oct 4, 2026) Two new preprints on how US funders count and fund science 📊
 
-    * ["Still Funded, No Longer Counted"](https://arxiv.org/abs/2610.03443): after NIH's 2025 award reviews, many minority health projects kept their funding but quietly dropped out of NIH's count.
+    * ["Still Funded, No Longer Counted: How NIH's 2025 Award Reviews Changed What the Government Counts as Minority Health Research"](https://arxiv.org/abs/2610.03443): many minority health projects kept their funding but quietly dropped out of NIH's count.
 
-    * ["The Shape of NSF Openness to Newcomers"](https://doi.org/10.31235/osf.io/9qpb7_v1): NSF newcomers got the same share of grants in 2026, just with fewer doors open, especially outside R1 universities.
+    * ["The Shape of NSF Openness to Newcomers: Same Share, Fewer Doors"](https://doi.org/10.31235/osf.io/9qpb7_v1): newcomers kept the same share of NSF grants in 2026, but fewer doors were open to them, especially outside R1 universities.
 
-* (Sep 19, 2026) Your AI does not sound like you? Try [your-voice](https://github.com/Wang-Haining/your_voice): it not only de-AI-slops your drafts, but also picks up your voice ;)
+* (Sep 19, 2026) AI drafts don't sound like you? Try [your-voice](https://github.com/Wang-Haining/your_voice): it strips the AI tone from your drafts and learns to write the way you do 😉
 
-* (Sep 18, 2026) My new preprint ["Funding the Runners-Up Beats a Golden Ticket"](https://arxiv.org/pdf/2609.19552) is out: NSF's proposed golden ticket works (almost) like a lottery 🎟️
+* (Sep 18, 2026) My new preprint ["Funding the Runners-Up Beats a Golden Ticket"](https://arxiv.org/pdf/2609.19552) is out: NSF's proposed golden ticket works (almost) like a lottery, judging by rejected ICLR submissions 🎟️
 
 * (Sep 13, 2026) My new preprint ["Ending the NIH Embargo Accelerated Public Access to Funded Research, But Substantial Delays Remain"](https://arxiv.org/pdf/2609.14842) is out: NIH-funded papers go public faster now, but most still aren't free a week after publication.
 
@@ -131,13 +131,13 @@ Hi 👋, I'm a postdoctoral fellow in the Department of Biostatistics and Health
 
 * (May 27, 2026) Our half-day short course, ["Practical Large Language Models: Foundations and Applications,"](https://mbswonline.com/program/) was successfully delivered at *MBSW 2026* in Carmel, Indiana, together with Drs. Jiang Bian, Xing He, and Yuhang Jiang. 
 
-* (Mar 20, 2026) DualR is live! 💊 Our clinical risk assessment tool is now available at [dualr.hainingwang.org](https://dualr.hainingwang.org). DualR asks a simple question: *given that a patient took this drug, how likely are they to have this disease?* and turns the answer into a portable risk score from any medication list. In our study across the All of Us Research Program and Indiana's largest clinical data network (N > 1.3M), DualR flagged future alcohol use disorder 300+ days before diagnosis — all with equity across race, gender, and social determinants of health.
+* (Mar 20, 2026) DualR is live! 💊 Our clinical risk tool is now at [dualr.hainingwang.org](https://dualr.hainingwang.org). DualR asks a simple question, *given that a patient took this drug, how likely are they to have this disease?*, and turns any medication list into a portable risk score. Across the All of Us Research Program and Indiana's largest clinical data network (N > 1.3M), it flagged alcohol use disorder more than 300 days before diagnosis and performed consistently across race, gender, and social determinants of health.
 
-* (Nov 17, 2025) Our poster, ["Thinking, Fast and Slow: DualReasoning Enhances Clinical Knowledge Extraction from Large Language Models,"](https://indiana.sharepoint.com/:b:/s/O365-Sulab-HainingResearch/EYJeap9LYVZHiFGSHzfQK1ABzhlp2gQd29qZJPsONAbRgA?e=hAIwpt) was nominated as a distinguished poster at AMIA 2025!
+* (Nov 17, 2025) Our poster, ["Thinking, Fast and Slow: DualReasoning Enhances Clinical Knowledge Extraction from Large Language Models,"](https://drive.google.com/file/d/1r9FAD9tLjCtWvCUjI-enLxQ4FxUeflFd/view?usp=sharing) was nominated as a distinguished poster at AMIA 2025!
 
 * (Nov 8, 2025) Our short course, "Practical Large Language Models: Foundations and Applications," has been accepted by MBSW 2026!
 
-* (Oct 21, 2025) Our paper ["Building and Deploying the Digital Humanities Quarterly Recommender System"](https://journal.code4lib.org/articles/18501) is out in *Code4Lib Journal*! 🎉 As the Data Analytics team at *DHQ*, we open-sourced [*DHQ*'s recommender system](https://github.com/Digital-Humanities-Quarterly/DHQ-similar-papers). With *DHQ*'s corpus (also fully open) and self-explanatory code, this serves a good starting point for CS/DS/LIS students interested in building their first retrieval system.
+* (Oct 21, 2025) Our paper ["Building and Deploying the Digital Humanities Quarterly Recommender System"](https://journal.code4lib.org/articles/18501) is out in *Code4Lib Journal*! 🎉 As the Data Analytics team at *DHQ*, we open-sourced [*DHQ*'s recommender system](https://github.com/Digital-Humanities-Quarterly/DHQ-similar-papers). With *DHQ*'s corpus (also fully open) and self-explanatory code, it is a good starting point for CS/DS/LIS students interested in building their first retrieval system.
 
 * (Aug 18, 2025) Excited to share that our ACCESS Explore request, "Practice-Informed, Explainable Multi-Agent Decision Support for Immune-Related Acute Kidney Injury (irAKI) Phenotyping" (MED250055), has been approved!
 
@@ -156,7 +156,7 @@ Hi 👋, I'm a postdoctoral fellow in the Department of Biostatistics and Health
 * (Feb 12, 2025) I presented a poster titled ["Thinking, Fast and Slow: DualReasoning Enhances Clinical Knowledge Extraction from Large Language Models"](https://drive.google.com/file/d/11o0DyC-K7RS7Zmgpo7NR0iyxYNpowN_H/view?usp=sharing) at the *Regenstrief Healthcare AI Conference*.  
 DualReasoning shows great promise in incorporating messy medication information for chronic disease phenotyping (e.g., diabetes and hypertension) while remaining fully privacy-preserving.
 
-* (Dec 27, 2024) Our *DSH* paper on solving authorship disputes between Lu Xun and Zhou Zuoren's early works is out—[give it a read!](https://doi.org/10.1093/llc/fqae084)
+* (Dec 27, 2024) Our *DSH* paper on the disputed early essays of Lu Xun and Zhou Zuoren is out—[give it a read!](https://doi.org/10.1093/llc/fqae084)
 
 * (Dec 18, 2024) I presented "Simplifying Scholarly Abstracts for Accessible Digital Libraries Using Language Models" at *JCDL 2024*.
 
