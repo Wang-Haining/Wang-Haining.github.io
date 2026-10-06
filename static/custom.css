@@ -1,6 +1,28 @@
-/* Override Flex sidebar background from #333 to green */
+/* ── Palette of the day ──
+   Colors come from a famous painting, chosen daily by the inline script in base.html.
+   Fallbacks are the original site colors. The content area stays white. */
 aside {
-    background-color: #5c8374 !important;
+    background-color: var(--pal-sidebar, #5c8374) !important;
+}
+a { color: var(--pal-accent, #d9411e); transition: color .15s ease; }
+a:hover { color: var(--pal-hover, #ff5a09); }
+a:focus-visible { outline: 2px solid var(--pal-accent, #d9411e); outline-offset: 2px; border-radius: 2px; }
+::selection { background: var(--pal-selection, #f6d8cf); color: #242121; }
+aside ::selection { background: rgba(255, 255, 255, .85); color: var(--pal-sidebar, #5c8374); }
+aside ul.social li a {
+    background-color: var(--pal-chip, rgba(255, 255, 255, .18)) !important;
+    color: #fff !important;
+    transition: background-color .15s ease, color .15s ease, transform .15s ease;
+}
+aside ul.social li a:hover {
+    background-color: #fff !important;
+    color: var(--pal-sidebar, #5c8374) !important;
+    transform: translateY(-1px);
+}
+@media (prefers-color-scheme: dark) {
+    a { color: var(--pal-accent-dark, #ef7c45); }
+    a:hover { color: #fff; }
+    ::selection { background: var(--pal-accent-dark, #ef7c45); color: #111; }
 }
 
 /* ── Contact page ── */
@@ -28,7 +50,7 @@ aside {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #5c8374;
+    background: var(--pal-sidebar, #5c8374);
     color: #fff;
     border-radius: 8px;
     font-size: 16px;
@@ -54,7 +76,7 @@ aside {
         border-bottom-color: rgba(255, 255, 255, 0.08);
     }
     .contact-icon {
-        background: #46726a;
+        background: var(--pal-sidebar, #46726a);
     }
     .contact-label {
         color: #999;
@@ -75,4 +97,78 @@ aside {
     width: auto;
     vertical-align: middle;
     margin-right: 6px;
+}
+
+/* ── Layout (rebuilt sidebar markup + responsive pass, 2026-10) ── */
+aside .sidebar-inner { padding: 28px 20px 24px; }
+aside .sidebar-avatar img { display: block; margin: 0 auto; width: 120px; height: 120px; max-width: 120px; border-radius: 50%; object-fit: cover; }
+aside .site-name { margin: 18px 0 10px; font-size: 1.6rem; font-weight: 600; line-height: 1.2; letter-spacing: .005em; }
+aside .site-name a, aside .site-name a:hover { color: #fff; }
+aside .site-roles p { margin: 0 0 .7em; font-size: 1.02rem; line-height: 1.4; }
+aside .site-roles span { display: block; }
+aside ul.social { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; list-style: none; margin: 0; padding: 22px 0 0; }
+aside ul.social li { margin: 0; padding: 0; display: block; }
+aside ul.social li a { width: 38px; height: 38px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 17px; line-height: 1; }
+
+main article { line-height: 1.65; }
+main article h3 { margin-top: 1.6em; }
+main article ul li { margin-bottom: .55em; }
+main article ul li ul { margin-top: .55em; }
+main article a { overflow-wrap: anywhere; }
+main article p, main article li { hyphens: manual; }
+.osbadges { display: flex; flex-wrap: wrap; gap: 6px; }
+.osbadges img { margin-right: 0 !important; }
+
+.news-more {
+    display: inline-flex; align-items: center; gap: .4em;
+    margin: .4em 0 2em; padding: .5em 1.1em;
+    font: inherit; font-size: .95em; color: var(--pal-accent, #d9411e);
+    background: transparent; border: 1px solid currentColor; border-radius: 999px; cursor: pointer;
+    transition: background-color .15s ease, color .15s ease;
+}
+.news-more::after { content: "▾"; font-size: .85em; }
+.news-more[aria-expanded="true"]::after { content: "▴"; }
+.news-more:hover { background: var(--pal-accent, #d9411e); color: #fff; }
+.news-more:focus-visible { outline: 2px solid var(--pal-accent, #d9411e); outline-offset: 2px; }
+
+/* Desktop and tablet: bounded sidebar width, vertically centered content */
+@media screen and (min-width: 768px) {
+    aside { width: clamp(240px, 25vw, 400px) !important; overflow-y: auto; }
+    main { padding-left: clamp(240px, 25vw, 400px) !important; }
+    aside .sidebar-inner { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 36px 22px; box-sizing: border-box; }
+    main article { margin-left: 6%; margin-right: 6%; }
+}
+@media screen and (min-width: 768px) and (max-height: 700px) {
+    aside .sidebar-inner { justify-content: flex-start; }
+    aside .sidebar-avatar img { width: 96px; height: 96px; }
+}
+
+/* Phones: compact header instead of a full-screen sidebar */
+@media screen and (max-width: 767px) {
+    aside .sidebar-inner { padding: 22px 16px 18px; }
+    aside .sidebar-avatar img { width: 88px; height: 88px; }
+    aside .site-name { margin: 12px 0 8px; font-size: 1.4rem; }
+    aside .site-roles p { margin: 0 0 .35em; font-size: .95rem; line-height: 1.35; }
+    aside ul.social { padding-top: 12px; gap: 8px; }
+    aside ul.social li a { width: 34px; height: 34px; font-size: 15px; }
+    main nav { padding: 12px 8px !important; line-height: 2; }
+    main nav a { font-size: 13px !important; padding: 0 7px !important; }
+    main article { margin: 0 5% 2%; font-size: 1rem; }
+    .osbadges img { height: 24px !important; }
+}
+
+@media (prefers-color-scheme: dark) {
+    .news-more { color: var(--pal-accent-dark, #ef7c45); }
+    .news-more:hover { background: var(--pal-accent-dark, #ef7c45); color: #111; }
+}
+/* Spacer paragraphs that hold a single <br> in the Markdown: keep a modest gap instead of a tall one */
+main article p:has(> br:only-child) { margin: 0; height: .4em; overflow: hidden; }
+main article p:has(> br:only-child) br { display: none; }
+/* Keep the floating chat button from covering the footer */
+main footer { padding-bottom: 84px !important; }
+/* Tablets / small laptops: narrower sidebar, keep the name on one line */
+@media screen and (min-width: 768px) and (max-width: 1100px) {
+    aside .site-name { font-size: 1.28rem; }
+    aside .site-roles p { font-size: .94rem; }
+    aside .sidebar-avatar img { width: 104px; height: 104px; }
 }

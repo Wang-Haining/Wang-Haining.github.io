@@ -1,0 +1,478 @@
+# Haining Wang, PhD
+
+> Postdoctoral Fellow in Biostatistics and Health Data Science at Indiana University School of Medicine (Indianapolis). Haining Wang works on natural language processing and large language models for real-world health data, research and health policy (NIH, NSF), responsible AI in libraries, and stylometry.
+
+## Open to work
+Haining Wang is on the academic job market in 2026-2027 and is open to faculty and research positions in:
+- Health and biomedical informatics (clinical NLP, LLM-based phenotyping, real-world data, health data science, biostatistics, public health)
+- Information science and library and information science (iSchools; responsible AI in libraries and information services; scholarly communication)
+- Science, research, and health policy (science of science, metascience, research funding and public access policy)
+
+Contact: hw56@iu.edu
+
+## Highlights
+- Builds language-model methods that read real-world health records (clinical notes, medication histories) across health systems; works on NIH-funded projects (OT2OD038014, U24AA026969, R21AA031370) at Indiana University School of Medicine.
+- Built DualR (https://dualr.hainingwang.org), which turns a medication list into a portable disease-risk score; in a study of more than 1.3 million people it flagged future alcohol use disorder 300+ days before diagnosis.
+- Studies research policy with public data: NIH's 2025 award reviews and minority health research, the end of the NIH public-access embargo, NSF openness to newcomers, and NSF's proposed "golden ticket".
+- Audits LLM fairness in academic library reference services (Humanities and Social Sciences Communications, 2026) and makes science accessible with reinforcement learning (Scientometrics, 2025).
+- Ph.D. in Information Science (Indiana University, 2025) with a background in stylometry and authorship attribution; teaches biomedical data science and practical LLM courses; mentors master's and undergraduate students.
+
+## Pages
+- [Home and news](https://hainingwang.org/): introduction and recent news
+- [Research](https://hainingwang.org/research): publications and preprints
+- [Teaching](https://hainingwang.org/teaching): courses and workshops
+- [Resources](https://hainingwang.org/resource): open-source tools, corpora, and packages
+- [Contact](https://hainingwang.org/contact)
+
+## Profiles
+- [Google Scholar](https://scholar.google.com/citations?user=zvrO0WMAAAAJ)
+- [ORCID](https://orcid.org/0000-0002-1196-0918)
+- [GitHub](https://github.com/Wang-Haining)
+
+---
+
+# Profile
+
+## Current position
+- Postdoctoral Fellow, Department of Biostatistics & Health Data Science, Indiana University School of Medicine (Indianapolis), since Aug 2025. Mentor: Dr. Jing Su.
+- Works on three NIH-funded projects as a team member:
+  - NIH OT2OD038014, "AI-based & Ethically-focused Multi-Modal Data Integration Framework for Screening, Diagnosing, and Caring for CKD Patients" (prime award: University of Florida). Haining leads the "textomics" work: extracting structured facts (kidney pathology, kidney radiology, social determinants of health) from clinical notes with locally hosted LLMs.
+  - NIH U24AA026969, ITAALD Data Coordinating Center (Integrated Therapies for Alcohol Use in Alcohol-Associated Liver Disease). Haining is on the ARDaC (AlcHepNet Research Data Commons) research team.
+  - NIH R21AA031370, GAIPA: Graph Artificial Intelligence for Precision Identification of Alcohol Use Disorder. Research team member.
+- ACCESS Explore compute allocation (2025-2026): explainable multi-agent decision support for immune-related acute kidney injury phenotyping.
+- Works with large real-world health data: the NIH All of Us Research Program (Controlled Tier), the Indiana Network for Patient Care (INPC), Indiana registries (immunotherapy, cirrhosis, kidney), and Merative MarketScan claims.
+
+## Research in one paragraph
+Haining does NLP with real-world data. A common thread: building computational measures of what institutional records miss, then asking how those gaps shape care, access, and policy. Examples: diagnosis codes that miss alcohol use disorder that clinical notes reveal; medication lists that carry disease signal (DualR); federal award records whose category labels changed when award text was edited (NIH "uncounted science"); library chatbots that might serve some patrons worse than others (fairness audits); and authorship signals that people try to hide (adversarial stylometry).
+
+## Research areas
+1. Clinical NLP and LLM-based phenotyping from EHR notes and medication histories, across health systems.
+2. Health disparities and social determinants of health in large cohorts (All of Us, claims).
+3. Science of science and research policy: NIH and NSF funding, public access, peer review and selection policies.
+4. Responsible AI in libraries and information services: fairness audits of LLM reference services, accessible science communication.
+5. Stylometry and authorship: attribution, adversarial stylometry (protecting author anonymity), Chinese literary authorship disputes.
+
+## Tools and resources he built
+- DualR (dualr.hainingwang.org): turns a medication list into a portable disease risk score by asking an on-premises LLM how likely a disease is given each drug. In a study across All of Us and Indiana's largest clinical data network (more than 1.3 million people), DualR flagged future alcohol use disorder 300+ days before diagnosis, with equitable performance across race, gender, and social determinants of health. AMIA 2025 Distinguished Poster nominee.
+- your-voice (github.com/Wang-Haining/your_voice): a skill that learns a writer's style from their own samples and revises AI-assisted drafts over three passes so they sound like the writer, not generic AI.
+- RLAM (github.com/Wang-Haining/RLAM): reinforcement learning to rewrite scientific abstracts at a high-school reading level.
+- AInotator: LLM annotation of computer-mediated discourse (speech acts, politeness, meta-acts).
+- NovEval: content-based scientific novelty measure.
+- DHQ recommender system for Digital Humanities Quarterly (open source).
+- Python packages: writeprints-static, functionwords. Corpora: Blog-1K, RAABT, Cross-Register Authorship Attribution Corpus, CCTAA.
+
+## Education
+- Ph.D. in Information Science (minor in Data Science), Indiana University Bloomington, 2019-2025. Dissertation: "Defending Against Authorship Attribution Attacks with Large Language Models." Advisor: Dr. Allen Riddell.
+- M.A. in Archival Studies, Wuhan University, 2013-2016.
+- B.S. in Air Defense Operations, PLA Air Defense Academy, 2012-2013.
+- B.S. in Management Information Systems, Shanxi University, 2008-2012.
+
+## Earlier positions
+- Research Intern, IU School of Medicine (GAIPA project), 2024-2025.
+- Research Scientist, Indiana University Bloomington, IARPA HIATUS program (human-interpretable attribution of text), 2023-2024.
+- Associate Instructor, ILS-Z 604 Music Data Mining, IU Bloomington, Fall 2022.
+- Research Assistant, NSF-funded "Defending Against Authorship Attribution Attacks," IU Bloomington, 2019-2022.
+
+## Teaching
+- Co-instructor, DSCI-D 590 Biomedical Data Science in Practice, Indiana University (Summer 2025): a new course applying AI and biostatistics to NIH All of Us data, co-designed with Drs. Haixu Tang and Jing Su.
+- Co-instructor, "Practical Large Language Models: Foundations and Applications," half-day short course at the Midwest Biopharmaceutical Statistics Workshop (May 27, 2026), with Drs. Jiang Bian, Xing He, and Yuhang Jiang.
+- Associate Instructor, Music Data Mining (Fall 2022): ML/DL labs for audio and text.
+- Guest lectures on stylometry, authorship attribution, and AI for libraries at Nankai, Soochow, Wuhan, Shanghai Normal Universities and Indiana University (2021-2024).
+- Mentoring: Haining mentors master's and undergraduate students and research interns on clinical NLP, health disparities, and aging projects; one undergraduate intern is first author on a manuscript in preparation.
+
+## Selected invited talks
+- "Can AI Serve Everyone Equally? Auditing Fairness in LLM-Powered Reference," AI Literacy & Learning for Libraries, Archives, and Museums Summit, Library of Congress (lightning talk, Jul 2026).
+- "AI for Information Services: Governance, Privacy, and Access," San Jose State University School of Information (Apr 2026).
+- "Using LLMs to Enable Timely and Equitable Phenotyping from Medication Histories," Temple University Barnett College of Public Health (Feb 2026).
+- "Thinking, Fast and Slow: DualReasoning Enhances Clinical Knowledge Extraction from LLMs," ICIBM 2025 (Aug 2025).
+- "Novelty of Science & Science of Novelty," Nanjing University (Dec 2024).
+
+## Honors
+- AMIA 2025 Distinguished Poster Award nominee; iConference 2025 Best Paper Finalist; ACM SIGIR Student Travel Grant (2024); LEADING Fellowship, IMLS (2022); HASTAC Scholar, IU (2022).
+
+## Service
+- Data Analytics Editor, Digital Humanities Quarterly (2024-present); co-editor of a forthcoming DHQ special issue, "AI for Digital Humanities: Research Problems and Critical Approaches."
+- Research Affiliate, Center for Rare Book Conservation and Restoration Research, Wuhan University.
+- Reviewer for journals including Nature Communications, Artificial Intelligence, Humanities & Social Sciences Communications, Digital Scholarship in the Humanities, College & Research Libraries, Journal of Academic Librarianship, IEEE JBHI, Scientific Reports; and for AMIA, ACL Rolling Review, iConference, DH, ASIS&T, RANLP.
+
+## Book
+- "Defending Against Authorship Identification Attacks" (Synthesis Lectures on Human Language Technologies, Springer Nature): full manuscript under external review.
+
+## Contact
+- Email: hw56@iu.edu. Website: hainingwang.org. GitHub: github.com/Wang-Haining. Office: HITS 3077, 410 W 10th St, Indianapolis, IN 46202.
+
+---
+
+# Website: home and news
+
+Hi 👋, I'm a postdoctoral fellow in the Department of Biostatistics and Health Data Science at Indiana University School of Medicine. I do NLP with real-world data. My research explores cultural and sociotechnical dynamics to help build better AI for everyone 🤗. My representative projects include [auditing AI bias](https://doi.org/10.1057/s41599-026-08465-5), evaluating funding agency policies at the [NIH](https://arxiv.org/pdf/2609.14842) and [NSF](https://arxiv.org/pdf/2609.19552), [protecting whistleblowers](https://hdl.handle.net/2022/33626), and promoting [accessible science](https://rdcu.be/ew0mK).
+
+### What's New
+
+* (Oct 4, 2026) Two new preprints on how US funders count and fund science 📊
+
+    * ["Still Funded, No Longer Counted"](https://arxiv.org/abs/2610.03443): after NIH's 2025 award reviews, many minority health projects kept their funding but quietly dropped out of NIH's count.
+
+    * ["The Shape of NSF Openness to Newcomers"](https://doi.org/10.31235/osf.io/9qpb7_v1): NSF newcomers got the same share of grants in 2026, just with fewer doors open, especially outside R1 universities.
+
+* (Sep 19, 2026) Your AI does not sound like you? Try [your-voice](https://github.com/Wang-Haining/your_voice): it not only de-AI-slops your drafts, but also picks up your voice ;)
+
+* (Sep 18, 2026) My new preprint ["Funding the Runners-Up Beats a Golden Ticket"](https://arxiv.org/pdf/2609.19552) is out: NSF's proposed golden ticket works (almost) like a lottery 🎟️
+
+* (Sep 13, 2026) My new preprint ["Ending the NIH Embargo Accelerated Public Access to Funded Research, But Substantial Delays Remain"](https://arxiv.org/pdf/2609.14842) is out: NIH-funded papers go public faster now, but most still aren't free a week after publication.
+
+* (Aug 14, 2026) Two papers are out! 🎉
+
+    * ["Fairness Evaluation of Large Language Models in Academic Library Reference Services"](https://doi.org/10.1057/s41599-026-08465-5), in *Humanities and Social Sciences Communications*: we found no meaningful bias across six leading LLMs, a credible null and good news for library reference services.
+
+    * ["Reproduction and Replication of an Adversarial Stylometry Experiment"](https://doi.org/10.17879/replicationresearch-2026-9414), in *Replication Research*: manual obfuscation methods really do hold up against authorship attribution.
+
+* (Jul 21, 2026) I gave an invited lightning talk, "Can AI Serve Everyone Equally? Auditing Fairness in LLM-Powered Reference," at the AI Literacy & Learning for Libraries, Archives, and Museums (LAMs) Summit, *Library of Congress*, Washington, DC.
+
+* (May 27, 2026) Our half-day short course, ["Practical Large Language Models: Foundations and Applications,"](https://mbswonline.com/program/) was successfully delivered at *MBSW 2026* in Carmel, Indiana, together with Drs. Jiang Bian, Xing He, and Yuhang Jiang. 
+
+* (Mar 20, 2026) DualR is live! 💊 Our clinical risk assessment tool is now available at [dualr.hainingwang.org](https://dualr.hainingwang.org). DualR asks a simple question: *given that a patient took this drug, how likely are they to have this disease?* and turns the answer into a portable risk score from any medication list. In our study across the All of Us Research Program and Indiana's largest clinical data network (N > 1.3M), DualR flagged future alcohol use disorder 300+ days before diagnosis — all with equity across race, gender, and social determinants of health.
+
+* (Nov 17, 2025) Our poster, ["Thinking, Fast and Slow: DualReasoning Enhances Clinical Knowledge Extraction from Large Language Models,"](https://indiana.sharepoint.com/:b:/s/O365-Sulab-HainingResearch/EYJeap9LYVZHiFGSHzfQK1ABzhlp2gQd29qZJPsONAbRgA?e=hAIwpt) was nominated as a distinguished poster at AMIA 2025!
+
+* (Nov 8, 2025) Our short course, "Practical Large Language Models: Foundations and Applications," has been accepted by MBSW 2026!
+
+* (Oct 21, 2025) Our paper ["Building and Deploying the Digital Humanities Quarterly Recommender System"](https://journal.code4lib.org/articles/18501) is out in *Code4Lib Journal*! 🎉 As the Data Analytics team at *DHQ*, we open-sourced [*DHQ*'s recommender system](https://github.com/Digital-Humanities-Quarterly/DHQ-similar-papers). With *DHQ*'s corpus (also fully open) and self-explanatory code, this serves a good starting point for CS/DS/LIS students interested in building their first retrieval system.
+
+* (Aug 18, 2025) Excited to share that our ACCESS Explore request, "Practice-Informed, Explainable Multi-Agent Decision Support for Immune-Related Acute Kidney Injury (irAKI) Phenotyping" (MED250055), has been approved!
+
+* (Aug 3, 2025) I gave an invited talk, ["Thinking, Fast and Slow: DualReasoning Enhances Clinical Knowledge Extraction from Large Language Models"](https://docs.google.com/presentation/d/1l9XvvgIIPtDGAPmZ9hQDdLs4AVYYyLYh2GQtTsA--rQ/edit?usp=sharing), at the International Conference on Intelligent Biology and Medicine (*ICIBM 2025*).
+
+* (Jul 19, 2025) Our paper ["Science Out of Its Ivory Tower: Improving Accessibility with Reinforcement Learning"](https://rdcu.be/ew0mK) is out in *Scientometrics*! 🎉
+
+* (Jul 8, 2025) Our new preprint ["Fairness Evaluation of Large Language Models in Academic Library Reference Services"](https://arxiv.org/pdf/2507.04224) is out! TL;DR: Current LLMs show a promising degree of readiness to support equitable and contextually appropriate communication in academic library reference services.
+
+* (May 20, 2025) I presented "Thinking, Fast and Slow: Knowledge Extraction to Facilitate Phenotyping Using Drug Records in Real-World Data" at the Midwest Biopharmaceutical Statistics Workshop (MBSW 2025). Check out our [DualReasoning](https://docs.google.com/presentation/d/1-Y8gy-lIWCWFLPSgMY0186Z2rNDb4-lLJhVsc3FnyXU/edit?usp=sharing), which enables effective and secure use of medication records through simple chat with LLMs.
+
+* (May 9, 2025) I successfully defended my PhD dissertation, *Defending Against Authorship Attribution Attacks with Large Language Models*. I am deeply grateful to my committee members: Dr. Allen Riddell (Chair), Dr. John Walsh, Dr. Kahyun Choi, Dr. Staša Milojević, and Dr. Xiaozhong Liu. I also extend my sincere thanks to Dr. Sandra Kübler for her guidance. Check out the [slides](https://docs.google.com/presentation/d/1-qUwhibta21vMB2wuhsTfsztl3sJVB6PLdg_6w9hwYQ/edit?usp=sharing) and [manuscript](https://hdl.handle.net/2022/33626).
+
+* (Mar 20, 2025) I presented "Improving Scholarship Accessibility With Reinforcement Learning" at *iConference 2025*, hosted at Indiana University Bloomington. Our jargon-busting AI paper became a Best Paper finalist—[give it a read!](https://publicera.kb.se/ir/article/view/47530)
+
+* (Feb 12, 2025) I presented a poster titled ["Thinking, Fast and Slow: DualReasoning Enhances Clinical Knowledge Extraction from Large Language Models"](https://drive.google.com/file/d/11o0DyC-K7RS7Zmgpo7NR0iyxYNpowN_H/view?usp=sharing) at the *Regenstrief Healthcare AI Conference*.  
+DualReasoning shows great promise in incorporating messy medication information for chronic disease phenotyping (e.g., diabetes and hypertension) while remaining fully privacy-preserving.
+
+* (Dec 27, 2024) Our *DSH* paper on solving authorship disputes between Lu Xun and Zhou Zuoren's early works is out—[give it a read!](https://doi.org/10.1093/llc/fqae084)
+
+* (Dec 18, 2024) I presented "Simplifying Scholarly Abstracts for Accessible Digital Libraries Using Language Models" at *JCDL 2024*.
+
+* (Oct 24, 2024) Our new preprint is out! ["Science Out of Its Ivory Tower: Improving Accessibility with Reinforcement Learning"](https://arxiv.org/abs/2410.17088) simplifies scholarly abstracts from postgraduate 🧑‍🎓 to high-school 🧑‍🏫 reading levels without sacrificing faithfulness or quality. All of this is done by [RL-tuning a Gemma-2B](https://github.com/Wang-Haining/RLAM).
+
+* (Oct 15, 2024) I presented ["Language Modeling: From Teaching to Incentivizing"](https://drive.google.com/file/d/151F-KPfJtaGgt6jn-tIjrK0HgMNve_1P/view?usp=sharing) at the *IU Computational Linguistics Discussion Group*.
+
+* (Sep 28, 2024) I presented "Science Out of Its Ivory Tower: Improving Accessibility with Reinforcement Learning" at the *ILS Doctoral Research Forum 2024* and won 🥇.
+
+* (Aug 7, 2024) Our new preprint ["Simplifying Scholarly Abstracts for Accessible Digital Libraries"](https://arxiv.org/abs/2408.03899) is now online. We introduced a novel corpus designed to simplify scholarly abstracts and demonstrated that mainstream LLMs perform well with straightforward supervised fine-tuning. Although the improvement doesn't yet make the content fully understandable for a middle-school audience, these models provide a strong baseline for further enhancement.
+
+* (May 1, 2024) I joined Dr. Jing Su's lab as a research intern on the GAIPA project (Graph Artificial Intelligence for Precision Identification of Alcohol Use Disorder) in the Department of Biostatistics and Health Data Science at Indiana University School of Medicine.
+
+* (Apr 30, 2024) I passed my proposal defense for my PhD dissertation.
+
+* (Apr 15, 2024) I presented the manuscript titled ["A Content-Based Novelty Measure for Scholarly Publications: A Proof of Concept"](https://link.springer.com/chapter/10.1007/978-3-031-57867-0_31) at *iConference 2024*.
+
+* (Mar 13, 2024) I delivered a presentation titled "AI4Library" at *Nankai University*, covering the fundamentals of LLMs, their capabilities, surrounding hype, and their applications within librarianship.
+
+* (Jan 31, 2024) I joined the *Center for Rare Book Conservation and Restoration Research* at Wuhan University as a Research Affiliate.
+
+* (Jan 29, 2024) I joined [*Digital Humanities Quarterly*](https://www.digitalhumanities.org/dhq/) as Data Analytics Editor.
+
+* (Jan 18, 2024) My invited column ["Defending Against Authorship Identification Attacks"](https://montrealethics.ai/defending-against-authorship-identification-attacks/) was published by the *Montreal AI Ethics Institute*.
+
+* (Jan 8, 2024) The manuscript for NovEval, ["A Content-Based Novelty Measure for Scholarly Publications: A Proof of Concept"](https://arxiv.org/abs/2401.03642), is up. I will be presenting it at *iConference 2024*.
+
+* (Oct 7, 2023) NovEval (pronounced as "Nawv-Ee-val") demo is now [online](https://zenodo.org/records/10485173)! This GPT-2-based model evaluates scientific novelty automatically, and its assessments align well with human evaluation. It's still in beta, and I would love to hear your feedback😉!
+
+* (Oct 5, 2023) I successfully completed my qualifying defense🎉. The committee consisted of Dr. Allen Riddell (Chair), Dr. Xiaozhong Liu, and Dr. Staša Milojević (Minor Advisor).
+
+* (Oct 4, 2023) Our new papers are available on arXiv. Check them out!
+
+    * ["Defending Against Authorship Identification Attacks"](https://arxiv.org/abs/2310.01568)
+    * ["Enhancing Representation Generalization in Authorship Identification"](https://arxiv.org/abs/2310.00436)
+    * ["The Many Voices of Duying: Revisiting the Disputed Essays Between Lu Xun and Zhou Zuoren"](https://arxiv.org/abs/2310.01440)
+
+* (May 19, 2023) I delivered a lightning talk introducing our jargon-busting AI at *LEADING Forum 2022*. You can access our poster titled "Science Out of the Ivory Tower: Scientific Abstract Simplification for Everyone" [here](https://drive.google.com/file/d/1zKazj-khPamNUSwZMxdbOqQMQ8vYFEfg/view?usp=share_link).
+
+* (May 10, 2023) I uploaded a LaTeX poster template to *Overleaf*. The template, based on [Gemini](https://github.com/anishathalye/gemini), is minimal and modern, and features Indiana University's official color palette. You can find the template [here](https://www.overleaf.com/latex/templates/indiana-university-iu-poster-template/pvpryrsjnczb), or simply search for "IU poster" in the Overleaf gallery.
+
+* (Apr 14, 2023) I gave a lightning talk and presented a poster titled "The Many Voices of the Detached: Revisiting the Disputed Writings of Lu Xun and Zhou Zuoren" at the *IDAH HASTAC Symposium 2023*.
+
+* (Apr 13, 2023) I gave a guest lecture titled "Authorship Attribution: An Introduction" for Allen's *Digital Humanities* course.
+
+* (Jan 9, 2023) I began working with Allen on the IARPA [HIATUS (Human Interpretable Attribution of Text Using Underlying Structure)](https://www.iarpa.gov/research-programs/hiatus) Task Three.
+
+* (Dec 12, 2022) Blog-1K was published on [Zenodo](https://zenodo.org/record/7455623#.Y5-tAOxAphG). It is a redistributable authorship identification testbed for contemporary English prose. As a midterm output of HASTAC, we will use it to benchmark a deep learning-based authorship verification model against a corresponding attribution model.
+
+* (Nov 19, 2022) We launched our AI on [Hugging Face](https://huggingface.co/haining/scientific_abstract_simplification). It rewrites complex scientific abstracts into simpler yet accurate versions, helping lay audiences enjoy the fruits of open science.
+
+* (Nov 14, 2022) I gave a guest lecture titled "Modern Stylometry: Theory & Practice" at *Wuhan University*.
+
+* (Nov 4, 2022) I presented "Protecting Author Identity with Bible-Reading Artificial Intelligence" and won 🥈 in [the *ILS Doctoral Research Forum 2022*](https://drf-ils.github.io/2022/).
+
+* (Aug 22, 2022) I worked with Dr. Kahyun Choi as an Associate Instructor in her *Music Data Mining* course that fall.
+
+* (Aug 15, 2022) Our new paper ["Reproduction and Replication of an Adversarial Stylometry Experiment"](https://arxiv.org/abs/2208.07395) was released on arXiv.
+
+* (Jun 28, 2022) I presented our paper *The Many Voices of Du Ying: Revisiting the Disputed Writings of Lu Xun and Zhou Zuoren* at *DH 2022*. The Book of Abstracts is [available here](https://dh2022.dhii.asia/dh2022bookofabsts.pdf). [Watch the presentation](https://confit.atlas.jp/guide/event/dh2022/session/LP7-03/entries) if registered.
+
+* (Jun 14, 2022) Our paper "Mandarin Tone Sandhi Realization: Evidence from Large Speech Corpora" was accepted by the *23rd INTERSPEECH Conference (INTERSPEECH 2022)*.
+
+* (May 4, 2022) I was accepted into the *2022–2023 Institute for Digital Arts & Humanities (IDAH) Humanities, Arts, Science, and Technology Alliance and Collaboratory (HASTAC) Scholarship* program and began working on *Leveraging Small Humanities Datasets With Few-Shot Learning: A Case Study in Stylometry*.
+
+* (May 4, 2022) The package [writeprints-static](https://literary-materials.github.io/writeprints-static/) was released [on PyPI](https://pypi.org/project/writeprints-static/). Check it out!
+
+* (May 1, 2022) Scripts for generating the *Chinese Cross-Topic Authorship Attribution (CCTAA) Corpus* and running baselines were hosted on [Codeberg](https://codeberg.org/haining/cctaa).
+
+* (Apr 14, 2022) I gave a guest lecture titled "Authorship Attribution: A Case Study with Classical Chinese" at *ILS Z-764/657 Digital Humanities*, Indiana University Bloomington.
+
+* (Apr 13, 2022) I was accepted as a [LIS Education and Data Science Integrated Network Group](https://cci.drexel.edu/mrc/leading/) (*LEADING*) Fellow and worked with Montana State University Library on the project "TL;DR it": Automating Article Synopses for Search Engine Optimization and Citizen Science.
+
+* (Apr 4, 2022) Our paper "CCTAA: A Reproducible Corpus for Chinese Authorship Attribution Research" was accepted by the [13th European Language Resources Association's *Language Resources and Evaluation Conference* (LREC 2022)](https://lrec2022.lrec-conf.org/en/).
+
+* (Mar 4, 2022) Our papers "Minimum Text Length for Chinese Authorship Attribution" and "The Many Voices of Du Ying: Revisiting the Disputed Writings of Lu Xun and Zhou Zuoren" were accepted by [*DH Unbound 2022*](https://dhunbound2022.ach.org/) and [*DH 2022*](https://dh2022.adho.org/home), respectively.
+
+* (Dec 22, 2021) I gave a guest lecture titled "Authorship Attribution: Theory & Practice" at *Shanghai Normal University*.
+
+* (Nov 19, 2021) I presented our study "The Challenge of Vernacular and Classical Chinese Cross-Register Authorship Attribution" at *CHR 2021*. Check out the [*Proceedings of the Conference on Computational Humanities Research 2021*](http://ceur-ws.org/Vol-2989/long_paper41.pdf).
+
+* (Nov 12, 2021) Katherine Morrison, Meredith Dedema, and I organized [the *ILS Doctoral Research Forum 2021*](https://ils-drf.github.io/). I won 🥉 in the contest with my presentation "The Challenge of Vernacular and Classical Chinese Cross-Register Authorship Attribution."
+
+* (Nov 1, 2021) I gave a guest lecture on modern stylometry, authorship attribution, and adversarial stylometry at *Soochow University*.
+
+* (Oct 13, 2021) I gave a guest lecture on adversarial stylometry in Allen's *Social Media Mining* course.
+
+* (Sep 16, 2021) The *Cross-Register Authorship Attribution Corpus* (v1.0) was released on [Zenodo](https://zenodo.org/record/5513043).
+
+* (Sep 3, 2021) Our paper "The Challenge of Vernacular and Classical Chinese Cross-Register Authorship Attribution" was accepted by [the *Second Conference on Computational Humanities Research*](https://2021.computational-humanities-research.org/conference/) (*CHR 2021*).
+
+* (Sep 1, 2021) I presented our paper ["A Call for Clarity in Contemporary Authorship Attribution Evaluation"](https://aclanthology.org/2021.ranlp-main.132.pdf) at *RANLP 2021* via Zoom.
+
+* (Aug 17, 2021) The *Reproducible Authorship Attribution Benchmark Tasks* (RAABT v1.0) was released on [Zenodo](https://zenodo.org/record/5213898).
+
+* (Jun 3, 2021) We presented our paper "Cross-Register Authorship Attribution Using Vernacular and Classical Chinese Texts" at *DH Benelux 2021*.
+
+* (May 17–18, 2021) I gave talks at *Nankai University* and *Shanghai Normal University* on the topic of modern stylometry and authorship attribution.
+
+* (Apr 23, 2021) I presented our paper at *EACL 2021*. We also made [a poster](https://drive.google.com/file/d/1teLOJTU4RNAIVEOkH7s5-2uLpPkw19qn/view?usp=sharing).
+ 
+
+* (Apr 16, 2021) Our long abstract ["Cross-Register Authorship Attribution Using Vernacular and Classical Chinese Texts"](https://zenodo.org/record/4886596#.YRNTpNNAphE) was accepted by the [*Digital Humanities Benelux 2021*](https://2021.dhbenelux.org/) (*DH Benelux 2021*).
+
+* (Jan 11, 2021) Our long paper ["Mode Effects' Challenge to Authorship Attribution"](https://aclanthology.org/2021.eacl-main.97.pdf) was accepted by [the *16th Conference of the European Chapter of the Association for Computational Linguistics*](https://2021.eacl.org/) (*EACL 2021*).
+
+* (Nov 16, 2020) I gave a talk at [*Clingding@IU*](https://cl.indiana.edu/clingding.html) about the progress we made on the paper "Mode Effects' Challenge to Authorship Attribution."
+
+---
+
+# Website: research
+
+## Journal
+
+- Herring, S. C., Lee, S., **Wang, H.**, & Yan, Y. (forthcoming). Can LLMs do computer-mediated discourse analysis? *Language@Internet*.
+
+- **Wang, H.**, Clark, J., Yan, Y., Bradley, S., Chen, R., Zhang, Y., Fu, H., & Tian, Z. (2026). Fairness evaluation of large language models in academic library reference services. *Humanities and Social Sciences Communications*. [https://doi.org/10.1057/s41599-026-08465-5](https://doi.org/10.1057/s41599-026-08465-5)
+
+- **Wang, H.**, Juola, P., & Riddell, A. (2026). Reproduction and replication of an adversarial stylometry experiment. *Replication Research*, 2. [https://doi.org/10.17879/replicationresearch-2026-9414](https://doi.org/10.17879/replicationresearch-2026-9414)
+
+- **Wang, H.**, Lee, J., Walsh, J. A., Flanders, J., & Lee, B. C. G. (2025). Building and deploying the Digital Humanities Quarterly recommender system. *Code4Lib Journal*, (61). [https://journal.code4lib.org/articles/18501](https://journal.code4lib.org/articles/18501)
+
+- **Wang, H.**, Clark, J., McKelvey, H., Sterman, L., Gao, Z., Tian, Z., Kübler, S., & Liu, X. (2025). Science out of its Ivory Tower: Improving accessibility with reinforcement learning. *Scientometrics*, 130(8), 4519–4543. [https://doi.org/10.1007/s11192-025-05386-z](https://rdcu.be/ew0mK)
+
+- **Wang, H.**, Clark, J., McKelvey, H., Sterman, L., Gao, Z., Tian, Z., & Liu, X. (2025). Improving scholarship accessibility with reinforcement learning. *Information Research: An International Electronic Journal*, 30(iConf), 203–218. [https://doi.org/10.47989/ir30iConf47530](https://doi.org/10.47989/ir30iConf47530)
+
+- Xie, X., Li, J., & **Wang, H.** (2025). The many voices of Duying: Revisiting the disputed essays between Lu Xun and Zhou Zuoren. *Digital Scholarship in the Humanities*, 40(1), 338–353. [https://doi.org/10.1093/llc/fqae084](https://doi.org/10.1093/llc/fqae084)
+
+## Conference
+
+- **Wang, H.**, & Clark, J. (2024). Simplifying scholarly abstracts for accessible digital libraries using language models. In *The 2024 ACM/IEEE Joint Conference on Digital Libraries (JCDL '24)*. [https://doi.org/10.1145/3677389.3702490](https://doi.org/10.1145/3677389.3702490)
+
+- **Wang, H.** (2024). A content-based novelty measure for scholarly publications: A proof of concept. In *International Conference on Information* (pp. 409–420). [https://link.springer.com/chapter/10.1007/978-3-031-57867-0_31](https://link.springer.com/chapter/10.1007/978-3-031-57867-0_31)
+
+- **Wang, H.**, & Riddell, A. (2022). CCTAA: A reproducible corpus for Chinese authorship attribution research. In *Proceedings of the 13th Conference on Language Resources and Evaluation* (pp. 5889–5893). [https://aclanthology.org/2022.lrec-1.633.pdf](https://aclanthology.org/2022.lrec-1.633.pdf)
+
+- Tian, Z., Dong, X., Gao, F., **Wang, H.**, & Lin, C. (2022). Mandarin tone sandhi realization: Evidence from large speech corpora. In *INTERSPEECH 2022* (pp. 5273–5277). [https://www.isca-speech.org/archive/pdfs/interspeech_2022/tian22e_interspeech.pdf](https://www.isca-archive.org/interspeech_2022/tian22e_interspeech.pdf)
+
+- **Wang, H.**, Xie, X., & Riddell, A. (2021). The challenge of vernacular and classical Chinese cross-register authorship attribution. In *Proceedings of the 2021 edition of the Computational Humanities Research Conference* (pp. 299–309). [http://ceur-ws.org/Vol-2989/long_paper41.pdf](http://ceur-ws.org/Vol-2989/long_paper41.pdf)
+
+- Riddell, A., **Wang, H.**, & Juola, P. (2021). A call for clarity in contemporary authorship attribution evaluation. In *Proceedings of the International Conference on Recent Advances in Natural Language Processing* (pp. 1178–1183). [https://doi.org/10.26615/978-954-452-072-4_133](https://doi.org/10.26615/978-954-452-072-4_133)
+
+- **Wang, H.**, Riddell, A., & Juola, P. (2021). Mode effects' challenge to authorship attribution. In *Proceedings of the 16th Conference of the European Chapter of the Association for Computational Linguistics* (pp. 1146–1155). [https://aclanthology.org/2021.eacl-main.97.pdf](https://aclanthology.org/2021.eacl-main.97.pdf)
+
+## Preprint
+
+- Zhang, J., Fu, H., & **Wang, H.** (2026). The shape of NSF openness to newcomers: Same share, fewer doors. SocArXiv. [https://doi.org/10.31235/osf.io/9qpb7_v1](https://doi.org/10.31235/osf.io/9qpb7_v1)
+
+- Xie, F., Zhang, J., & **Wang, H.** (2026). Still funded, no longer counted: How NIH's 2025 award reviews changed what the government counts as minority health research. arXiv preprint arXiv:2610.03443 [https://arxiv.org/abs/2610.03443](https://arxiv.org/abs/2610.03443)
+
+- **Wang, H.** (2026). Funding the runners-up beats a golden ticket. arXiv preprint arXiv:2609.19552 [https://arxiv.org/pdf/2609.19552](https://arxiv.org/pdf/2609.19552)
+
+- **Wang, H.** (2026). Ending the NIH embargo accelerated public access to funded research, but substantial delays remain. arXiv preprint arXiv:2609.14842 [https://arxiv.org/pdf/2609.14842](https://arxiv.org/pdf/2609.14842)
+
+- **Wang, H.** (2023). Defending against authorship identification attacks. arXiv preprint arXiv:2310.01568 [https://arxiv.org/pdf/2310.01568.pdf](https://arxiv.org/pdf/2310.01568.pdf)
+
+- **Wang, H.** (2023). Enhancing representation generalization in authorship identification. arXiv preprint arXiv:2310.00436 [https://arxiv.org/pdf/2310.00436.pdf](https://arxiv.org/pdf/2310.00436.pdf)
+
+---
+
+# Website: teaching
+
+I design learning experiences that bridge theory, computational methods, and real-world data.
+
+### Courses Taught
+
+* *DSCI-D 590 Biomedical Data Science in Practice*, Indiana University (online, Summer 2025)  
+    - A new course applying AI and biostatistical methods using NIH *All of Us* data; co-designed and co-taught with Drs. Haixu Tang and Jing Su.
+
+* *ILS-Z 604 Music Data Mining*, Indiana University (in person, Fall 2022)  
+    - Led lab sessions on machine and deep learning for audio and text analysis.
+
+### Workshops
+
+* ["Practical Large Language Models: Foundations and Applications,"](https://mbswonline.com/program/) Midwest Biopharmaceutical Statistics Workshop (May 27, 2026, Carmel, Indiana)  
+    - A half-day short course on large language models for biomedical data analysis; co-designed and co-taught with Drs. Jiang Bian, Xing He, and Yuhang Jiang.
+
+---
+
+# Website: resources
+
+## AI/Agent
+
+- [*your-voice*](https://github.com/Wang-Haining/your_voice): A skill that learns your writing style from your own samples and revises AI drafts across three passes so they read like you, not generic AI.
+
+- [*AInotator*](https://github.com/Wang-Haining/ainotator): Annotate computer-mediated discourse with LLMs to capture communicative acts, politeness strategies, and meta-acts. Supports multiple model backends and provides reproducible, theory-grounded annotations for large-scale CMC research.
+
+- [*RLAM*](https://github.com/Wang-Haining/RLAM): Make jargon-laden scientific abstracts accessible to those without a college degree.
+
+- [*NovEval*](https://github.com/Wang-Haining/noveval): Assess scientific novelty in alignment with human evaluation.
+
+## Corpus
+
+- [*Blog-1K*](https://zenodo.org/record/7455623#.Y5-v9uxAphG): A redistributable English authorship identification benchmark with roughly balanced samples per author and fixed data splits (train/val/test), allowing for fair comparison among deep learning–based models.
+
+- [*RAABT*](https://zenodo.org/record/5213898#.YRxwLNNAphE): The Reproducible Authorship Attribution Benchmark Tasks include five tasks for attributing authorship of contemporary non-fiction American English prose. Fixed training/testing splits prevent accuracy inflation from homogeneous corpora.
+
+- [*Cross-Register Authorship Attribution Corpus*](https://zenodo.org/record/5513043): Contains writings from eight authors who wrote in both vernacular and classical Chinese. With 4.2 million Chinese characters, it supports authorship identification research.
+
+## Python Package
+
+- [*functionwords*](https://pypi.org/project/functionwords/): Provides curated lists of function words in modern English and both modern and classical Chinese.
+
+- [*writeprints-static*](https://pypi.org/project/writeprints-static/): Extracts the [Writeprints-static feature set](https://dl.acm.org/doi/10.1145/2382448.2382450), useful for authorship attribution studies.
+
+## Other
+
+- [*Unofficial IU Poster TeX Template*](https://www.overleaf.com/latex/templates/indiana-university-iu-poster-template/pvpryrsjnczb): An unofficial LaTeX poster template for Indiana University.
+
+---
+
+# Publications and preprints (public)
+
+Each entry: citation, link, and abstract or summary. Haining Wang is 'Wang, H.'.
+
+## Herring et al. (forthcoming), Can LLMs do computer-mediated discourse analysis?, Language@Internet
+Link: (no public link yet)
+
+This study evaluates the ability of large language models (LLMs) to classify text according to the computer-mediated discourse analysis (CMDA) research paradigm developed by the first author. Three LLMs (ChatGPT-4o, Claude Sonnet 4, Gemini Pro 2.5) were prompted to apply three CMDA methods ((im)politeness, speech acts, and two meta-acts: non-bona fide communication and reported perspective) to two public Reddit threads, and the results were compared with coding by humans skilled in CMDA. LLM-human agreement was below the threshold expected of trained human coders but within the range of novice CMDA learners, especially considering the LLMs' reasoning and the subjectivity of some categories. Gemini did better on rarer, harder phenomena and somewhat worse on the most common categories, and all three models varied across the two threads. The paper discusses implications for using LLMs in qualitative discourse research and pedagogy.
+
+## Zhang, Fu & Wang (2026), The shape of NSF openness to newcomers: Same share, fewer doors, SocArXiv
+Link: https://doi.org/10.31235/osf.io/9qpb7_v1
+
+Openness to new investigators is often judged by the share of awards to principal investigators (PIs) without recent funding. We examine it in fiscal year (FY) 2026, when the US National Science Foundation (NSF) made the fewest new grants in four decades. NSF made 30% fewer new research projects than in FY2025, and the number of funded PIs with no NSF award as PI in the previous decade (newcomers) fell nearly as much, yet their share of new projects barely moved (34.5% to 34.3%). CAREER, NSF's main early-career award, added 3.3 percentage points to the newcomer share, offsetting the closure of three early-career programs reserved for institutions outside the Carnegie R1 tier (−3.0 points). The stable share hid a narrowing of reach. Where those programs closed, newcomers fell by 13% at R1 universities and by 66% at institutions below R2, whereas in engineering, which kept its program, newcomers below R2 rose. CAREER's growth went to institutions with more prior NSF projects, and NSF's grant obligations to institutions below R2 fell by 44%, twice the fall at R1 universities, with no offset from other federal research agencies. Per dollar, the closed programs had produced more papers than CAREER or standard grants.
+
+## Xie, Zhang & Wang (2026), Still funded, no longer counted, arXiv:2610.03443
+Link: https://arxiv.org/abs/2610.03443
+
+Funders know their portfolios through software that classifies award text. The US National Institutes of Health (NIH) reports its spending in more than 300 categories mined this way, and work on classification and indicators treats the text as the applicant's to write. In 2025 NIH required "DEI language" removed from awards not supporting DEI activities, and so policed the words it also counts. We followed population names through 37,790 continuing awards, checking them against practice records. Names were informative: in new awards with trial baselines, a title naming Black populations predicted a 60-percentage-point higher enrolled share. Text features predicted which names survived, and practice records added little. NIH's minority health category followed the names: of continuing projects carrying it, 99.4% with unchanged summaries kept it, against 15.7% of those whose summaries no longer named a racial or ethnic population, while the projects kept their funding. Blinded reviewers judged 42 of a random 50 such losses to have met its definition in FY2024. Comparing both summaries of 70 name losses, they found aims concerning the population recast in 49. Read alone, 63 FY2025 summaries no longer met the definition. Awards naming sexual and gender minorities were recorded as terminated 37.8 points more often after adjustment for listed terms, institute and activity. We call the mechanism word targeting, its boundary population targeting, and its product uncounted science: funded research the count no longer records. The count followed the edited text, and the edited record cannot say whether the research changed with it.
+
+## Wang (2026), Funding the runners-up beats a golden ticket, arXiv:2609.19552
+Link: https://arxiv.org/abs/2609.19552
+
+A golden ticket allows one reviewer to advance a proposal that the rest of a panel would reject. We assess its score-based rationale by comparing minority-support ranking with other rules for allocating the same number of places. We do so on 10,625 rejected submissions to a computer-science conference between 2017 and 2024, using later citation percentiles as the outcome. Minority-support ranking measured the gap between the two highest scores after adjustment for the panel mean and reviewer count. At a budget of 10% of the year's accepted count, panel-mean ranking selected submissions with a mean citation percentile 7.75 points higher than minority-support ranking (95% bootstrap interval 4.35 to 11.09). The difference was larger in the other sample periods and citation windows examined. At that budget, minority-support ranking was equivalent to a lottery within a margin of plus or minus 5 percentile points. Two further analyses, adjusted highest-score ranking and a matched comparison, found no clear citation advantage from minority support once the panel mean was accounted for. Ranking on score variance also outperformed minority-support ranking in a paired comparison. Estimates cover the 69.8% of eligible rejections whose later citations could be verified. These comparisons identify panel-mean ranking as a benchmark for evaluating whether golden tickets select work that would otherwise be overlooked.
+
+## Wang (2026), Ending the NIH embargo accelerated public access to funded research, but substantial delays remain, arXiv:2609.14842
+Link: https://arxiv.org/abs/2609.14842
+
+On 1 July 2025 the National Institutes of Health began requiring that funded articles be publicly available in PubMed Central on the day they are published, ending the 12-month embargo that had applied since 2008. Comparing NIH-supported articles with articles in the same journals and months that reported no US federal support, before and after the policy, the share available in PubMed Central within a week of publication rose by 5.6 percentage points more for NIH-supported articles (95% CI 1.9 to 9.6). The change was concentrated in journals outside the Directory of Open Access Journals, where the share of NIH-supported articles in PubMed Central within a week doubled from 11% to 22%, with no differential change in DOAJ-listed journals. A pre-policy comparison showed no difference. For articles published in early 2026, the policy had made NIH-supported research available sooner, and most NIH-supported articles in journals outside the Directory were still not in PubMed Central a week after publication.
+
+## Wang, Clark, Yan, et al. (2026), Fairness evaluation of LLMs in academic library reference services, Humanities and Social Sciences Communications
+Link: https://doi.org/10.1057/s41599-026-08465-5
+
+As libraries explore large language models (LLMs) for use in virtual reference services, a key question arises: Can LLMs serve all users equitably, regardless of demographics or social status? While they offer great potential for scalable support, LLMs may also reproduce societal biases embedded in their training data, risking the integrity of libraries' commitment to equitable service. To address this concern, we evaluate whether LLMs differentiate responses across user identities by prompting six state-of-the-art LLMs to assist patrons differing in sex, race/ethnicity, and institutional role. We find no evidence of differentiation by race or ethnicity, and only minor evidence of stereotypical bias against women in one model. LLMs demonstrate nuanced accommodation of institutional roles through the use of linguistic choices related to formality, politeness, and domain-specific vocabularies, reflecting professional norms rather than discriminatory treatment. These findings suggest that current LLMs show a promising degree of readiness to support equitable and contextually appropriate communication in academic library reference services.
+
+## Wang, Clark & Peña (forthcoming), Responsible intelligence in practice: fairness audit of open LLMs for library reference (Emerald chapter)
+Link: https://arxiv.org/abs/2602.18935
+
+As libraries explore large language models (LLMs) as a scalable layer for reference services, a core fairness question follows: can LLM-based services support all patrons fairly, regardless of demographic identity? While LLMs offer great potential for broadening access to information assistance, they may also reproduce societal biases embedded in their training data, potentially undermining libraries' commitments to impartial service. In this chapter, we apply a systematic evaluation approach that combines diagnostic classification to detect systematic differences with linguistic analysis to interpret their sources. Across three widely used open models (Llama-3.1 8B, Gemma-2 9B, and Ministral 8B), we find no compelling evidence of systematic differentiation by race/ethnicity, and only minor evidence of sex-linked differentiation in one model. We discuss implications for responsible AI adoption in libraries and the importance of ongoing monitoring in aligning LLM-based services with core professional values.
+
+## Wang, Juola & Riddell (2026), Reproduction and replication of an adversarial stylometry experiment, Replication Research
+Link: https://doi.org/10.17879/replicationresearch-2026-9414
+
+Maintaining anonymity in natural language communication remains a challenging task. Even when the number of candidate authors is large, standard authorship attribution techniques that analyze writing style predict the original author with uncomfortably high accuracy. Adversarial stylometry provides a defense against authorship attribution, helping users avoid unwanted deanonymization. This paper reproduces and replicates experiments from a seminal study of defenses against authorship attribution (Brennan et al., 2012). After reproducing the experiment using the original data, we then replicate the experiment by repeating the online field experiment using the procedures described in the original paper. Although we reach the same conclusion as the original paper, our results suggest that the defenses studied may be overstated in their effectiveness. This is largely due to the absence of a control group in the original study. In our replication, we find evidence suggesting that an entirely automatic method, round-trip translation, warrants re-examination because it appears to reduce the effectiveness of established authorship attribution methods.
+
+## Wang, Lee, Walsh, Flanders & Lee (2025), Building and deploying the Digital Humanities Quarterly recommender system, Code4Lib Journal
+Link: https://journal.code4lib.org/articles/18501
+
+Since 2007, Digital Humanities Quarterly has published over 750 scholarly articles, constituting a significant repository of scholarship within the digital humanities. As the journal’s corpus of articles continues to grow, it is no longer possible for readers to manually navigate the title and abstract of every article in order to stay apprised of relevant work or conduct literature reviews. To address this, we have implemented a recommender system for the Digital Humanities Quarterly corpus, generating recommendations of related articles that appear below each article on the journal’s website with the goal of improving discoverability. These recommendations are generated via three different methods: a keyword-based approach based on a controlled vocabulary of topics assigned to articles by editors; a TF-IDF approach applied to full article text; and a deep learning approach using the Allen Institute for Artificial Intelligence’s SPECTER2 model applied to article titles and abstracts. In this article, we detail our process of creating this recommender system, from the article pre-processing pipeline to the front-end implementation of the recommendations on the Digital Humanities Quarterly website [ 1 ]. All of the code for our recommender system is publicly available in the Digital Humanities Quarterly GitHub repository [ 2 ].
+
+## Wang et al. (2025), Science out of its ivory tower: Improving accessibility with reinforcement learning, Scientometrics
+Link: https://doi.org/10.1007/s11192-025-05386-z
+
+A vast amount of scholarly work is published daily, yet much of it remains inaccessible to the general public due to dense jargon and complex language. To address this challenge in science communication, we introduce a reinforcement learning framework that fine-tunes a language model to rewrite scholarly abstracts into more comprehensible versions. Guided by a carefully balanced combination of word- and sentence-level accessibility rewards, our language model effectively substitutes technical terms with more accessible alternatives, a task which models supervised fine-tuned or guided by conventional readability measures struggle to accomplish. Our best model adjusts the readability level of scholarly abstracts by approximately six U.S. grade levels -- in other words, from a postgraduate to a high school level. This translates to roughly a 90% relative boost over the supervised fine-tuning baseline, all while maintaining factual accuracy and high-quality language. An in-depth analysis of our approach shows that balanced rewards lead to systematic modifications in the base model, likely contributing to smoother optimization and superior performance. We envision this work as a step toward bridging the gap between scholarly research and the general public, particularly younger readers and those without a college degree.
+
+## Wang et al. (2025), Improving scholarship accessibility with reinforcement learning, Information Research (iConference 2025 best paper finalist)
+Link: https://doi.org/10.47989/ir30iConf47530
+
+Introduction. A vast amount of scholarly work is published daily, yet much of it remains inaccessible to the general public due to dense jargon and complex language. We introduce a reinforcement learning approach that fine-tunes a language model to rewrite scholarly abstracts into more comprehensible versions. Method. Our approach utilises a carefully balanced combination of word- and sentence-level accessibility rewards to guide the language model in substituting technical terms with more accessible alternatives, a task which models supervised fine-tuned or guided by conventional readability measures struggle to accomplish. Analysis. We evaluate our model’s performance through readability metrics, factual accuracy assessments and language quality measurements, comparing results against supervised fine-tuning baselines. Results. Our best model adjusts the readability level of scholarly abstracts by approximately six US grade levels—in other words, from a postgraduate to a high school level. This translates to roughly a 90% relative improvement over the supervised fine-tuning baseline, while maintaining factual accuracy and high-quality language. Conclusions. We envision our work as a step toward bridging the gap between scholarly research and the general public, particularly younger readers, and those without a college degree.
+
+## Xie, Li & Wang (2025), The many voices of Duying: Revisiting the disputed essays between Lu Xun and Zhou Zuoren, Digital Scholarship in the Humanities
+Link: https://doi.org/10.1093/llc/fqae084
+
+Abstract Lu Xun (鲁迅) and Zhou Zuoren (周作人) stand as two of the most influential writers in modern Chinese literature. Beyond their familial ties as brothers, they were also intimate collaborators during the nascent stages of their writing careers. This research employs quantitative methods to revisit three disputed essays pseudonymously published by the brothers in 1912. Our stylometric analysis uses an interpretable authorship attribution model to investigate the essays’ authorship and examine the brothers’ respective writing styles. Our findings suggest that ‘Looking at the Country of China’ (望华国篇) was authored by Lu Xun. Moreover, ‘People of Yue, Forget Not Your Ancestors’ Instructions’ (尔越人毋忘先民之训) seems to be either predominantly authored or extensively revised by Lu Xun given its notable stylistic similarities to ‘Looking at the Land of Yue’ (望越篇), a piece Zhou Zuoren recognized as his own, but edited by Lu Xun. The third essay, ‘Where Has the Character of the Republic Gone?’ (民国之征何在), exhibits a ‘diluted’, mixed writing style, suggesting thorough collaboration. We offer visual representations of essay features to facilitate a nuanced and intuitive understanding. We have uncovered evidence suggesting Lu Xun’s covert engagement with social issues during his purported ‘silent era’ and provided insights into the brothers’ formative intellectual trajectories.
+
+## Wang & Clark (2024), Simplifying scholarly abstracts for accessible digital libraries using language models, JCDL 2024
+Link: https://doi.org/10.1145/3677389.3702490
+
+Standing at the forefront of knowledge dissemination, digital libraries curate vast collections of scientific literature. However, these scholarly writings are often laden with jargon and tailored for domain experts rather than the general public. As librarians, we strive to offer services to a diverse audience, including those with lower reading levels. To extend our services beyond mere access, we propose fine-tuning a language model to rewrite scholarly abstracts into more comprehensible versions, thereby making scholarly literature more accessible when requested. We began by introducing a corpus specifically designed for training models to simplify scholarly abstracts. This corpus consists of over three thousand pairs of abstracts and significance statements from diverse disciplines. We then fine-tuned four language models using this corpus. The outputs from the models were subsequently examined both quantitatively for accessibility and semantic coherence, and qualitatively for language quality, faithfulness, and completeness. Our findings show that the resulting models can improve readability by over three grade levels, while maintaining fidelity to the original content. Although commercial state-of-the-art models still hold an edge, our models are much more compact, can be deployed locally in an affordable manner, and alleviate the privacy concerns associated with using commercial models. We envision this work as a step toward more inclusive and accessible libraries, improving our services for young readers and those without a college degree.
+
+## Wang (2024), A content-based novelty measure for scholarly publications: A proof of concept, iConference 2024
+Link: https://link.springer.com/chapter/10.1007/978-3-031-57867-0_31
+
+Novelty, akin to gene mutation in evolution, opens possibilities for scholarly advancement. Although peer review remains the gold standard for evaluating novelty in scholarly communication and resource allocation, the vast volume of submissions necessitates an automated measure of scholarly novelty. Adopting a perspective that views novelty as the atypical combination of existing knowledge, we introduce an information-theoretic measure of novelty in scholarly publications. This measure quantifies the degree of ‘surprise’ perceived by a language model that represents the word distribution of scholarly discourse. The proposed measure is accompanied by face and construct validity evidence; the former demonstrates correspondence to scientific common sense, and the latter is endorsed through alignment with novelty evaluations from a select panel of domain experts. Additionally, characterized by its interpretability, fine granularity, and accessibility, this measure addresses gaps prevalent in existing methods. We believe this measure holds great potential to benefit editors, stakeholders, and policymakers, and it provides a reliable lens for examining the relationship between novelty and academic dynamics such as creativity, interdisciplinarity, and scientific advances.
+
+## Wang & Riddell (2022), CCTAA: A reproducible corpus for Chinese authorship attribution research, LREC 2022
+Link: https://aclanthology.org/2022.lrec-1.633.pdf
+
+Authorship attribution infers the likely author of an unsigned, single-authored document from a pool of candidates. Despite recent advances, a lack of standard, reproducible testbeds for Chinese language documents impedes progress. In this paper, we present the Chinese Cross-Topic Authorship Attribution (CCTAA) corpus. It is the first standard testbed for authorship attribution on contemporary Chinese prose. The cross-topic design and relatively inflexible genre of newswire contribute to an appropriate level of difficulty. It supports reproducible research by using pre-defined data splits. We show that a sequence classifier based on pre-trained Chinese RoBERTa embedding and a support vector machine classifier using function character n-gram frequency features perform below expectations on this task. The code for generating the corpus and reproducing the baselines is freely available at https://codeberg.org/haining/cctaa.
+
+## Tian, Dong, Gao, Wang & Lin (2022), Mandarin tone sandhi realization: Evidence from large speech corpora, INTERSPEECH 2022
+Link: https://www.isca-archive.org/interspeech_2022/tian22e_interspeech.pdf
+
+There has been a long-standing debate on the acoustical difference between second tone and sandhi third tone in Mandarin Chinese. Except [1], most of the studies focus on the tonal realization in carefully controlled speech, and the relationship between demographic features and tonal realization has not been addressed by existing studies using large-scale speech data. In this paper, we investigate the tonal realization in three large speech corpora of Mandarin Chinese, which contain around 2,300 speakers from different regions of China. The relation between demographic factors (e.g., gender, age, and place of origin) and tonal realization is addressed. The results show that even though the sandhi third tone is close to the second tone in terms of acoustic features, it still displays significant differences in large data. We also report some demographic influences on tonal realization, including age, gender, and places of origin.
+
+## Wang, Xie & Riddell (2021), The challenge of vernacular and classical Chinese cross-register authorship attribution, CHR 2021
+Link: http://ceur-ws.org/Vol-2989/long_paper41.pdf
+
+Studies whether authorship attribution works across registers: eight writers who wrote in both vernacular (modern) and classical Chinese, and how well methods trained on one register identify the same authors in the other. Introduces a cross-register corpus (released on Zenodo) and shows that cross-register attribution is much harder than within-register attribution.
+
+## Riddell, Wang & Juola (2021), A call for clarity in contemporary authorship attribution evaluation, RANLP 2021
+Link: https://doi.org/10.26615/978-954-452-072-4_133
+
+A position paper arguing that contemporary authorship attribution evaluations are often hard to compare or reproduce (unclear candidate sets, topic and register confounds, leaky splits) and calling for clearer, reproducible benchmark tasks; accompanies the RAABT benchmark.
+
+## Wang, Riddell & Juola (2021), Mode effects' challenge to authorship attribution, EACL 2021
+Link: https://aclanthology.org/2021.eacl-main.97.pdf
+
+The success of authorship attribution relies on the presence of linguistic features specific to individual authors. There is, however, limited research assessing to what extent authorial style remains constant when individuals switch from one writing modality to another. We measure the effect of writing mode on writing style in the context of authorship attribution research using a corpus of documents composed online (in a web browser) and documents composed offline using a traditional word processor. The results confirm the existence of a “mode effect” on authorial style. Online writing differs systematically from offline writing in terms of sentence length, word use, readability, and certain part-of-speech ratios. These findings have implications for research design and feature engineering in authorship attribution studies.
+
+## Wang (2023; v2 2026), Authorship identification under domain shift: A survey of stylistic measures and learned author representations, arXiv:2310.00436
+Link: https://arxiv.org/abs/2310.00436
+
+Authorship identification uses patterns in writing to infer who wrote a text, but those patterns also reflect topic, genre, and register. This survey argues that topic-independence is not a property of a stylistic feature but of the feature together with its encoding, its scoring rule, and the evaluation split, so the question is which combinations preserve author differences when the domain changes. We organize the evidence in four layers, domains and evaluation conditions, linguistic measures, representations, and scoring and decision rules, and examine within-study comparisons from classical frequency measures to learned author representations and language-model-mediated writing. These comparisons show why feature inventories alone do not explain performance: normalization and encoding change results, author-supervised learning can retain content, and evaluation protocols can reverse model rankings. Successful identification, stylistic similarity, and generalization therefore require separate evidence. The literature offers a practical way to obtain it through designs that separate author identity from particular circumstances of writing: the same authors writing across genres, different authors writing within the same conversation, and parallel texts with controlled content. These designs also help evaluate content masking and language-model rewriting, whose effects depend on what identifying information remains. We use this evidence to guide the choice of stylistic representations and the comparisons needed to establish where they generalize.
+
+## Wang (2023), Defending against authorship identification attacks, arXiv:2310.01568 (basis of the book under review, Synthesis Lectures on Human Language Technologies)
+Link: https://arxiv.org/abs/2310.01568
+
+Authorship identification has proven unsettlingly effective in inferring the identity of the author of an unsigned document, even when sensitive personal information has been carefully omitted. In the digital era, individuals leave a lasting digital footprint through their written content, whether it is posted on social media, stored on their employer's computers, or located elsewhere. When individuals need to communicate publicly yet wish to remain anonymous, there is little available to protect them from unwanted authorship identification. This unprecedented threat to privacy is evident in scenarios such as whistle-blowing. Proposed defenses against authorship identification attacks primarily aim to obfuscate one's writing style, thereby making it unlinkable to their pre-existing writing, while concurrently preserving the original meaning and grammatical integrity. The presented work offers a comprehensive review of the advancements in this research area spanning over the past two decades and beyond. It emphasizes the methodological frameworks of modification and generation-based strategies devised to evade authorship identification attacks, highlighting joint efforts from the differential privacy community. Limitations of current research are discussed, with a spotlight on open challenges and potential research avenues.

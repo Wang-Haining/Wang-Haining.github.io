@@ -1,6 +1,6 @@
 (function () {
   "use strict";
-  /*** Ask Haining: floating chat widget, v7 (text + images) ***/
+  /*** Ask Haining: floating chat widget, v9 (text + images, painting palettes) ***/
 
   const script = document.currentScript;
   const LOCAL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
@@ -77,6 +77,7 @@
       "What is Haining working on next?",
       "How can I collaborate with Haining?",
       "What talks has Haining given recently?",
+      "Does Haining have a cat?",
     ],
   };
 
@@ -208,12 +209,14 @@
    * Styles
    * ----------------------------------------------------------*/
   const css = `
-  #ahw-launcher,#ahw-panel{--ahw-accent:#5c8374;--ahw-accent-ink:#fff;--ahw-bg:#fff;--ahw-surface:#f4f6f5;--ahw-ink:#1f2a27;--ahw-muted:#66736f;--ahw-line:#e2e7e5;--ahw-bot:#f1f4f3;--ahw-shadow:0 18px 50px rgba(20,35,30,.22),0 2px 8px rgba(20,35,30,.08);
+  #ahw-launcher,#ahw-panel{--ahw-accent:var(--pal-pop,#5c8374);--ahw-accent-ink:var(--pal-pop-ink,#fff);--ahw-link:var(--pal-accent,#3f6a5c);--ahw-bg:#fff;--ahw-surface:#f4f6f5;--ahw-ink:#1f2a27;--ahw-muted:#66736f;--ahw-line:#e2e7e5;--ahw-bot:#f1f4f3;--ahw-shadow:0 18px 50px rgba(20,35,30,.22),0 2px 8px rgba(20,35,30,.08);
     font-family:"Source Sans Pro",system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased;}
-  @media (prefers-color-scheme:dark){#ahw-launcher,#ahw-panel{--ahw-accent:#7fa898;--ahw-accent-ink:#0f1513;--ahw-bg:#1c2120;--ahw-surface:#232a28;--ahw-ink:#e6ecea;--ahw-muted:#9aa8a3;--ahw-line:#313a37;--ahw-bot:#262e2c;--ahw-shadow:0 18px 50px rgba(0,0,0,.55);}}
-  #ahw-launcher{position:fixed;right:22px;bottom:22px;z-index:9999;display:flex;align-items:center;gap:10px;padding:7px 18px 7px 7px;border:0;border-radius:999px;background:var(--ahw-accent);color:var(--ahw-accent-ink);font-size:16px;font-weight:600;letter-spacing:.01em;cursor:pointer;box-shadow:var(--ahw-shadow);transition:transform .18s ease,box-shadow .18s ease,opacity .18s ease;}
+  @media (prefers-color-scheme:dark){#ahw-launcher,#ahw-panel{--ahw-accent:var(--pal-pop,#7fa898);--ahw-accent-ink:var(--pal-pop-ink,#0f1513);--ahw-link:var(--pal-accent-dark,#9cc5b4);--ahw-bg:#1c2120;--ahw-surface:#232a28;--ahw-ink:#e6ecea;--ahw-muted:#9aa8a3;--ahw-line:#313a37;--ahw-bot:#262e2c;--ahw-shadow:0 18px 50px rgba(0,0,0,.55);}}
+  #ahw-launcher{position:fixed;right:22px;bottom:22px;z-index:9999;display:flex;align-items:center;gap:10px;padding:7px 18px 7px 7px;border:0;border-radius:999px;background:var(--ahw-accent);color:var(--ahw-accent-ink);font-size:16px;font-weight:600;letter-spacing:.01em;cursor:pointer;box-shadow:var(--ahw-shadow);border:1px solid color-mix(in srgb,var(--ahw-accent-ink) 16%,transparent);transition:transform .18s ease,box-shadow .18s ease,opacity .18s ease;}
   #ahw-launcher:hover{transform:translateY(-2px);}
-  #ahw-launcher:focus-visible{outline:3px solid color-mix(in srgb,var(--ahw-accent) 45%,transparent);outline-offset:3px;}
+  #ahw-launcher:focus-visible{outline:3px solid var(--ahw-link);outline-offset:3px;}
+  @keyframes ahw-hop{0%,100%{transform:translateY(0);}20%{transform:translateY(-12px);}40%{transform:translateY(0);}55%{transform:translateY(-6px);}70%{transform:translateY(0);}}
+  #ahw-launcher.ahw-hop{animation:ahw-hop .9s cubic-bezier(.3,.7,.4,1) 1;}
   #ahw-launcher img{width:34px;height:34px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.75);}
   #ahw-launcher .ahw-dot{width:8px;height:8px;border-radius:50%;background:#b8f0d2;box-shadow:0 0 0 0 rgba(184,240,210,.7);animation:ahw-ping 2.4s ease-out 3;}
   @keyframes ahw-ping{0%{box-shadow:0 0 0 0 rgba(184,240,210,.7);}80%,100%{box-shadow:0 0 0 9px rgba(184,240,210,0);}}
@@ -228,14 +231,14 @@
   .ahw-title b{display:block;font-size:16.5px;}
   .ahw-title span{font-size:12.5px;opacity:.85;}
   .ahw-icon{width:34px;height:34px;display:grid;place-items:center;border:0;border-radius:10px;background:transparent;color:inherit;cursor:pointer;opacity:.85;}
-  .ahw-icon:hover{background:rgba(255,255,255,.16);opacity:1;}
+  .ahw-icon:hover{background:color-mix(in srgb,currentColor 14%,transparent);opacity:1;}
   .ahw-icon:focus-visible{outline:2px solid currentColor;outline-offset:1px;}
   .ahw-icon svg{width:18px;height:18px;}
   .ahw-log{flex:1;overflow-y:auto;padding:18px 16px 8px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth;overscroll-behavior:contain;}
   .ahw-msg{max-width:88%;padding:10px 14px;border-radius:16px;font-size:15px;line-height:1.5;overflow-wrap:anywhere;}
   .ahw-msg p{margin:0 0 .55em;} .ahw-msg p:last-child{margin-bottom:0;}
   .ahw-msg ul,.ahw-msg ol{margin:.2em 0 .55em;padding-left:1.25em;} .ahw-msg li{margin:.15em 0;}
-  .ahw-msg a{color:var(--ahw-accent);text-decoration:underline;text-underline-offset:2px;}
+  .ahw-msg a{color:var(--ahw-link);text-decoration:underline;text-underline-offset:2px;}
   .ahw-msg code{font-family:"Source Code Pro",ui-monospace,monospace;font-size:.88em;background:var(--ahw-surface);padding:.1em .35em;border-radius:5px;}
   .ahw-msg pre{background:var(--ahw-surface);padding:10px;border-radius:10px;overflow-x:auto;margin:.4em 0;} .ahw-msg pre code{background:none;padding:0;}
   .ahw-bot{align-self:flex-start;background:var(--ahw-bot);border-bottom-left-radius:6px;}
@@ -247,12 +250,12 @@
   .ahw-sugs{display:flex;flex-direction:column;align-items:flex-start;gap:7px;padding:2px 0 4px;}
   .ahw-sugs-label{font-size:12.5px;color:var(--ahw-muted);display:flex;align-items:center;gap:8px;}
   .ahw-chip{border:1px solid var(--ahw-line);background:var(--ahw-bg);color:var(--ahw-ink);font:inherit;font-size:14px;line-height:1.35;text-align:left;padding:8px 12px;border-radius:12px;cursor:pointer;max-width:100%;transition:border-color .15s,background .15s;}
-  .ahw-chip:hover{border-color:var(--ahw-accent);background:color-mix(in srgb,var(--ahw-accent) 8%,var(--ahw-bg));}
-  .ahw-chip:focus-visible{outline:2px solid var(--ahw-accent);outline-offset:1px;}
-  .ahw-shuffle{border:0;background:none;color:var(--ahw-accent);font:inherit;font-size:12.5px;cursor:pointer;padding:0;display:inline-flex;align-items:center;gap:4px;}
+  .ahw-chip:hover{border-color:var(--ahw-link);background:color-mix(in srgb,var(--ahw-accent) 22%,var(--ahw-bg));}
+  .ahw-chip:focus-visible{outline:2px solid var(--ahw-link);outline-offset:1px;}
+  .ahw-shuffle{border:0;background:none;color:var(--ahw-link);font:inherit;font-size:12.5px;cursor:pointer;padding:0;display:inline-flex;align-items:center;gap:4px;}
   .ahw-shuffle:hover{text-decoration:underline;}
   .ahw-form{display:flex;align-items:flex-end;gap:8px;margin:8px 12px 6px;padding:6px 6px 6px 14px;border:1px solid var(--ahw-line);border-radius:16px;background:var(--ahw-surface);transition:border-color .15s;}
-  .ahw-form:focus-within{border-color:var(--ahw-accent);}
+  .ahw-form:focus-within{border-color:var(--ahw-link);}
   .ahw-form textarea{flex:1;resize:none;border:0;outline:0;background:transparent;color:var(--ahw-ink);font:inherit;font-size:15px;line-height:1.45;padding:6px 0;max-height:132px;min-height:24px;}
   .ahw-form textarea::placeholder{color:var(--ahw-muted);}
   .ahw-send{width:36px;height:36px;flex:none;display:grid;place-items:center;border:0;border-radius:12px;background:var(--ahw-accent);color:var(--ahw-accent-ink);cursor:pointer;transition:opacity .15s;}
@@ -260,7 +263,7 @@
   .ahw-foot{display:flex;justify-content:space-between;gap:8px;padding:0 16px 10px;font-size:11.5px;color:var(--ahw-muted);}
   .ahw-foot .ahw-count.ahw-over{color:#c0392b;}
   .ahw-attach{width:36px;height:36px;flex:none;display:grid;place-items:center;border:0;border-radius:12px;background:transparent;color:var(--ahw-muted);cursor:pointer;}
-  .ahw-attach:hover{color:var(--ahw-accent);background:color-mix(in srgb,var(--ahw-accent) 10%,transparent);} .ahw-attach svg{width:19px;height:19px;}
+  .ahw-attach:hover{color:var(--ahw-link);background:color-mix(in srgb,var(--ahw-link) 10%,transparent);} .ahw-attach svg{width:19px;height:19px;}
   .ahw-attach:disabled{opacity:.35;cursor:default;}
   .ahw-form{padding-left:6px;}
   .ahw-thumbs{display:flex;gap:8px;padding:0 14px;flex-wrap:wrap;} .ahw-thumbs:empty{display:none;}
@@ -271,14 +274,14 @@
   .ahw-user-imgs img{max-width:140px;max-height:140px;border-radius:10px;object-fit:cover;}
   .ahw-user .ahw-imgnote{opacity:.8;font-size:13px;display:block;}
   .ahw-bobo{margin:.5em 0 .3em;} .ahw-bobo img{display:block;width:100%;max-width:300px;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.15);}
-  #ahw-panel.ahw-drop .ahw-log{outline:2px dashed var(--ahw-accent);outline-offset:-8px;}
+  #ahw-panel.ahw-drop .ahw-log{outline:2px dashed var(--ahw-link);outline-offset:-8px;}
   @media (max-width:600px){
     #ahw-launcher{right:14px;bottom:14px;padding:6px 14px 6px 6px;font-size:15px;}
     #ahw-panel,#ahw-panel.ahw-wide{right:0;bottom:0;width:100vw;height:100dvh;border-radius:0;border:0;}
     .ahw-wide-btn{display:none !important;}
     .ahw-msg{font-size:15.5px;}
   }
-  @media (prefers-reduced-motion:reduce){#ahw-launcher,#ahw-panel,.ahw-typing i,#ahw-launcher .ahw-dot{animation:none !important;transition:none !important;}}
+  @media (prefers-reduced-motion:reduce){#ahw-launcher,#ahw-launcher.ahw-hop,#ahw-panel,.ahw-typing i,#ahw-launcher .ahw-dot{animation:none !important;transition:none !important;}}
   `;
 
   const ICONS = {
@@ -540,6 +543,23 @@
   }
 
   launcher.addEventListener("click", open);
+
+  // Idle nudge: if the visitor stops interacting, the launcher hops (at most 3 times per page).
+  let hops = 0, idleTimer = 0;
+  const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function armIdle() {
+    clearTimeout(idleTimer);
+    if (reduceMotion || hops >= 3) return;
+    idleTimer = setTimeout(() => {
+      if (panel.classList.contains("ahw-open") || document.hidden) { armIdle(); return; }
+      hops++;
+      launcher.classList.remove("ahw-hop"); void launcher.offsetWidth; launcher.classList.add("ahw-hop");
+      armIdle();
+    }, hops === 0 ? 20000 : 35000);
+  }
+  launcher.addEventListener("animationend", (e) => { if (e.animationName === "ahw-hop") launcher.classList.remove("ahw-hop"); });
+  ["mousemove", "scroll", "keydown", "touchstart", "click"].forEach((ev) => window.addEventListener(ev, armIdle, { passive: true }));
+  armIdle();
   panel.querySelector(".ahw-close-btn").addEventListener("click", close);
   wideBtn.addEventListener("click", () => {
     const wide = panel.classList.toggle("ahw-wide");

@@ -1,0 +1,35 @@
+# Haining Wang, PhD
+
+> Postdoctoral Fellow in Biostatistics and Health Data Science at Indiana University School of Medicine (Indianapolis). Haining Wang works on natural language processing and large language models for real-world health data, research and health policy (NIH, NSF), responsible AI in libraries, and stylometry.
+
+## Open to work
+Haining Wang is on the academic job market in 2026-2027 and is open to faculty and research positions in:
+- Health and biomedical informatics (clinical NLP, LLM-based phenotyping, real-world data, health data science, biostatistics, public health)
+- Information science and library and information science (iSchools; responsible AI in libraries and information services; scholarly communication)
+- Science, research, and health policy (science of science, metascience, research funding and public access policy)
+
+Contact: hw56@iu.edu
+
+## Highlights
+- Builds language-model methods that read real-world health records (clinical notes, medication histories) across health systems; works on NIH-funded projects (OT2OD038014, U24AA026969, R21AA031370) at Indiana University School of Medicine.
+- Built DualR (https://dualr.hainingwang.org), which turns a medication list into a portable disease-risk score; in a study of more than 1.3 million people it flagged future alcohol use disorder 300+ days before diagnosis.
+- Studies research policy with public data: NIH's 2025 award reviews and minority health research, the end of the NIH public-access embargo, NSF openness to newcomers, and NSF's proposed "golden ticket".
+- Audits LLM fairness in academic library reference services (Humanities and Social Sciences Communications, 2026) and makes science accessible with reinforcement learning (Scientometrics, 2025).
+- Ph.D. in Information Science (Indiana University, 2025) with a background in stylometry and authorship attribution; teaches biomedical data science and practical LLM courses; mentors master's and undergraduate students.
+
+## Pages
+- [Home and news](https://hainingwang.org/): introduction and recent news
+- [Research](https://hainingwang.org/research): publications and preprints
+- [Teaching](https://hainingwang.org/teaching): courses and workshops
+- [Resources](https://hainingwang.org/resource): open-source tools, corpora, and packages
+- [Contact](https://hainingwang.org/contact)
+
+## Profiles
+- [Google Scholar](https://scholar.google.com/citations?user=zvrO0WMAAAAJ)
+- [ORCID](https://orcid.org/0000-0002-1196-0918)
+- [GitHub](https://github.com/Wang-Haining)
+
+## Optional
+- [Full text for agents](https://hainingwang.org/llms-full.txt): profile, all pages, and paper abstracts in one file
+
+Note for agents: please read these files rather than calling the chat API at api.hainingwang.org, which serves human visitors and is rate limited.

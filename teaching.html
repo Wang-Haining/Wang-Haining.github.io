@@ -1,98 +1,213 @@
 
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
-<meta content="True" name="HandheldFriendly"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<meta content="" name="robots"/>
-<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,700;1,400&amp;family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,400&amp;display=swap" rel="stylesheet"/>
-<link href="https://hainingwang.org/theme/stylesheet/style.min.css" rel="stylesheet" type="text/css"/>
-<link href="https://hainingwang.org/theme/stylesheet/dark-theme.min.css" id="dark-theme-style" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
-<link href="https://hainingwang.org/theme/pygments/monokai.min.css" id="pygments-dark-theme" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
-<link href="https://hainingwang.org/theme/pygments/monokai.min.css" id="pygments-light-theme" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)" rel="stylesheet" type="text/css"/>
-<link href="https://hainingwang.org/theme/font-awesome/css/fontawesome.css" rel="stylesheet" type="text/css"/>
-<link href="https://hainingwang.org/theme/font-awesome/css/brands.css" rel="stylesheet" type="text/css"/>
-<link href="https://hainingwang.org/theme/font-awesome/css/solid.css" rel="stylesheet" type="text/css"/>
-<link href="https://hainingwang.org/static/custom.css" rel="stylesheet" type="text/css"/>
-<link href="/images/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
-<link href="/images/favicon.ico" rel="icon" type="image/x-icon"/>
-<!-- Chrome, Firefox OS and Opera -->
-<meta content="#5c8374" name="theme-color"/>
-<!-- Windows Phone -->
-<meta content="#5c8374" name="msapplication-navbutton-color"/>
-<!-- iOS Safari -->
-<meta content="yes" name="apple-mobile-web-app-capable"/>
-<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
-<!-- Microsoft EDGE -->
-<meta content="#5c8374" name="msapplication-TileColor"/>
-<meta content="Haining Wang" name="author"/>
-<meta content="Haining Wang | Home" name="description"/>
-<meta content="Haining Wang" property="og:site_name"/>
-<meta content="blog" property="og:type"/>
-<meta content="Haining Wang" property="og:title"/>
-<meta content="Haining Wang | Home" property="og:description"/>
-<meta content="en_US" property="og:locale"/>
-<meta content="https://hainingwang.org" property="og:url"/>
-<meta content="/images/profile.png" property="og:image"/>
-<title>Haining Wang – Teaching</title>
-<link href="https://hainingwang.org/teaching.html" rel="canonical"/><script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Haining Wang", "item": "https://hainingwang.org"}, {"@type": "ListItem", "position": 2, "name": "Teaching", "item": "https://hainingwang.org/teaching.html"}]}</script><script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "author": {"@type": "Person", "name": "Haining Wang"}, "publisher": {"@type": "Organization", "name": "Haining Wang"}, "headline": "Teaching", "about": "pages"}</script><meta content="summary" name="twitter:card"/><meta content="https://hainingwang.org/teaching.html" property="og:url"/><meta content="page" property="og:type"/><meta content="Teaching" property="og:title"/><meta content="en_US" property="og:locale"/></head>
-<body>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Palette of the day: colors from famous paintings (via Color Lisa, colorlisa.com). Preview any with ?palette=N. -->
+  <script>
+  (function () {
+    var P = [ // [work, artist, sidebar, chip, accent, hover, accentDark, selection, pop, popInk]
+    ["The Starry Night","Vincent van Gogh","#1a3431","#3f5452","#324cc3","#7688dc","#8a9ae1","#d4d08c","#ccc776","#1a3431"],
+    ["The Great Wave off Kanagawa","Katsushika Hokusai","#1f284c","#434a69","#3a5893","#718ec7","#879fd0","#d9ccac","#d9ccac","#1f284c"],
+    ["Water Lilies","Claude Monet","#395a92","#5974a3","#9f4640","#c67670","#d08e8a","#bed4b0","#9f4640","#ffffff"],
+    ["Woman with a Parasol","Claude Monet","#4c7899","#698ea9","#386141","#5a9b67","#6eab7b","#cdd28c","#b1b94c","#2a4355"],
+    ["Girl with a Pearl Earring","Johannes Vermeer","#63729e","#7c88ae","#8c713b","#a98847","#ba9a5a","#ddc9be","#a77e5e","#161a24"],
+    ["The Kiss","Gustav Klimt","#4a5fab","#6779b8","#8f61ac","#a47fbc","#b393c6","#e7cc6c","#e3c454","#3b4b87"],
+    ["Night Windows","Edward Hopper","#3f6148","#5e7a65","#aa242e","#de666f","#e47f86","#dbd3a4","#67161c","#ffffff"],
+    ["Bedroom in Arles","Vincent van Gogh","#374d8d","#57699f","#5d7b46","#739957","#82a866","#d8cf83","#c4b743","#2d3f73"],
+    ["A Sunday on La Grande Jatte","Georges Seurat","#465946","#647464","#535382","#8888b3","#9b9bbf","#cccfb4","#808eb7","#1e261e"],
+    ["The Birth of Venus","Sandro Botticelli","#5d787a","#778e8f","#9b6b28","#bc8131","#cf9546","#d9cdb8","#cf9546","#283435"],
+    ["The Arnolfini Portrait","Jan van Eyck","#3b5b71","#5a7588","#4e5f10","#7d9819","#8ba91c","#d2cdc3","#7c6c4e","#ffffff"],
+    ["The Swan","Hilma af Klint","#466ca6","#6484b4","#a72d11","#eb5d3e","#ef7c63","#e2cd8c","#d1ae45","#294062"],
+    ["The Persistence of Memory","Salvador Dalí","#40798c","#5f8e9e","#805730","#ba7f47","#c59465","#d6cead","#bca455","#1e3942"],
+    ["The Son of Man","René Magritte","#3a282f","#5a4a50","#b60614","#f94d5a","#fa747f","#e7c8ae","#767614","#ffffff"],
+    ["Dance (I)","Henri Matisse","#165f8c","#3b799e","#03735e","#04a083","#05b493","#abd8cb","#dfae90","#104769"],
+    ["Landscape at Collioure","Henri Matisse","#375c8c","#57769e","#a1651c","#c87d23","#da8b2a","#d9ccbc","#a29a68","#1a2c43"],
+    ["A Bigger Splash","David Hockney","#126599","#387ea9","#497e58","#5a9b6c","#6eab7f","#a7d4e6","#cabd8a","#0d4a70"],
+    ["Abstraction Blue","Georgia O'Keeffe","#182044","#3d4462","#51628e","#7c8cb4","#909dc0","#c6cedb","#dfd190","#182044"],
+    ["The Night Watch","Rembrandt","#5b5224","#756e47","#983a0d","#eb5f1b","#ef7c45","#ddcca0","#909ddf","#363116"],
+    ["Broadway Boogie Woogie","Piet Mondrian","#314290","#5260a2","#4a71c0","#6c8ccc","#839ed4","#f0d32d","#f0d32d","#314290"],
+    ["Villa di Marlia, Lucca","John Singer Sargent","#4e6a3d","#6a825c","#556ec4","#778bd0","#8a9bd7","#e2d76b","#778bd0","#1a2314"],
+    ["American Gothic","Grant Wood","#41240b","#5f4732","#9c4823","#d57145","#dc8863","#c1d1c8","#90bbdf","#41240b"],
+    ["White Zig Zags","Wassily Kandinsky","#4052bd","#5f6ec8","#c13c53","#d26e7f","#d98593","#efe96d","#efe96d","#4052bd"],
+    ["Les Demoiselles d'Avignon","Pablo Picasso","#566c7d","#718492","#a1544b","#bf7d75","#c8908a","#ebc4bd","#cd6c74","#181e22"],
+    ["Large Green Vase with Mixed Flowers","Odilon Redon","#4d5e30","#697851","#695b8f","#9185b1","#a298bd","#dacf90","#695b8f","#ffffff"],
+    ["George Lawson and Wayne Sleep","David Hockney","#3e797a","#5d8e8f","#a63f5a","#ca7289","#d2889c","#f2e7ae","#a63f5a","#ffffff"],
+    ["Hommage à Blériot","Robert Delaunay","#4368b6","#6180c2","#a06707","#c27d09","#e4930a","#e4cd5e","#a06707","#ffffff"],
+    ["The Creation of Adam","Michelangelo","#3f7b98","#5e90a8","#5b7e52","#6d9762","#86aa7d","#dccbb8","#cbb396","#244657"]
+    ];
+    var d = new Date(), day = Math.floor((d.getTime() - d.getTimezoneOffset() * 60000) / 86400000);
+    var i = ((day % P.length) + P.length) % P.length;
+    try { var q = new URLSearchParams(location.search).get("palette"); if (q !== null && P[+q]) i = +q; } catch (e) {}
+    var p = P[i], s = document.documentElement.style;
+    s.setProperty("--pal-sidebar", p[2]); s.setProperty("--pal-chip", p[3]);
+    s.setProperty("--pal-accent", p[4]); s.setProperty("--pal-hover", p[5]);
+    s.setProperty("--pal-accent-dark", p[6]); s.setProperty("--pal-selection", p[7]);
+    s.setProperty("--pal-pop", p[8]); s.setProperty("--pal-pop-ink", p[9]);
+    window.PALETTE_OF_THE_DAY = { index: i, work: p[0], artist: p[1] };
+    document.addEventListener("DOMContentLoaded", function () {
+      var m = document.querySelector('meta[name="theme-color"]'); if (m) m.setAttribute("content", p[2]);
+    });
+  })();
+  </script>
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="https://hainingwang.org/theme/stylesheet/style.min.css">
+
+    <link id="dark-theme-style" rel="stylesheet" type="text/css"
+          media="(prefers-color-scheme: dark)"
+    href="https://hainingwang.org/theme/stylesheet/dark-theme.min.css">
+
+    <link id="pygments-dark-theme" rel="stylesheet" type="text/css"
+              media="(prefers-color-scheme: dark)"
+          href="https://hainingwang.org/theme/pygments/monokai.min.css">
+    <link id="pygments-light-theme" rel="stylesheet" type="text/css"
+              media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)"
+          href="https://hainingwang.org/theme/pygments/monokai.min.css">
+
+
+
+  <link rel="stylesheet" type="text/css" href="https://hainingwang.org/theme/font-awesome/css/fontawesome.css">
+  <link rel="stylesheet" type="text/css" href="https://hainingwang.org/theme/font-awesome/css/brands.css">
+  <link rel="stylesheet" type="text/css" href="https://hainingwang.org/theme/font-awesome/css/solid.css">
+
+  <link rel="stylesheet" type="text/css" href="https://hainingwang.org/static/custom.css?v=3">
+
+  <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+
+  <!-- Chrome, Firefox OS and Opera -->
+  <meta name="theme-color" content="#5c8374">
+  <!-- Windows Phone -->
+  <meta name="msapplication-navbutton-color" content="#5c8374">
+  <!-- iOS Safari -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <!-- Microsoft EDGE -->
+  <meta name="msapplication-TileColor" content="#5c8374">
+
+
+
+
+
+
+
+
+
+
+<title>Teaching | Haining Wang, Indiana University</title>
+  <meta name="description" content="Teaching by Haining Wang at Indiana University: biomedical data science with NIH All of Us data, practical large language models, and music data mining.">
+  <meta name="author" content="Haining Wang">
+  <link rel="canonical" href="https://hainingwang.org/teaching">
+  <meta property="og:site_name" content="Haining Wang">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Teaching | Haining Wang, Indiana University">
+  <meta property="og:description" content="Teaching by Haining Wang at Indiana University: biomedical data science with NIH All of Us data, practical large language models, and music data mining.">
+  <meta property="og:url" content="https://hainingwang.org/teaching">
+  <meta property="og:image" content="https://hainingwang.org/images/profile.png">
+  <meta property="og:image:alt" content="Haining Wang">
+  <meta property="og:locale" content="en_US">  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@Haining_Wang_">
+  <meta name="twitter:title" content="Teaching | Haining Wang, Indiana University">
+  <meta name="twitter:description" content="Teaching by Haining Wang at Indiana University: biomedical data science with NIH All of Us data, practical large language models, and music data mining.">
+  <meta name="twitter:image" content="https://hainingwang.org/images/profile.png">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://hainingwang.org/#person",
+        "name": "Haining Wang",
+        "honorificSuffix": "PhD",
+        "url": "https://hainingwang.org/",
+        "image": "https://hainingwang.org/images/profile.png",
+        "email": "mailto:hw56@iu.edu",
+        "jobTitle": "Postdoctoral Fellow",
+        "description": "Haining Wang, PhD, is a postdoctoral fellow in Biostatistics and Health Data Science at Indiana University School of Medicine (IU). Haining builds NLP and large language model methods for real-world health data, and studies research policy, AI fairness in libraries, and stylometry.",
+        "worksFor": {
+          "@type": "Organization",
+          "name": "Department of Biostatistics and Health Data Science, Indiana University School of Medicine",
+          "parentOrganization": {"@type": "CollegeOrUniversity", "name": "Indiana University", "url": "https://www.iu.edu/"}
+        },
+        "affiliation": [
+          {"@type": "Organization", "name": "Indiana University School of Medicine", "url": "https://medicine.iu.edu/"},
+          {"@type": "Organization", "name": "Indiana University Richard M. Fairbanks School of Public Health", "url": "https://fairbanks.indianapolis.iu.edu/"}
+        ],
+        "alumniOf": [
+          {"@type": "CollegeOrUniversity", "name": "Indiana University Bloomington", "url": "https://www.indiana.edu/"},
+          {"@type": "CollegeOrUniversity", "name": "Wuhan University"}
+        ],
+        "address": {"@type": "PostalAddress", "addressLocality": "Indianapolis", "addressRegion": "IN", "addressCountry": "US"},
+        "knowsAbout": ["Natural language processing", "Large language models", "Clinical NLP", "Computational phenotyping", "Electronic health records", "Real-world data", "Health data science", "Biomedical informatics", "Health disparities", "Social determinants of health", "Science of science", "Research policy", "NIH and NSF funding", "Open access and public access policy", "AI fairness", "Library reference services", "Accessible science communication", "Stylometry", "Authorship attribution", "Adversarial stylometry"],
+        "sameAs": ["https://scholar.google.com/citations?user=zvrO0WMAAAAJ", "https://orcid.org/0000-0002-1196-0918", "https://github.com/Wang-Haining", "https://twitter.com/Haining_Wang_"]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://hainingwang.org/#website",
+        "url": "https://hainingwang.org/",
+        "name": "Haining Wang",
+        "publisher": {"@id": "https://hainingwang.org/#person"}
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://hainingwang.org/teaching#webpage",
+        "url": "https://hainingwang.org/teaching",
+        "name": "Teaching | Haining Wang, Indiana University",
+        "description": "Teaching by Haining Wang at Indiana University: biomedical data science with NIH All of Us data, practical large language models, and music data mining.",
+        "isPartOf": {"@id": "https://hainingwang.org/#website"},        "about": {"@id": "https://hainingwang.org/#person"},        "dateModified": "2026-10-05"
+      }
+    ]
+  }
+  </script>
+
+</head>
+<body >
+
 <aside>
-<div>
-<a href="https://hainingwang.org/">
-<img alt="" src="/images/profile.png" title=""/>
-</a>
-<h1>
-<a href="https://hainingwang.org/"></a>
-</h1>
-<p><br/>
-<br/> <br/> <br/>
-<br/><font size="5">Haining Wang, Ph.D.</font><br/> <br/>
-<br/> <font size="4">Postdoctoral Fellow</font> <br/> <br/>
-<br/> <font size="4">Biostatistics &amp; Health Data Science</font>
-<br/>
-<br/> <font size="4">School of Medicine</font>
-<br/> <font size="4">Richard M. Fairbanks School of Public Health</font>
-<br/> <font size="4">Indiana University</font>
-<br/>
-<br/></p>
-<ul class="social">
-<li>
-<a class="sc-envelope" href="mailto:hw56@iu.edu" rel="me" target="_blank">
-<i class="fa-solid fa-envelope"></i>
-</a>
-</li>
-<li>
-<a class="sc-twitter" href="https://twitter.com/Haining_Wang_" target="_blank">
-<i class="fa-brands fa-twitter"></i>
-</a>
-</li>
-<li>
-<a class="sc-github-alt" href="https://github.com/Wang-Haining" target="_blank">
-<i class="fa-brands fa-github-alt"></i>
-</a>
-</li>
-</ul>
-</div>
+  <div class="sidebar-inner">
+    <a href="https://hainingwang.org/" class="sidebar-avatar">
+      <img src="/images/profile.png" alt="Haining Wang" width="140" height="140">
+    </a>
+<p class="site-name"><a href="https://hainingwang.org/">Haining Wang, Ph.D.</a></p>    <div class="site-roles">
+      <p><span>Postdoctoral Fellow</span></p>
+      <p><span>Biostatistics & Health Data Science</span></p>
+      <p><span>School of Medicine</span><span>Richard M. Fairbanks School of Public Health</span><span>Indiana University</span></p>
+    </div>
+    <ul class="social">
+      <li><a href="mailto:hw56@iu.edu" title="Email" aria-label="Email" rel="me"><i class="fa-solid fa-envelope" aria-hidden="true"></i></a></li>
+      <li><a href="https://scholar.google.com/citations?user=zvrO0WMAAAAJ" title="Google Scholar" aria-label="Google Scholar" target="_blank" rel="me noopener"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i></a></li>
+      <li><a href="https://orcid.org/0000-0002-1196-0918" title="ORCID" aria-label="ORCID" target="_blank" rel="me noopener"><i class="fa-brands fa-orcid" aria-hidden="true"></i></a></li>
+      <li><a href="https://github.com/Wang-Haining" title="GitHub" aria-label="GitHub" target="_blank" rel="me noopener"><i class="fa-brands fa-github-alt" aria-hidden="true"></i></a></li>
+      <li><a href="https://twitter.com/Haining_Wang_" title="Twitter" aria-label="Twitter" target="_blank" rel="me noopener"><i class="fa-brands fa-twitter" aria-hidden="true"></i></a></li>
+    </ul>
+  </div>
 </aside>
-<main>
+  <main>
+
 <nav>
-<a href="https://hainingwang.org/">Home</a>
-<a href="/research">Research</a>
-<a href="/teaching">Teaching</a>
-<a href="/resource">Resource</a>
-<a href="/contact">Contact</a>
+  <a href="https://hainingwang.org/">Home</a>
+
+  <a href="/research">Research</a>
+  <a href="/teaching">Teaching</a>
+  <a href="/resource">Resource</a>
+  <a href="/contact">Contact</a>
+
+
 </nav>
+
 <article class="single">
-<header>
-<h1 id="teaching">Teaching</h1>
-</header>
-<div>
-<p>I design learning experiences that bridge theory, computational methods, and real-world data.</p>
-<p><br/></p>
+  <header>
+    <h1 id="teaching">Teaching</h1>
+  </header>
+  <div>
+    <p>I design learning experiences that bridge theory, computational methods, and real-world data.</p>
+<p><br></p>
 <h3>Courses Taught</h3>
 <ul>
 <li>
@@ -108,30 +223,25 @@
 </ul>
 </li>
 </ul>
-<p><br/></p>
+<p><br></p>
 <h3>Workshops</h3>
 <ul>
 <li><a href="https://mbswonline.com/program/">"Practical Large Language Models: Foundations and Applications,"</a> Midwest Biopharmaceutical Statistics Workshop (May 27, 2026, Carmel, Indiana)  <ul>
 <li>A half-day short course on large language models for biomedical data analysis; co-designed and co-taught with Drs. Jiang Bian, Xing He, and Yuhang Jiang.</li>
 </ul>
 </li>
-</ul> </div>
+</ul>
+  </div>
 </article>
+
 <footer>
-<p>© 2026 0BSD</p>
+<p>&copy; 2026 0BSD</p>
 <p>
 Built with <a href="http://getpelican.com" target="_blank">Pelican</a> using <a href="http://bit.ly/flex-pelican" target="_blank">Flex</a> theme
-</p></footer> </main>
-<script type="application/ld+json">
-{
-  "@context" : "http://schema.org",
-  "@type" : "Blog",
-  "name": " Haining Wang ",
-  "url" : "https://hainingwang.org",
-  "image": "/images/profile.png",
-  "description": "Haining Wang | Home"
-}
-</script>
-<script defer="" src="/static/chat-widget.js?v=7"></script>
+</p></footer>  </main>
+
+
+<script src="/static/site.js?v=1" defer></script>
+<script src="/static/chat-widget.js?v=9" defer></script>
 </body>
 </html>
