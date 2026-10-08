@@ -146,8 +146,55 @@
     for (y = 0; y < GH; y++) for (x = 0; x < GW; x++) if (t[y][x] !== ".") g[y][x] = t[y][x];
   }
 
+  // Climbing: seen from behind, paws reaching up the side of the chat window in turns.
+  function outlineAll(g) {
+    var o = blank(), y, x;
+    for (y = 0; y < GH; y++) for (x = 0; x < GW; x++) {
+      if (g[y][x] !== ".") continue;
+      if ([[1, 0], [-1, 0], [0, 1], [0, -1]].some(function (d) {
+        var yy = y + d[1], xx = x + d[0];
+        return yy >= 0 && yy < GH && xx >= 0 && xx < GW && g[yy][xx] !== "." && g[yy][xx] !== "O";
+      })) o[y][x] = "O";
+    }
+    for (y = 0; y < GH; y++) for (x = 0; x < GW; x++) if (o[y][x] === "O") g[y][x] = "O";
+  }
+  function limb(g, x0, y0, x1, y1) {
+    var n = Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0)), i;
+    for (i = 0; i <= n; i++) {
+      var x = Math.round(x0 + (x1 - x0) * i / n), y = Math.round(y0 + (y1 - y0) * i / n);
+      [[0, 0], [1, 0], [0, 1], [1, 1]].forEach(function (d) {
+        var yy = y + d[1], xx = x + d[0];
+        if (yy >= 0 && yy < GH && xx >= 0 && xx < GW) g[yy][xx] = (i % 3 === 1) ? "S" : "B";
+      });
+    }
+    [[0, 0], [1, 0], [0, 1], [1, 1]].forEach(function (d) {
+      var yy = y1 + d[1], xx = x1 + d[0];
+      if (yy >= 0 && yy < GH && xx >= 0 && xx < GW) g[yy][xx] = "W";
+    });
+  }
+  function buildClimb(phase) {
+    var g = blank(), y, x, up = phase === 0;
+    for (y = 10; y < GH; y++) for (x = 0; x < GW; x++) {
+      var d = ((x - 11.5) * (x - 11.5)) / 38 + ((y - 16) * (y - 16)) / 36;
+      if (d <= 1) g[y][x] = (x === 11 || x === 12) ? "S" : (y % 3 === 0 ? "S" : "B");
+    }
+    g[22][11] = "S"; g[22][12] = "B"; g[23][11] = "K"; g[23][12] = "K";
+    // limbs over the body, reaching past the head; the high paw swaps each frame
+    limb(g, 6, 13, 1, up ? 3 : 8);
+    limb(g, 16, 13, 21, up ? 8 : 3);
+    limb(g, 7, 19, 3, up ? 22 : 20);
+    limb(g, 15, 19, 19, up ? 20 : 22);
+    var back = HEAD.map(function (row) { return row.replace(/[EKNWLHP]/g, "B"); });
+    stamp(g, back, 0, 0);
+    [[9, 6], [9, 7], [14, 6], [14, 7], [11, 8], [12, 8], [11, 9], [12, 9], [6, 9], [17, 9], [10, 11], [13, 11]].forEach(function (p) { if (g[p[1]][p[0]] === "B") g[p[1]][p[0]] = "S"; });
+    outlineAll(g);
+    return g;
+  }
+
   // pose = {body, tail, eyes, headDY, mouth, ear, paw}
   function compose(p) {
+    if (p.body === "climbA") return buildClimb(0);
+    if (p.body === "climbB") return buildClimb(1);
     var g = blank(), dy = p.headDY || 0;
     if (p.body === "loaf") {
       stampLoaf(g);
@@ -193,11 +240,11 @@
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   var css = [
-    "#bolaud{position:fixed;z-index:10000;pointer-events:auto;cursor:pointer;image-rendering:pixelated;image-rendering:crisp-edges;",
+    "#bolaud{position:fixed;z-index:10002;pointer-events:auto;cursor:pointer;image-rendering:pixelated;image-rendering:crisp-edges;",
     "transition:opacity .2s ease;touch-action:manipulation;-webkit-tap-highlight-color:transparent;}",
     "#bolaud.bolaud-hidden{opacity:0;pointer-events:none;}",
     "#bolaud canvas{display:block;width:100%;height:100%;image-rendering:pixelated;image-rendering:crisp-edges;}",
-    ".bolaud-fx{position:fixed;z-index:10001;pointer-events:none;font:700 12px/1 ui-monospace,Menlo,monospace;color:#7d8aa3;",
+    ".bolaud-fx{position:fixed;z-index:10003;pointer-events:none;font:700 12px/1 ui-monospace,Menlo,monospace;color:#7d8aa3;",
     "animation:bolaud-float 1.6s ease-out forwards;}",
     ".bolaud-fx.heart{color:#e0564f;font-size:14px;}",
     "@keyframes bolaud-float{0%{opacity:0;transform:translate(0,0)}15%{opacity:1}100%{opacity:0;transform:translate(var(--dx,6px),-34px)}}",
@@ -218,17 +265,22 @@
     document.body.appendChild(wrap);
     var ctx = canvas.getContext("2d");
 
-    var S = 3, x = 0, minX = 0, maxX = 0, baseBottom = 0, lift = 0;
+    // mode: "launcher" (perched on the button), "panel" (on the chat input box), "moving" (in between).
+    var S = 3, x = 0, minX = 0, maxX = 0, baseBottom = 0, lift = 0, mode = "launcher";
+    var panel = document.getElementById("ahw-panel");
+    var form = panel && panel.querySelector(".ahw-form");
+    var log = panel && panel.querySelector(".ahw-log");
     function layout() {
       S = window.innerWidth <= 600 ? 2 : 3;
       wrap.style.width = GW * S + "px";
       wrap.style.height = GH * S + "px";
-      var r = launcher.getBoundingClientRect();
-      // Feet rest on the top edge of the pill, a little in from its rounded ends.
+      if (mode === "moving") return;
+      var r = (mode === "panel" && form ? form : launcher).getBoundingClientRect();
+      // Feet rest on the top edge of the pill (or the input box), a little in from the ends.
       baseBottom = window.innerHeight - r.top - S * 1;
-      minX = r.left + 6;
-      maxX = Math.max(minX, r.right - GW * S - 4);
-      if (!x || x < minX || x > maxX) x = maxX;
+      minX = r.left + (mode === "panel" ? 10 : 6);
+      maxX = Math.max(minX, r.right - GW * S - (mode === "panel" ? 10 : 4));
+      if (!x || x < minX || x > maxX) x = mode === "panel" ? Math.min(maxX, Math.max(minX, x)) : maxX;
       place();
     }
     function place() {
@@ -255,19 +307,23 @@
     render();
     window.addEventListener("resize", layout);
 
-    // Hide while the chat panel is open (the launcher hides itself then); hop when it hops.
     var busy = false;
-    new MutationObserver(function () {
-      var hidden = launcher.classList.contains("ahw-hidden");
-      wrap.classList.toggle("bolaud-hidden", hidden);
-      if (launcher.classList.contains("ahw-hop") && !reduce) hopWithLauncher();
-      setTimeout(layout, 50);
-    }).observe(launcher, { attributes: true, attributeFilter: ["class"] });
+    function chatOpen() { return launcher.classList.contains("ahw-hidden"); }
+    function padLog(on) { if (log) log.style.paddingBottom = on ? (GH * S + 10) + "px" : ""; }
+    if (window.ResizeObserver && panel) {
+      var ro = new ResizeObserver(function () { if (mode === "panel") layout(); });
+      ro.observe(panel); if (form) ro.observe(form);
+    }
 
     if (reduce) {
+      // No motion: sit on whichever surface is showing.
       pose = { tail: "low", eyes: "open" };
       render();
       wrap.addEventListener("click", function () { pose.eyes = pose.eyes === "happy" ? "open" : "happy"; render(); });
+      new MutationObserver(function () {
+        mode = chatOpen() ? "panel" : "launcher"; x = 0; padLog(mode === "panel");
+        setTimeout(layout, 260);
+      }).observe(launcher, { attributes: true, attributeFilter: ["class"] });
       return;
     }
 
@@ -281,7 +337,7 @@
         if (i >= steps.length) { busy = false; if (done) done(); return; }
         var s = steps[i++];
         if (s.pose) { pose = Object.assign({}, pose, s.pose); }
-        if (s.dx) { x = Math.min(maxX, Math.max(minX, x + s.dx)); }
+        if (s.dx) { x = (s.free || mode === "moving") ? x + s.dx : Math.min(maxX, Math.max(minX, x + s.dx)); }
         if (s.lift !== undefined) lift = s.lift;
         if (s.fx) fx(s.fx[0], s.fx[1]);
         render(); place();
@@ -397,6 +453,60 @@
       else if (r < 0.80) hop(false);
       else if (r < 0.88) sleep();
     }
+
+    // Chat opens: climb up the right edge of the chat window, then walk onto the input box.
+    function enterPanel() {
+      if (!form) { wrap.classList.add("bolaud-hidden"); return; }
+      stop(); clearInterval(zzzTimer); sleeping = false;
+      mode = "moving";
+      wrap.classList.add("bolaud-hidden");
+      setTimeout(function () {
+        if (!chatOpen()) return;
+        var pr = panel.getBoundingClientRect(), fr = form.getBoundingClientRect(), w = GW * S;
+        padLog(true);
+        baseBottom = window.innerHeight - fr.top - S;
+        x = Math.min(window.innerWidth - w, pr.right - Math.round(w / 2));
+        lift = -(baseBottom + GH * S);
+        pose = { body: "climbA" };
+        render(); place();
+        wrap.classList.remove("bolaud-hidden");
+        var steps = [], climbed = lift, k = 0;
+        while (climbed < 0) {
+          climbed = Math.min(0, climbed + S * 3);
+          steps.push({ pose: { body: k++ % 2 ? "climbB" : "climbA" }, lift: climbed, t: 110 });
+        }
+        var target = fr.left + fr.width * 0.55 - w / 2;
+        steps.push({ pose: { body: "sit", tail: "up", eyes: "left", headDY: 1 }, lift: S * 3, t: 120 });
+        steps.push({ pose: { headDY: 0 }, lift: 0, t: 140 });
+        var n = Math.max(2, Math.min(30, Math.round((x - target) / (S * 3))));
+        for (var i = 0; i < n; i++) {
+          steps.push({ pose: { body: i % 2 ? "walkB" : "walkA", eyes: "left", tail: i % 2 ? "up" : "out" }, dx: -S * 3, lift: i % 2 ? 0 : S * 0.34, t: 130, free: true });
+        }
+        steps.push({ pose: { body: "sit", tail: "curl", eyes: "open" }, lift: 0, t: 300 });
+        run(steps, function () { mode = "panel"; layout(); });
+      }, 280);
+    }
+    // Chat closes: hop back onto the button.
+    function leavePanel() {
+      stop(); clearInterval(zzzTimer); sleeping = false;
+      padLog(false);
+      wrap.classList.add("bolaud-hidden");
+      mode = "launcher"; lift = 0; x = 0;
+      setTimeout(function () {
+        if (chatOpen()) return;
+        pose = { tail: "curl", eyes: "open" };
+        layout(); render();
+        wrap.classList.remove("bolaud-hidden");
+        hop(false);
+      }, 220);
+    }
+    var wasOpen = chatOpen();
+    new MutationObserver(function () {
+      var open = chatOpen();
+      if (open !== wasOpen) { wasOpen = open; if (open) enterPanel(); else leavePanel(); }
+      else if (!open && launcher.classList.contains("ahw-hop")) hopWithLauncher();
+    }).observe(launcher, { attributes: true, attributeFilter: ["class"] });
+    if (wasOpen) enterPanel();
 
     if (/[?&]bolaud=debug/.test(location.search)) {
       window.__bolaudDebug = { walk: walk, groom: groom, yawn: function () { yawn(); }, ear: earFlick, hop: function () { hop(true); }, sleep: function () { sleep(8000); }, wake: wake };
