@@ -119,7 +119,7 @@
   function stamp(g, rows, x, y) {
     for (var r = 0; r < rows.length; r++) for (var c = 0; c < rows[r].length; c++) {
       var ch = rows[r][c], yy = y + r, xx = x + c;
-      if (ch !== "." && yy >= 0 && yy < GH && xx >= 0 && xx < GW) g[yy][xx] = ch;
+      if (ch !== "." && yy >= 0 && yy < g.length && xx >= 0 && xx < g[0].length) g[yy][xx] = ch;
     }
   }
   function stampTail(g, pts) {
@@ -362,7 +362,14 @@
     (p.nearLegs || []).forEach(function (l) { put(g, legPart(l, false), true); });
     put(g, bodyPart(p.body), false);
     (p.frontLegs || []).forEach(function (l) { put(g, legPart(l, false), true); });
-    put(g, headPart(p.head), true);
+    if (p.head) put(g, headPart(p.head), true);
+    if (p.frontHead) {
+      var fh = p.frontHead;
+      stamp(g, HEAD, fh.x, fh.y);
+      stamp(g, EYES[fh.eyes] || EYES.open, fh.x + 6, fh.y + 6);
+      stamp(g, (EYES_RIGHT[fh.eyes] || EYES[fh.eyes] || EYES.open), fh.x + 15, fh.y + 6);
+      if (fh.blep) stamp(g, ["P"], fh.x + 12, fh.y + 11);
+    }
     if (p.afterHead) p.afterHead.forEach(function (l) { put(g, legPart(l, false), true); });
     return g;
   }
@@ -390,8 +397,18 @@
       p.farLegs[0][2] = [23.4, G]; p.farLegs[0][1] = [23.4, 22.5]; p.farLegs[1][2] = [16.2, G]; p.farLegs[1][1] = [14.8, 22.8];
       p.nearLegs[0][2] = [25, G]; p.nearLegs[0][1] = [24.9, 22.5]; p.nearLegs[1][2] = [14.4, G]; p.nearLegs[1][1] = [12.9, 22.8];
       return p; }
-    function lick(k) { // big chicken-leg crotch lick: hind leg straight up behind, head bowed in front
+    function lick(k, opt) { // big chicken-leg crotch lick: hind leg straight up behind, head bowed in front
       var bob = k % 2 ? 0.7 : 0;
+      if (opt && opt.freeze) { // caught mid-lick: head turns to the screen, tongue out, leg still up
+        return {
+          tail: [[12.4, 24.2], [9.4, 25.3], [6.4, 25.5], [3.8, 24.8], [2.6, 23.4]],
+          nearLegs: [[[15.6, 20.4], [16.6, 11.4], [17, 1.8], 2.0]],
+          farLegs: [[[18.6, 16.8], [20, 21.4], [20.6, G]]],
+          body: { cx: 15.8, cy: 20.6, rx: 6, ry: 5.2, tilt: 1.15 },
+          frontLegs: [[[15.2, 23.2], [19.2, 24.8], [23.4, G], 1.6], [[19.6, 17], [21.2, 21.4], [22.2, G], 1.35]],
+          frontHead: { x: 11, y: 6, eyes: (opt && opt.eyes) || "open", blep: true }
+        };
+      }
       return {
         tail: [[12.4, 24.2], [9.4, 25.3], [6.4, 25.5], [3.8, 24.8], [2.6, 23.4]],
         nearLegs: [[[15.6, 20.4], [17.4, 12.6], [18.4, 4.6], 2.0]],
@@ -469,7 +486,7 @@
   // otherwise the front-view sprite is centred on the larger canvas.
   function frame(p) {
     if (p.side) {
-      var sp = POSES[p.side](p.k || 0);
+      var sp = POSES[p.side](p.k || 0, p);
       if (p.eyes && sp.head && p.side !== "lick") sp.head.eyes = p.eyes === "happy" ? "closed" : p.eyes;
       var g = sideCat(sp);
       return p.dir < 0 ? mirror(g) : g;
@@ -715,10 +732,23 @@
     }
     function chickenLick() {
       var dir = roomyDir();
-      var st = [{ pose: { side: "stand", k: 0, dir: dir }, t: 260 }];
-      for (var i = 0; i < 12; i++) st.push({ pose: { side: "lick", k: i % 2, dir: dir }, t: i === 0 ? 420 : 190 });
+      var st = [{ pose: { side: "stand", k: 0, dir: dir, freeze: false }, t: 260 }];
+      var before = 6 + Math.floor(Math.random() * 6);
+      for (var i = 0; i < before; i++) st.push({ pose: { side: "lick", k: i % 2, dir: dir }, t: i === 0 ? 420 : 190 });
+      if (Math.random() < 0.45) {
+        // Caught mid-lick: turn to the screen, tongue out, and think very hard about nothing.
+        var hold = 3000 + Math.random() * 3000;
+        st.push({ pose: { side: "lick", k: 0, dir: dir, freeze: true, eyes: "open" }, t: hold * 0.35 });
+        st.push({ fx: ["\u2026"], t: hold * 0.25 });
+        st.push({ pose: { eyes: "half" }, t: 260 });
+        st.push({ pose: { eyes: "closed" }, t: 160 });
+        st.push({ pose: { eyes: "half" }, t: 220 });
+        st.push({ pose: { eyes: "open" }, t: hold * 0.25, fx: Math.random() < 0.7 ? ["?"] : null });
+        st.push({ pose: { side: "lick", k: 1, dir: dir, freeze: false, eyes: null }, t: 260 });
+        for (i = 0; i < 4; i++) st.push({ pose: { side: "lick", k: i % 2, dir: dir }, t: 190 });
+      }
       st.push({ pose: { side: "lick", k: 0, dir: dir }, t: 500 });
-      st.push({ pose: { side: "stand", k: 0, dir: dir }, t: 220 });
+      st.push({ pose: { side: "stand", k: 0, dir: dir, freeze: false }, t: 220 });
       run(st.concat(sitDown(dir)));
     }
     function scoot() {
@@ -893,7 +923,7 @@
 
     if (/[?&]bolaud=debug/.test(location.search)) {
       window.__bolaudDebug = {
-        walk: walk, groom: groom, lick: chickenLick, scoot: scoot, stretch: stretch, scratch: scratch, yarn: yarn,
+        walk: walk, groom: groom, lick: chickenLick, freeze: function () { var r = Math.random; Math.random = function () { return 0.1; }; try { chickenLick(); } finally { Math.random = r; } }, scoot: scoot, stretch: stretch, scratch: scratch, yarn: yarn,
         yawn: function () { yawn(); }, ear: earFlick, hop: function () { hop(true); }, sleep: function () { sleep(8000); }, wake: wake
       };
     }
