@@ -46,8 +46,8 @@
     "....OBBBOSSOOSSOBBBO......",
     "....OSSSOBBOOBBOSSSO......",
     "....OBBBOSSOOSSOBBBO......",
-    "....OBSSOWWOOWWOSSBO......",
-    "....OBBBOWWOOWWOBBBO......",
+    "....OBSSOCCOOCCOSSBO......",
+    "....OBBBOCCOOCCOBBBO......",
     ".....OOOOOOOOOOOOOO......."
   ];
   // Grooming: right front leg raised to the mouth (rows 17-23 replaced; paw drawn over the muzzle).
@@ -56,15 +56,15 @@
     "....OBBBOSSOBBBBBBBO......",
     "....OSSSOBBOBSSSBSSO......",
     "....OBBBOSSOBBBBBBBO......",
-    "....OBSSOWWOBSSSBSSO......",
-    "....OBBBOWWOBBBBBBBO......",
+    "....OBSSOCCOBSSSBSSO......",
+    "....OBBBOCCOBBBBBBBO......",
     ".....OOOOOOOOOOOOOO......."
   ];
-  var GROOM_PAW = { x: 12, y: 9, rows: [
+  var GROOM_PAC = { x: 12, y: 9, rows: [
     ".OOO..",
-    "OWWWO.",
-    "OWPWO.",
-    "OBWWBO",
+    "OCCCO.",
+    "OCPCO.",
+    "OBCCBO",
     "..OSBO",
     "..OBSO",
     "..OSBO",
@@ -78,7 +78,7 @@
       if (d <= 1 && y <= 22) g[y][x] = ((y + Math.round(Math.abs(x - cx) / 4)) % 3 === 0) ? "S" : "B";
     }
     for (x = 3; x <= 20; x++) g[22][x] = x <= 4 ? "K" : (x % 3 === 0 ? "S" : "L");
-    [[8, 20], [9, 20], [14, 20], [15, 20]].forEach(function (p) { g[p[1]][p[0]] = "W"; });
+    [[8, 20], [9, 20], [14, 20], [15, 20]].forEach(function (p) { g[p[1]][p[0]] = "C"; });
     var o = blank();
     for (y = 0; y < GH; y++) for (x = 0; x < GW; x++) {
       if (g[y][x] !== ".") continue;
@@ -159,7 +159,7 @@
     }
     [[0, 0], [1, 0], [0, 1], [1, 1]].forEach(function (d) {
       var yy = y1 + d[1], xx = x1 + d[0];
-      if (yy >= 0 && yy < GH && xx >= 0 && xx < GW) g[yy][xx] = "W";
+      if (yy >= 0 && yy < GH && xx >= 0 && xx < GW) g[yy][xx] = "C";
     });
   }
   function buildClimb(phase) {
@@ -250,12 +250,12 @@
     }
   }
   function ringColor(base) {
-    return function (s, total) { return total - s < 1.4 ? "W" : (Math.floor(s) % 3 === 2 ? "S" : base); };
+    return function (s, total) { return total - s < 1.4 ? "C" : (Math.floor(s) % 3 === 2 ? "S" : base); };
   }
   function legPart(leg, far) {
     var part = cblank(), base = far ? "D" : "B";
     strand(part, [leg[0], leg[1], leg[2]], [leg[3] || 1.35, 1.05, 1.0], function (s, total) {
-      if (total - s < 1.4) return far ? "L" : "W";
+      if (total - s < 1.4) return far ? "L" : "C";
       return Math.floor(s) % 3 === 2 ? "S" : base;
     });
     return part;
