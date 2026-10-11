@@ -305,6 +305,13 @@ DualReasoning shows great promise in incorporating messy medication information 
 - Wang, H. (2026). Ending the NIH embargo accelerated public access to funded research, but substantial delays remain. *arXiv:2609.14842*. https://arxiv.org/abs/2609.14842 (pdf: https://arxiv.org/pdf/2609.14842, code: https://github.com/Wang-Haining/nih_embargo) [topics: metasci, health]
 - Wang, H. (2023). Defending against authorship identification attacks. *arXiv:2310.01568*. https://arxiv.org/abs/2310.01568 (pdf: https://arxiv.org/pdf/2310.01568) [topics: nlp]
 
+## In the media
+
+- *R&D World*, Oct 9, 2026. NSF looks to UK experiments as it plans to test how it awards grants. https://www.rdworldonline.com/nsf-looks-to-uk-experiments-as-it-plans-to-test-how-it-awards-research-grants/ Discusses Haining's golden-ticket preprint in a story on how NSF plans to test new ways of awarding grants.
+- *infoDOCKET*, Feb 24, 2026. Responsible Intelligence in Practice: A Fairness Audit of Open Large Language Models for Library Reference Services. https://www.infodocket.com/2026/02/24/research-paper-preprint-responsible-intelligence-in-practice-a-fairness-audit-of-open-large-language-models-for-library-reference-services/ Features Haining's team's fairness audit of open LLMs for library reference services.
+- *Nature*, Dec 20, 2024. Can novelty scores on papers shift the power dynamics in scientific publishing? https://www.nature.com/articles/d41586-024-04021-w Quoted on measuring novelty in research (Nature Index).
+- *Montreal AI Ethics Institute*, Jan 18, 2024. Defending Against Authorship Identification Attacks. https://montrealethics.ai/defending-against-authorship-identification-attacks/ Invited column on protecting writers from being identified by their style.
+
 ---
 
 # Website: teaching

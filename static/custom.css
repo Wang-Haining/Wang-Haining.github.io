@@ -261,3 +261,13 @@ a.pub-title:hover { color: var(--pal-accent, #d9411e) !important; text-decoratio
 @media screen and (max-width: 600px) {
     main { padding-bottom: 72px; }
 }
+
+/* Research: In the Media */
+.research .media-section h2 { margin: 1.8em 0 .4em; font-size: 1.3em; }
+.research ul.media-list { list-style: none; padding: 0; margin: 0; }
+.research ul.media-list li { margin: 0; padding: .55em 0; line-height: 1.55; }
+.media-outlet { color: #6e6e6e; }
+.media-note { color: #6e6e6e; }
+@media (prefers-color-scheme: dark) {
+    .media-outlet, .media-note { color: #a8a8a8; }
+}
