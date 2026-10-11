@@ -291,6 +291,10 @@ DualReasoning shows great promise in incorporating messy medication information 
 - Riddell, A., Wang, H., & Juola, P. (2021). A call for clarity in contemporary authorship attribution evaluation. *Proceedings of Recent Advances in Natural Language Processing (RANLP 2021)*, 1178–1183. https://doi.org/10.26615/978-954-452-072-4_133 (data: https://zenodo.org/record/5213898) [topics: nlp]
 - Wang, H., Riddell, A., & Juola, P. (2021). Mode effects' challenge to authorship attribution. *Proceedings of the 16th Conference of the European Chapter of the ACL (EACL 2021)*, 1146–1155. https://aclanthology.org/2021.eacl-main.97/ (pdf: https://aclanthology.org/2021.eacl-main.97.pdf, poster: https://drive.google.com/file/d/1teLOJTU4RNAIVEOkH7s5-2uLpPkw19qn/view?usp=sharing) [topics: nlp]
 
+## Books
+
+- Wang, H. (under contract). Defending against authorship identification attacks. *Synthesis Lectures on Human Language Technologies (Springer Nature)*. [topics: nlp]
+
 ## Book chapters
 
 - Wang, H., Clark, J., & Peña, A. (forthcoming). Responsible intelligence in practice: A fairness audit of open large language models for library reference services. *Artificial Intelligence and Social Justice Intersections in Library and Information Studies (Emerald)*. https://arxiv.org/abs/2602.18935 (code: https://github.com/AI4Library/AISJ) [topics: nlp]
