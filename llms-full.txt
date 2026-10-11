@@ -293,7 +293,7 @@ DualReasoning shows great promise in incorporating messy medication information 
 
 ## Books
 
-- Wang, H. (under contract). Defending against authorship identification attacks. *Synthesis Lectures on Human Language Technologies (Springer Nature)*. [topics: nlp]
+- Wang, H. (under contract; manuscript under review). Defending against authorship identification attacks. *Synthesis Lectures on Human Language Technologies (Springer Nature)*. [topics: nlp]
 
 ## Book chapters
 
