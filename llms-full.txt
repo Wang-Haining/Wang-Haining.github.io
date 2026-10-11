@@ -109,6 +109,8 @@ Hi 👋, I'm a postdoctoral fellow in the Department of Biostatistics and Health
 
 ### What's New
 
+* (Oct 9, 2026) I gave a talk, ["LLMs for Knowledge Extraction and Phenotyping: Systems 1, 2, and Beyond"](https://docs.google.com/presentation/d/15hKXCZrcalAw1tPTERviEkrZv3_v0n3u/edit?usp=sharing), in the ARDaC session of the *AlcHepNet–ITAALD Annual Meeting* in Indianapolis: when should an LLM answer fast, and when should it slow down and reason? 🧠
+
 * (Oct 4, 2026) Two new preprints on how US funders count and fund science 📊
 
     * ["Still Funded, No Longer Counted: How NIH's 2025 Award Reviews Changed What the Government Counts as Minority Health Research"](https://arxiv.org/abs/2610.03443): many minority health projects kept their funding but quietly dropped out of NIH's count.
