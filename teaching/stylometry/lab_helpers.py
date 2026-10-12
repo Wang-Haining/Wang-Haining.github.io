@@ -35,23 +35,24 @@ def count_function_words(text, words):
     return [c[w] for w in words]
 
 
-def load_koppel(path="data/koppel_function_words.txt"):
-    """The 512-word Koppel function-word list (one word per line; some contain an apostrophe)."""
+def load_fw224(path="data/function_words_224.json"):
+    """The lab's 224 function words (the list FW in unabom/scripts/verify.py, also used in Chapter 2)."""
     with open(path, encoding="utf-8") as f:
-        return f.read().splitlines()
+        return json.load(f)["words"]
 
 
-def koppel_counts(text, words):
-    """Counts of each word in `words`: how often it occurs as a whole word, regex \\bword\\b, in the lower-cased text.
+_FW_TOKEN = re.compile(r"[a-z]+(?:'[a-z]+)?")
 
-    Same rule as vectorize_koppel512 in the published reproduction (Wang, Reproduction and Replication of an Adversarial
-    Stylometry Experiment), so the counts are identical. For a word without an apostrophe, \\bword\\b matches exactly when
-    the word is a whole run of letters/digits, so those words are counted from one pass over the text (much faster);
-    the few words with an apostrophe (can't, e'g') use the regex itself.
-    """
-    low = text.lower()
-    runs = Counter(re.findall(r"\w+", low))
-    return [len(re.findall(r"\b" + w + r"\b", low)) if "'" in w else runs[w] for w in words]
+
+def fw_tokens(text):
+    """Lower-case words (letters and inner apostrophes; curly apostrophes straightened): the tokenizer of Chapter 2."""
+    return _FW_TOKEN.findall(text.lower().replace("\u2019", "'"))
+
+
+def fw_counts(text, words):
+    """Counts of each word in `words` among the tokens of `text` (see fw_tokens), in the order of `words`."""
+    c = Counter(fw_tokens(text))
+    return [c[w] for w in words]
 
 
 def relative_freq(counts, n_words):

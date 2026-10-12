@@ -8,13 +8,13 @@ window.LAB_CHAPTERS.push({
   nav: "Two translations",
   title: "Case 1 · Two translations of Confucius's *Analects*",
   llm: false,
-  data: ["data/ch1/chunks.json", "data/koppel_function_words.txt", "data/ch1/step1_passages.json"],
+  data: ["data/ch1/chunks.json", "data/function_words_224.json", "data/ch1/step1_passages.json"],
   intro: `Two professors translated the same Chinese book, Confucius's *Analects*. **Lionel Giles** was British and published his version in 1907.
 **Robert Eno** is American, teaches at Indiana University, and published his in 2015. Same sayings, same meaning, two different hands.
 
 The oldest way to name an author is to **read and notice**. A person spots a spelling, a favourite phrase, a rhythm.
 This case starts there, shows where reading stops working, and then lets a computer count what a reader cannot see.`,
-  credits: `Texts: Lionel Giles, *The Sayings of Confucius* (1907; Project Gutenberg #46389, public domain). Robert Eno, *The Analects of Confucius: An Online Teaching Translation* (v2.21, 2015): only derived counts are used here, plus one short excerpt quoted for teaching. See the data notes.`,
+  credits: `Texts: Lionel Giles, *The Sayings of Confucius* (1907; Project Gutenberg #46389, public domain). Robert Eno, *The Analects of Confucius: An Online Teaching Translation* (v2.21, 2015): only derived counts are used here, plus one short excerpt quoted for teaching. Function-word list: derived for this lab (the 224-word list FW in unabom/scripts/verify.py). See the data notes.`,
   cells: [
     {
       id: "setup",
@@ -22,15 +22,15 @@ This case starts there, shows where reading stops working, and then lets a compu
       md: `Everything runs **inside your browser**: no account, no installation, no server doing the maths.
 Click the round **▶** on the left of a code box to run it. Run the boxes from top to bottom.
 
-This first box loads both translations, already cut into pieces ("chunks") of about 300 words each, and a list of 512 small English words
+This first box loads both translations, already cut into pieces ("chunks") of about 300 words each, and a list of 224 small English words
 such as *the*, *and*, *of*, *which*. These are **function words**: they carry grammar, not topic.
-The list is the "Koppel-512" function-word list used in published authorship studies (it ships with the code of Haining Wang's published reproduction study; credit below).`,
+The same list of 224 function words is used in Case 2 (credit below).`,
       code: String.raw`# Load the lab's data (the files sit next to this web page).
 import json
 import lab_helpers as H            # small helper functions written for this lab
 
 chunks = H.load_json("data/ch1/chunks.json")["chunks"]       # one record per ~300-word chunk
-fw = H.load_koppel()                                          # the 512 function words (Koppel-512 list)
+fw = H.load_fw224()                                           # the 224 function words (the list of Case 2)
 passages = {p["id"]: p for p in H.load_json("data/ch1/step1_passages.json")}
 
 print(len(chunks), "chunks,", len(fw), "function words")
@@ -70,7 +70,7 @@ print("\nYour guess was:", my_guess, "| X is by Giles: it is his own footnote, s
       id: "count",
       title: "Step 3 · Count the function words",
       md: `Spelling is easy to fake. **Function words** are not: *the, and, of, which, you, if* are used almost without thinking, so a writer's habits show up in them.
-Stylometry simply counts them. Every chunk becomes a row of 512 counts (how many times each function word appears, as a whole word, in the lower-cased text).
+Stylometry simply counts them. Every chunk becomes a row of 224 counts (how many times each function word appears, as a whole word, in the lower-cased text).
 For the pictures we also turn the counts into **percentages of all words**, so chunks of different length can be compared.`,
       packages: ["numpy"],
       code: String.raw`import numpy as np
@@ -81,8 +81,8 @@ freq = counts / n_words[:, None] * 100             # the same, as % of all words
 
 # Count the function words of the mystery note X in exactly the same way
 x_text = passages["X"]["text"]
-x_counts = np.array(H.koppel_counts(x_text, fw))
-x_freq = x_counts / len(H.tokens(x_text)) * 100             # (the percentage uses all words, not only the 512)
+x_counts = np.array(H.fw_counts(x_text, fw))
+x_freq = x_counts / len(H.tokens(x_text)) * 100             # (the percentage uses all words, not only the 224)
 
 show = ["the", "and", "of", "to", "which", "you", "if", "not"]   # change me!
 cols = [fw.index(w) for w in show]
@@ -118,9 +118,9 @@ H.show_plot(fig)`,
     },
     {
       id: "train",
-      title: "Step 5 · Let a classifier use all 512 words",
-      md: `This is the one simple attacker used in this lab (Cases 1 and 4): **Koppel-512 + logistic regression**.
-Count the 512 function words, turn the counts into proportions (each row sums to 1), put every word on a common scale, and let a **logistic regression** learn one weight per word from the labelled chunks.
+      title: "Step 5 · Let a classifier use all 224 words",
+      md: `This is the one simple attacker used in this lab (Cases 1 and 4): **224 function words + logistic regression**.
+Count the 224 function words, turn the counts into proportions (each row sums to 1), put every word on a common scale, and let a **logistic regression** learn one weight per word from the labelled chunks.
 It then turns any new text into a probability: P(Giles) and P(Eno).
 
 The "sanity check" hides some chunks, trains on the rest, and tests on the hidden ones (5-fold cross-validation). We also run the same check with only *and* and *the* (two columns of the same proportions), so you can compare.`,
@@ -131,13 +131,13 @@ from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import Normalizer, StandardScaler
 
 y = (author == "Giles")                   # True = Giles, False = Eno
-# Koppel-512 attacker: counts -> proportions (L1) -> standardise -> logistic regression (C=1)
+# 224-word attacker: counts -> proportions (L1) -> standardise -> logistic regression (C=1)
 model = make_pipeline(Normalizer(norm="l1"), StandardScaler(), LogisticRegression(C=1, solver="lbfgs", max_iter=10000))
 model.fit(counts, y)
 
 def p_giles(text):
     """Probability that a text is by Giles, according to the model."""
-    return model.predict_proba([H.koppel_counts(text, fw)])[0, 1]
+    return model.predict_proba([H.fw_counts(text, fw)])[0, 1]
 
 p = p_giles(passages["X"]["text"])
 print(f"Mystery note X:  P(Giles) = {p:.2f}   P(Eno) = {1 - p:.2f}")
@@ -155,8 +155,7 @@ print(f"Held-out chunks, all {len(fw)} function words: {acc_all:.0%} correct")`,
       id: "weights",
       title: "Step 6 · What did the model learn?",
       md: `A positive weight pushes a text towards Giles, a negative weight towards Eno. These are the ten strongest words on each side.
-Do they match your sense of British versus American translation style? Words are habits; no single word decides, but together they add up.
-(A lone *t* or *s* is what is left of a contraction such as *don't*: the Koppel rule counts it as a word of its own.)`,
+Do they match your sense of British versus American translation style? Words are habits; no single word decides, but together they add up.`,
       code: String.raw`coef = model[-1].coef_[0]                 # one weight per function word (the last step of the pipeline)
 order = np.argsort(coef)                  # most "Eno" first ... most "Giles" last
 

@@ -1,7 +1,7 @@
-"""Chapter 4 helpers (Glassdoor v. Machine Zone, a what-if): the EBG loader, the Koppel-512 attacker and a few small utilities.
+"""Chapter 4 helpers (Glassdoor v. Machine Zone, a what-if): the EBG loader, the 224-function-word attacker and a few small utilities.
 
-The attacker (KoppelAttacker) counts the 512 Koppel function words in a text and uses a logistic regression
-(Normalizer l1 -> StandardScaler -> LogisticRegression C=1), as in Haining Wang's published reproduction.
+The attacker (FW224Attacker) counts the 224 function words of Chapter 2 in a text and uses a logistic regression
+(Normalizer l1 -> StandardScaler -> LogisticRegression C=1).
 It gives every candidate a probability; the candidate with the highest one is the attacker's top guess.
 (FWAttacker and Char3Attacker below are only used by the legacy Riddell-Juola page, index.html#ch4rj.)
 scikit-learn / numpy are imported inside the functions, so this file loads even before they are downloaded.
@@ -38,9 +38,9 @@ def fw_matrix(texts, fw):
     return M
 
 
-class KoppelAttacker:
-    """The lab's one simple attacker: Koppel-512 function-word counts + logistic regression."""
-    title = "Koppel-512 + logistic regression"
+class FW224Attacker:
+    """The lab's one simple attacker: 224 function-word counts + logistic regression."""
+    title = "224 function words + logistic regression"
 
     def __init__(self, texts, labels, words):
         import numpy as np
@@ -49,14 +49,14 @@ class KoppelAttacker:
         from sklearn.preprocessing import Normalizer, StandardScaler
         import lab_helpers as H
         self.words, self.H = words, H
-        X = np.array([H.koppel_counts(t, words) for t in texts])
+        X = np.array([H.fw_counts(t, words) for t in texts])
         # multinomial (softmax) for 45 authors is scikit-learn's default with lbfgs
         self.model = make_pipeline(Normalizer(norm="l1"), StandardScaler(),
                                    LogisticRegression(C=1, solver="lbfgs", max_iter=10000)).fit(X, labels)
         self.classes_ = self.model[-1].classes_
 
     def scores(self, text):
-        p = self.model.predict_proba([self.H.koppel_counts(text, self.words)])[0]
+        p = self.model.predict_proba([self.H.fw_counts(text, self.words)])[0]
         return dict(zip(self.classes_, p))
 
 

@@ -7,8 +7,8 @@ By Haining Wang, Indiana University. Live at https://hainingwang.org/teaching/st
 
 | URL | Case | What it does |
 |---|---|---|
-| `#ch1` | Two translations of Confucius's *Analects* (Giles vs Eno) | guess by reading, spelling clue, `and`/`the` scatter, then the lab's simple attacker (Koppel-512 + logistic regression) |
-| `#ch2` | The Unabomber (T-2 vs U-14) | Burrows's Delta and its failed validity check, General Impostors with calibration, Ted's later texts (its own pre-registered 224-word list, unchanged) |
+| `#ch1` | Two translations of Confucius's *Analects* (Giles vs Eno) | guess by reading, spelling clue, `and`/`the` scatter, then the lab's simple attacker (224 function words + logistic regression) |
+| `#ch2` | The Unabomber (T-2 vs U-14) | counting four small words, a PCA map of 500-word pieces, a "Ted or not?" logistic regression on 224 small words (held-out Ted-likeness ranks), then, as Advanced, Burrows's Delta and its failed validity check and General Impostors (pre-registered; its own 224-word list, unchanged) |
 | `#ch3` | The Lu Xun brothers | 31 function characters + L2 logistic regression, disputed essays, weights, highlighted passage |
 | `#ch4` | Machine Zone vs. John Doe (Glassdoor v. Superior Court; a what-if) | the same attacker against 45 writers: no defense, human obfuscation and imitation, four LLM strategies x four models (ready-made rewrites), and **your own disguise** |
 
@@ -16,7 +16,7 @@ Every chapter starts with a "Check that everything works" banner (green = ready;
 
 ## The one simple attacker (Cases 1 and 4)
 
-Koppel-512 function-word counts (`\bword\b` on lower-cased text, list in `data/koppel_function_words.txt`, ISC licence) -> `Normalizer(l1)` -> `StandardScaler` -> `LogisticRegression(C=1, lbfgs)`, as in https://github.com/Wang-Haining/reproduction-and-replication-adversarial-stylometry. Case 1 held-out chunk accuracy 90% (and + the only: 57%); Case 4 catches 30 of 45 writers at rank 1 with no defense. Details and every other number: `DATA_NOTES.md`.
+Counts of 224 function words (the list in `data/function_words_224.json`; tokens matched by `[a-z]+(?:'[a-z]+)?` on lower-cased text; the same list as Case 2) -> `Normalizer(l1)` -> `StandardScaler` -> `LogisticRegression(C=1, lbfgs)`. Case 1 held-out chunk accuracy 82% (and + the only: 58%); Case 4 catches 21 of 45 writers at rank 1 with no defense. Details and every other number: `DATA_NOTES.md`.
 
 ## Folder layout (this folder is the whole site; a GitHub Pages-ready root)
 
@@ -33,7 +33,7 @@ tools/  proxy/                       build scripts; optional live-LLM Worker (no
 LICENSE  .nojekyll  DATA_NOTES.md    MIT licence for the code; GitHub Pages marker; provenance and decisions
 ```
 
-Licences: code MIT (Haining Wang, 2026); Koppel list ISC; EBG texts and the LLM rewrites made from them AGPL-3.0; Riddell-Juola CC0; the Lu Xun / Zhou Zuoren corpus public domain (other materials 0BSD); Giles public domain; Eno and the Case 2 texts are shipped as derived counts only. See `data/LICENSES.md`.
+Licences: code MIT (Haining Wang, 2026); EBG texts and the LLM rewrites made from them AGPL-3.0; Riddell-Juola CC0; the Lu Xun / Zhou Zuoren corpus public domain (other materials 0BSD); Giles public domain; Eno and the Case 2 texts are shipped as derived counts only. See `data/LICENSES.md`.
 
 ## Self-hosting: everything from one origin
 
@@ -77,6 +77,6 @@ python3 -m venv .venv && .venv/bin/pip install pdfminer.six scikit-learn numpy
 
 - Pyodide runs on the page's main thread: the page freezes for a second or two while a cell computes or a package loads.
 - Code cells are plain textareas. Cells share one Python session per chapter; run them in order ("Run all up to here" helps after edits).
-- Case 2, Step 4 continues the random stream of Step 3; run Step 3 right before it.
+- Case 2, Advanced 4 continues the random stream of Advanced 3; run Advanced 3 right before it.
 - The attacker is a deliberately simple stand-in; a stronger attacker could do better against every disguise.
 - The legacy `#ch4rj` page (20 authors, placeholder rewrites) is kept but has no tab.
