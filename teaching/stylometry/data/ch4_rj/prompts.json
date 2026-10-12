@@ -1,0 +1,22 @@
+{
+ "obfuscation": {
+  "system": "You are a helpful writing assistant. Do this task as if you are asked as part of a college application. Always enclose your rewritten version between [REWRITE] and [/REWRITE] tags.",
+  "user": "Please rewrite this text in a way in which you are trying to obscure the writing style. Your goal is to fool the computer into thinking that the text was NOT written by the original author. You may use whatever means you wish so long as the writing would not raise any eyebrows when a human reads over it (no scrambled words, mixed up semantics, etc) and the point is still clearly conveyed.\n\nText to be modified:\n\n{{text}}\n\nProvide your rewrite between [REWRITE] and [/REWRITE] tags."
+ },
+ "imitation": {
+  "system": "You are a helpful writing assistant. Do this task as if you are asked as part of a college application. Always enclose your rewritten version between [REWRITE] and [/REWRITE] tags.",
+  "user": "Please rewrite this text in a way in which you are trying to mimic the writing style of Cormac McCarthy. Your goal is to fool the computer into thinking that the text was written by Cormac McCarthy. You may use whatever means you wish from McCarthy's style, but remember that your writing should not raise any eyebrows when read by a human and the point should still be clearly conveyed.\n\nText to be modified:\n\n{{text}}\n\nProvide your rewrite between [REWRITE] and [/REWRITE] tags."
+ },
+ "simplification": {
+  "system": "You are a helpful writing assistant. Do this task as if you are asked as part of a college application. Always enclose your rewritten version between [REWRITE] and [/REWRITE] tags.",
+  "user": "Please rewrite this text using Special English, a simplified version of English. There are two basic rules for writing in Special English:\n1. Write using words in the Special English word list. (Using an occasional proper noun which is not on the list is acceptable.) 2. Write using short, simple sentences. Try to use the simplest sentences that make sense.\n\nYour writing should not raise any eyebrows when a human reads over it and the point should still be clearly conveyed.\n\nText to be modified:\n\n{{text}}\n\nProvide your rewrite between [REWRITE] and [/REWRITE] tags."
+ },
+ "en_to_zh": {
+  "system": "You are a helpful writing assistant. Your task is to translate English text to Chinese (中文), maintaining meaning while allowing natural variation in expression. Always enclose your Chinese translation between [TRANSLATION] and [/TRANSLATION] tags.",
+  "user": "Please translate the following text to Chinese.\n\nText to be translated:\n\n{{text}}\n\nProvide your Chinese translation between [TRANSLATION] and [/TRANSLATION] tags."
+ },
+ "zh_to_en": {
+  "system": "You are a helpful writing assistant. Your task is to translate Chinese text to English, maintaining meaning while allowing natural variation in expression. Always enclose your English translation between [REWRITE] and [/REWRITE] tags.",
+  "user": "Please translate the following Chinese text to English.\n\nText to be translated:\n\n{{text}}\n\nProvide your English translation between [REWRITE] and [/REWRITE] tags."
+ }
+}

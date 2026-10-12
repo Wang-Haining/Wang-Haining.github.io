@@ -1,0 +1,11 @@
+Extended Brennan-Greenstadt (EBG) corpus, as distributed in the PSAL Anonymouth repository
+https://github.com/psal/anonymouth  (path jsan_resources/corpora/amt), commit 7bd8e24b661f587facf8715a1de345dffde9734e.
+
+The repository's COPYRIGHT.txt states that JSAN, JStylo and Anonymouth are copyright 2011-2013 by the Privacy, Security and
+Automation lab at Drexel University and released under the GNU Affero General Public License, version 3 (AGPL-3.0).
+The full licence text is in LICENSE-AGPL-3.0.txt in this folder.
+
+The 793 .txt files in the author folders are copied here unchanged (SHA-256 values are listed in ../ebg_manifest.json and are
+checked by the lab every time it loads them). Corresponding source: the repository above. Because this folder is distributed
+under the AGPL-3.0, so are the machine rewrites in ../rewrites_cache.json, which were made from these texts.
+Note for maintainers: the text above summarises the repository's COPYRIGHT.txt; copy the original file in here when convenient.

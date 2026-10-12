@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stylometry Lab: Who Wrote This?</title>
+<meta name="description" content="A browser-only stylometry lab in four cases: two translators, the Unabomber manifesto, Lu Xun versus Zhou Zuoren, and a what-if on an anonymous-review lawsuit (Machine Zone vs. John Doe). No account needed.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <h1>Who wrote this? A stylometry lab</h1>
+    <p class="sub">Guest lecture, Haining Wang (Indiana University). Python runs in your browser: no account, no install.</p>
+    <nav class="tabs" id="tabs" aria-label="Case chapters"></nav>
+  </div>
+</header>
+
+<div id="boot" class="boot" role="status" aria-live="polite">
+  <div class="wrap">
+    <div class="spinner" aria-hidden="true"></div>
+    <div>
+      <strong id="boot-title">Waking up Python in your browser&hellip;</strong>
+      <div id="boot-detail">Downloading the Python engine (about 10 MB, once). Each case then loads its own data, and the packages it needs (NumPy, scikit-learn, matplotlib) the first time a step uses them. Please be patient on slow Wi-Fi.</div>
+    </div>
+  </div>
+</div>
+
+<div class="bar" id="bar">
+  <div class="wrap barrow">
+    <label class="pass" id="pass-wrap" hidden>Class passcode
+      <input id="passcode" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="from the board (optional)">
+    </label>
+    <span id="llm-mode" class="pill" hidden>LLM step: offline cache</span>
+    <span id="data-note" class="pill"></span>
+    <button id="run-all" class="btn" disabled>Run all</button>
+  </div>
+</div>
+
+<main class="wrap" id="cells"></main>
+
+<footer class="wrap foot">
+  <div id="credits"></div>
+  <p>Privacy: the analysis never leaves your browser. In Case 4 the page downloads the EBG texts from GitHub (raw.githubusercontent.com), which sees your IP address as in any download, and if you type the class passcode, the text you chose is sent through a class proxy to an AI model provider; otherwise nothing else is sent. Provenance and licences of every dataset: <a href="DATA_NOTES.md">data notes</a>.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/pyodide/v0.27.7/full/pyodide.js"></script>
+<script src="chapters/ch1.js"></script>
+<script src="chapters/ch2.js"></script>
+<script src="chapters/ch3.js"></script>
+<script src="chapters/ch4.js"></script>
+<script src="chapters/ch4_rj.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
