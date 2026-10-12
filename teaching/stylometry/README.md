@@ -8,7 +8,7 @@ By Haining Wang, Indiana University. Live at https://hainingwang.org/teaching/st
 | URL | Case | What it does |
 |---|---|---|
 | `#ch1` | Two translations of Confucius's *Analects* (Giles vs Eno) | guess by reading, spelling clue, `and`/`the` scatter, then the lab's simple attacker (224 function words + logistic regression) |
-| `#ch2` | The Unabomber (T-2 vs U-14) | counting four small words, a PCA map of 500-word pieces, a "Ted or not?" logistic regression on 224 small words (held-out Ted-likeness ranks), then, as Advanced, Burrows's Delta and its failed validity check and General Impostors (pre-registered; its own 224-word list, unchanged) |
+| `#ch2` | The Unabomber (T-2 vs U-14) | counting four small words, a PCA map of 500-word pieces, a "Ted or not?" logistic regression on 224 small words (an "alarm line" set at 5% false alarms: how many manifesto pieces it flags), then, as Advanced, Burrows's Delta and its failed validity check and General Impostors (pre-registered; its own 224-word list, unchanged) |
 | `#ch3` | The Lu Xun brothers | 31 function characters + L2 logistic regression, disputed essays, weights, highlighted passage |
 | `#ch4` | Machine Zone vs. John Doe (Glassdoor v. Superior Court; a what-if) | the same attacker against 45 writers: no defense, human obfuscation and imitation, four LLM strategies x four models (ready-made rewrites), and **your own disguise** |
 

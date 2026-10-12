@@ -104,6 +104,7 @@ def same_author_scores(A, imp_freq, t2_freq, ref, rng, iters=200):
 
 # ------------------------------------------------------------------ the classifier steps (Steps 1 to 4)
 BLUE, ORANGE, GREY, INK = "#2F5D8A", "#B45309", "#9E978A", "#1F2430"     # Ted's essay, the manifesto, other writers, text
+CREAM, MUTED, CRIM = "#F7F5F0", "#6B6458", "#9D2235"                      # page background, quiet text, the alarm line
 
 
 def per_1000(block):
@@ -191,6 +192,53 @@ def ted_likeness(D, size=1000, drop_fbi=False, words=None):
     pu, pp = m.predict_proba(U)[:, 1], m.predict_proba(P)[:, 1]
     return {"held": held, "manifesto": pu, "later": pp, "n_ted": len(T), "size": size,
             "beats_manifesto": float((held < np.median(pu)).mean() * 100), "beats_later": float((held < np.median(pp)).mean() * 100)}
+
+
+def logit(p):
+    """Probability of 'Ted' -> log-odds (the score drawn on the plots)."""
+    p = np.clip(np.asarray(p, float), 1e-6, 1 - 1e-6)
+    return np.log(p / (1 - p))
+
+
+def alarm(r, false_alarm=0.05):
+    """Set the alarm line so that `false_alarm` of the other writers' held-out pieces are flagged (the matching percentile of their scores),
+    then count the flagged pieces in each group. Scores are log-odds of 'Ted'. Returns the line and the counts."""
+    held = logit(r["held"])
+    th = float(np.quantile(held, 1 - false_alarm))
+    out = {"threshold": th, "false_alarm": false_alarm, "held_flagged": float((held > th).mean())}
+    for k in ("manifesto", "later"):
+        v = logit(r[k])
+        out[k + "_flagged"], out[k + "_n"] = int((v > th).sum()), len(v)
+    return out
+
+
+def flag_plot(r, false_alarm=0.05):
+    """The alarm-line plot: other writers' pieces (grey dots) and manifesto pieces (orange stars) on one score axis.
+    Everything to the right of the dashed line is flagged as Ted. The labels sit in a column to the right of the plot."""
+    import matplotlib
+    matplotlib.use("agg")
+    import matplotlib.pyplot as plt
+    a = alarm(r, false_alarm)
+    th, imp, u = a["threshold"], logit(r["held"]), logit(r["manifesto"])
+    fig = plt.figure(figsize=(9.6, 3.9), dpi=100); fig.patch.set_facecolor(CREAM)
+    ax = fig.add_axes([0.17, 0.2, 0.58, 0.74]); ax.set_facecolor(CREAM)
+    rng = np.random.default_rng(3)
+    xmax, xmin = max(imp.max(), u.max()) + .3, min(imp.min(), u.min()) - .3
+    ax.axvspan(th, xmax, color="#F4E3E3", zorder=0)
+    ax.scatter(imp, 1 + rng.uniform(-.25, .25, len(imp)), s=26, color=GREY, edgecolors="none", alpha=.9, zorder=2)
+    ax.scatter(u, 0 + rng.uniform(-.25, .25, len(u)), s=190, marker="*", color=ORANGE, edgecolors="white", linewidths=.8, zorder=3)
+    ax.axvline(th, color=CRIM, lw=2.5, ls="--", zorder=1)
+    ax.text(th + 0.12, 1.62, "flagged as Ted  \u2192", color=CRIM, fontsize=12, fontweight="bold", va="center")
+    ax.set_yticks([1, 0]); ax.set_yticklabels(["Other writers'\npieces", "Manifesto\npieces"], fontsize=11, color=INK)
+    ax.set_xticks([]); ax.set_xlim(xmin, xmax); ax.set_ylim(-.6, 1.85)
+    ax.set_xlabel("Computer's score:   less like Ted  \u2190            \u2192  more like Ted", fontsize=10, color=INK)
+    for k in ("top", "right", "left"):
+        ax.spines[k].set_visible(False)
+    ylab = lambda yv: ax.transData.transform((0, yv))[1] / fig.bbox.height
+    fig.text(0.77, ylab(1), "%.0f%% flagged\n(false alarms)" % (a["held_flagged"] * 100), va="center", fontsize=12, fontweight="bold", color=MUTED)
+    fig.text(0.77, ylab(0), "%.0f%% flagged\n(%d of %d)" % (a["manifesto_flagged"] / a["manifesto_n"] * 100, a["manifesto_flagged"], a["manifesto_n"]),
+             va="center", fontsize=12, fontweight="bold", color=ORANGE)
+    return fig
 
 
 def likeness_plot(r):

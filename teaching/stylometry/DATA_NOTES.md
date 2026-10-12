@@ -48,11 +48,17 @@ Files: `fw_counts.json` (about 0.9 MB; per-chunk counts and token counts), `exce
 - `p500`: counts per 500-word piece for T-2, U-14, the later writings (joined into one text before cutting), the same T-2 and U-14 with the FBI-matched paragraphs removed (`t2_drop`, `u14_drop`), the impostors per text (`imp`, 576 pieces; used by the classifier, in `build()` order because GroupKFold breaks ties by order) and the impostors joined per author (`imp_author`, 582 pieces; used by the PCA map, as in `ted_2d.py`).
 - `post1000`: the later writings joined, cut into 61 pieces of 1,000 words. The 1,000-word pieces of T-2, U-14, the impostors and the FBI-removed versions are the existing `t2`, `u14`, `impostors`, `t2_r1_first1000`, `u14_r1` (the old per-text `ted_post` is kept for the General Impostors cells).
 
+**Readout (Steps 3, 3b, 4).** The page reports an "alarm line" (`lab_ch2.alarm`, `lab_ch2.flag_plot`; plot replicates section A of `assets/figs/flag_figs.py`): scores are log-odds of P(Ted), clipped at 1e-6; the line is `np.quantile(held_out_scores, 0.95)` (5% false alarms; 15 of 282 other-writer pieces score above it, 5.3%); a piece is flagged if its score is strictly above the line. Ted's later writings (20 of 61, 33%) are stated in the text as an honest limit (Ted is learned from one essay of about 6,300 words; writing changes over 25 years), not as a headline. The old rank readout ("typical manifesto piece beats 97.9% / 95.7%") survives as a one-line aside.
+
 Features, model and scoring are those of `unabom/scripts/lr_binary.py FW224` (224 words, `Normalizer(l1)` -> `StandardScaler` -> `LogisticRegression(C=1, class_weight="balanced")`), with the other writers' pieces scored held out by whole text in 5 folds. The lab writes the fold rule out (`lab_ch2.group_folds`, the same rule as scikit-learn 1.9's `GroupKFold`) because the Pyodide copy of scikit-learn (1.6) breaks ties between equal-sized texts differently and gave 98.2% / 89.0% instead of 97.9% / 89.4%. PCA map: `StandardScaler` on relative frequencies of the 500-word pieces, `PCA(2, random_state=0)` fit on T-2 plus impostor pieces, boundary = balanced logistic regression refit on the 2D coordinates (illustration only).
 
 | Quantity | Reference (`SUMMARY.md`, `lr_binary_points_FW224_*.json`) | Lab (browser) |
 |---|---|---|
-| Median manifesto piece beats held-out other-writer pieces, 1,000 words | 97.9% | 97.9% |
+| **Alarm line** (95th percentile of held-out other-writer scores, log-odds; 5% false alarms): manifesto pieces flagged, 1,000 words | 24 of 30 (80%) | 24 of 30 (80%) |
+| Same, FBI-matched passages removed (line recomputed on that run's held-out scores) | 12 of 22 (55%) | 12 of 22 (55%) |
+| Ted's later writings at the main line | 20 of 61 (33%) | 20 of 61 (33%) |
+| Step 4 false-alarm rate 10% / 1% (main run): manifesto pieces flagged | 27 / 9 of 30 | 27 / 9 of 30 |
+| Median manifesto piece beats held-out other-writer pieces, 1,000 words (one-line aside on the page) | 97.9% | 97.9% |
 | Same, FBI-matched passages removed | 95.7% | 95.7% |
 | Ted's later writings, 1,000 words | 89.4% | 89.4% |
 | Manifesto 500-word pieces on Ted's side of the PCA line | 67% | 67% (41 of 61) |

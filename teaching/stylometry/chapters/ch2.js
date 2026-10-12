@@ -101,50 +101,58 @@ print("Caption: the line is drawn in 2D for illustration only. The real classifi
       title: "Step 3 · Let the computer decide",
       md: `Now we skip the picture. A **logistic regression** learns, from **Ted's 1971 essay against the 19 other writers**, which mix of the 224 small words says "Ted". Then it gives any piece of text a **Ted-likeness score**.
 
-Pieces are 1,000 words. To keep it fair, every other-writer piece is scored **held out**: the computer never saw that whole text when it was trained (5-fold, grouped by text). Then we ask: where do the manifesto's pieces fall, compared with pieces by the other writers, and with Ted's own later writings (1999-2016)?
+Pieces are 1,000 words. To keep it fair, every other-writer piece is scored **held out**: the computer never saw that whole text when it was trained (5-fold, grouped by text). Then we ask: where do the manifesto's pieces fall, compared with pieces by the other writers?
 
-The readout is a **rank**: the typical (median) manifesto piece scores higher than what share of the other writers' pieces?`,
+**An honest limit.** The computer learned Ted from a single essay of about 6,300 words, and people's writing changes over 25 years. Run the box and read the last line: Ted's own later writings (1999-2016) are flagged far less often than the manifesto is. A flag is a weak clue, and a missing flag proves little.
+
+The readout is an **alarm line**. We set it so that only **5% of the other writers' pieces** set it off (a 5% false-alarm rate). Anything scoring above the line is "flagged as Ted". Then we count how many manifesto pieces are flagged.`,
       packages: ["numpy", "scikit-learn", "matplotlib"],
       code: String.raw`r = G.ted_likeness(D, size=1000)             # Ted: 6 pieces of 1,000 words; other writers: 282 pieces
-H.show_plot(G.likeness_plot(r))                 # black tick = the median of each row
+a = G.alarm(r, false_alarm=0.05)                # the line: 5% of the other writers' held-out pieces score above it
+H.show_plot(G.flag_plot(r, false_alarm=0.05))
 
-print(f"Typical manifesto piece beats {r['beats_manifesto']:.1f}% of the other writers' held-out pieces.")
-print(f"Typical piece of Ted's later writings beats {r['beats_later']:.1f}%.")
-print("Median score (probability of 'Ted'):", {k: round(float(np.median(r[k])), 3) for k in ("held", "later", "manifesto")})`,
+print(f"Other writers' pieces flagged (false alarms): {a['held_flagged']:.0%}")
+print(f"Manifesto pieces flagged: {a['manifesto_flagged']} of {a['manifesto_n']} = {a['manifesto_flagged'] / a['manifesto_n']:.0%}")
+print(f"Aside: the typical manifesto piece scores higher than {r['beats_manifesto']:.1f}% of the other writers' held-out pieces.")
+print(f"An honest limit: at this same line, Ted's later writings (1999-2016) are flagged {a['later_flagged']} of {a['later_n']} = {a['later_flagged'] / a['later_n']:.0%}.")`,
     },
     {
       id: "lr_drop",
       title: "Step 3b · The same, with the FBI-matched passages removed",
       md: `The FBI matched many passages of the 1971 essay and the manifesto **by subject**. Perhaps the computer is just picking up on shared content. So we delete every T-2 paragraph the FBI aligned (and the manifesto paragraphs they match), and run Step 3 again. Ted's essay shrinks to about 1,700 words, so he is now learned from **one 1,000-word piece**.
 
-**An honest note:** the probabilities are low (see the medians above and below), because the computer learns Ted from very little text. The evidence is in the **ranking**, not in any single probability: do not read a score as "chance that Ted wrote it".`,
+**An honest note:** the probabilities are low, because the computer learns Ted from very little text. So we do not read any one score as "chance that Ted wrote it". We only ask which pieces cross the alarm line. The line is **recomputed on this run's held-out scores**, again with a 5% false-alarm rate.`,
       packages: ["numpy", "scikit-learn", "matplotlib"],
       code: String.raw`r2 = G.ted_likeness(D, size=1000, drop_fbi=True)   # Ted: 1 piece; manifesto: 22 pieces
-H.show_plot(G.likeness_plot(r2))
+a2 = G.alarm(r2, false_alarm=0.05)                  # new line, from this run's held-out scores
+H.show_plot(G.flag_plot(r2, false_alarm=0.05))
 
-print(f"Without the FBI-matched passages, the typical manifesto piece beats {r2['beats_manifesto']:.1f}% of the other writers' held-out pieces.")
-print(f"Typical piece of Ted's later writings beats {r2['beats_later']:.1f}%.")
-print("Median score (probability of 'Ted'):", {k: round(float(np.median(r2[k])), 4) for k in ("held", "later", "manifesto")})`,
+print(f"Other writers' pieces flagged (false alarms): {a2['held_flagged']:.0%}")
+print(f"Without the FBI-matched passages, manifesto pieces flagged: {a2['manifesto_flagged']} of {a2['manifesto_n']} = {a2['manifesto_flagged'] / a2['manifesto_n']:.0%}")
+print(f"Aside: the typical manifesto piece scores higher than {r2['beats_manifesto']:.1f}% of the other writers' held-out pieces.")`,
     },
     {
       id: "tryit",
       title: "Step 4 · Try it yourself",
-      md: `Change a setting in the first three lines and press ▶ again. Things to try:
+      md: `Change a setting in the first four lines and press ▶ again. Things to try:
 
 - **Piece size:** \`SIZE = 500\`. Shorter pieces carry less evidence. What happens to the percentages?
 - **Only four words:** \`WORDS = ["because", "any", "and", "the"]\`. The score will look excellent. But careful: these four were picked *after* looking at where the manifesto falls, so using them to judge the manifesto is circular, like grading a test with the answers you already peeked at. Now try four words picked *without* looking (e.g. \`["of", "in", "is", "that"]\`). This is why the real test uses all 224 words, chosen in advance.
 - **Drop one word:** \`WORDS = [w for w in fw if w != "the"]\`. Does the result depend on a single word?
 - **Remove the FBI-matched passages:** \`DROP_FBI = True\`.
+- **Move the alarm line:** \`FALSE_ALARM = 0.01\` or \`0.10\`. A stricter line (1%) flags fewer other writers but also fewer manifesto pieces; a looser one (10%) flags more of both. Watch how the two flag rates move together. (For the main run: 10% gives 27 of 30 manifesto pieces, 1% gives 9 of 30.)
 
 This is a laboratory: only 500 and 1,000 are available as piece sizes, because only counts are shipped.`,
       packages: ["numpy", "scikit-learn", "matplotlib"],
       code: String.raw`SIZE = 1000        # 500 or 1000 words per piece
 WORDS = None       # None = all 224 small words; or a list of words
 DROP_FBI = False   # True = remove the passages the FBI matched
+FALSE_ALARM = 0.05 # share of other writers' pieces allowed to set off the alarm (try 0.01 or 0.10)
 
 r3 = G.ted_likeness(D, size=SIZE, drop_fbi=DROP_FBI, words=WORDS)
-H.show_plot(G.likeness_plot(r3))
-print(f"Ted is learned from {r3['n_ted']} piece(s). The typical manifesto piece beats {r3['beats_manifesto']:.1f}% of the other writers' pieces; Ted's later writings: {r3['beats_later']:.1f}%.")`,
+a3 = G.alarm(r3, FALSE_ALARM)
+H.show_plot(G.flag_plot(r3, FALSE_ALARM))
+print(f"Ted is learned from {r3['n_ted']} piece(s). Other writers flagged: {a3['held_flagged']:.0%}. Manifesto pieces flagged: {a3['manifesto_flagged']} of {a3['manifesto_n']} = {a3['manifesto_flagged'] / a3['manifesto_n']:.0%}. Ted's later writings: {a3['later_flagged']} of {a3['later_n']} = {a3['later_flagged'] / a3['later_n']:.0%}.")`,
     },
     {
       id: "adv",
