@@ -216,7 +216,7 @@ async function askLLM(chap, key, strategy, text, config) {
   const cache = await getJSON("data/" + chap + "/rewrites_cache.json");
   if (cache.rewrites) {                              // benchmark cache: {rewrites: {"<id>|<strategy>": {"<config>": {text, ...}}}, configs: {...}}
     const cfg = config || Object.keys(cache.configs)[0], hit = (cache.rewrites[key + "|" + strategy] || {})[cfg], m = cache.configs[cfg];
-    if (hit && hit.text) return JSON.stringify({ text: hit.text, source: "cached rewrite by " + m.model + " (" + m.precision + "); " + cache._source.replace(/\.$/, "") + (why ? "; live LLM not used because " + why : "") });
+    if (hit && hit.text) return JSON.stringify({ text: hit.text, source: "cached rewrite by " + m.model + " (" + m.precision + "); " + cache._source.split(" (")[0].replace(/\.$/, "") + (why ? "; live LLM not used because " + why : "") });
     return JSON.stringify({ error: "There is no cached rewrite for this text, strategy and model configuration." });
   }
   const hit = cache[key + "|" + strategy];

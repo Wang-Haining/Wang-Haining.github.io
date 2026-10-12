@@ -4,32 +4,45 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Stylometry Lab: Who Wrote This?</title>
-<meta name="description" content="A browser-only stylometry lab in four cases: two translators, the Unabomber manifesto, Lu Xun versus Zhou Zuoren, and a what-if on an anonymous-review lawsuit (Machine Zone vs. John Doe). No account needed.">
+<meta name="description" content="A free, self-paced, browser-only stylometry lab in four cases: two translators, the Unabomber manifesto, Lu Xun versus Zhou Zuoren, and a what-if on an anonymous-review lawsuit (Machine Zone vs. John Doe). No account needed.">
+<link rel="icon" href="data:,">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header class="top">
   <div class="wrap">
     <h1>Who wrote this? A stylometry lab</h1>
-    <p class="sub">Guest lecture, Haining Wang (Indiana University). Python runs in your browser: no account, no install.</p>
+    <p class="sub">A free, self-paced lab by Haining Wang, Indiana University. Python runs in your browser: no account, no install.</p>
     <nav class="tabs" id="tabs" aria-label="Case chapters"></nav>
   </div>
 </header>
+
+<section class="wrap howto" aria-labelledby="howto-h">
+  <h2 id="howto-h">How to use this lab</h2>
+  <ul>
+    <li>Four short cases; pick any one from the tabs. Each takes about 15&ndash;20 minutes. You need no account and nothing to install.</li>
+    <li>Everything runs in your browser. Click the round <strong>&#9654;</strong> next to a code box (or press Shift+Enter inside it), or use <strong>Run all</strong>.</li>
+    <li>Every code box is editable: change a number or a word and run it again. <strong>+ Add a code cell</strong> adds your own; <strong>Reset code</strong> undoes your edits.</li>
+    <li>The green box at the top of each case says when it is ready. If it is red, it says what to try.</li>
+  </ul>
+  <p class="privacy">Privacy: nothing you type leaves your browser unless you choose an optional online step (for example, pasting text into a chatbot yourself).</p>
+  <p><a class="dl" href="stylometry-lab.zip" download>Download the whole lab (.zip)</a> &mdash; for teachers who want to host or archive a copy (needs any static web server; see the README inside).</p>
+</section>
 
 <div id="boot" class="boot" role="status" aria-live="polite">
   <div class="wrap">
     <div class="spinner" aria-hidden="true"></div>
     <div>
       <strong id="boot-title">Waking up Python in your browser&hellip;</strong>
-      <div id="boot-detail">Downloading the Python engine (about 10 MB, once). Each case then loads its own data, and the packages it needs (NumPy, scikit-learn, matplotlib) the first time a step uses them. Please be patient on slow Wi-Fi.</div>
+      <div id="boot-detail">Loading the Python engine (a few MB, once). Each case then loads its own data, and the packages it needs (NumPy, scikit-learn, matplotlib) the first time a step uses them. Please be patient on slow connections.</div>
     </div>
   </div>
 </div>
 
 <div class="bar" id="bar">
   <div class="wrap barrow">
-    <label class="pass" id="pass-wrap" hidden>Class passcode
-      <input id="passcode" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="from the board (optional)">
+    <label class="pass" id="pass-wrap" hidden>Passcode
+      <input id="passcode" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="optional">
     </label>
     <span id="llm-mode" class="pill" hidden>LLM step: offline cache</span>
     <span id="data-note" class="pill"></span>
@@ -41,10 +54,9 @@
 
 <footer class="wrap foot">
   <div id="credits"></div>
-  <p>Privacy: the analysis never leaves your browser. In Case 4 the page downloads the EBG texts from GitHub (raw.githubusercontent.com), which sees your IP address as in any download, and if you type the class passcode, the text you chose is sent through a class proxy to an AI model provider; otherwise nothing else is sent. Provenance and licences of every dataset: <a href="DATA_NOTES.md">data notes</a>.</p>
+  <p>Privacy: the analysis never leaves your browser, and the page loads everything (Python engine, data, texts) from this same site. Nothing you type is sent anywhere unless you choose an optional online step yourself. Provenance and licences of every dataset: <a href="DATA_NOTES.md">data notes</a>. Code: MIT licence (Haining Wang, 2026); data licences are listed in the data notes.</p>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/pyodide/v0.27.7/full/pyodide.js"></script>
 <script src="chapters/ch1.js"></script>
 <script src="chapters/ch2.js"></script>
 <script src="chapters/ch3.js"></script>

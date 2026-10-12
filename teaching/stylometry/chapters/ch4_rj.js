@@ -95,7 +95,7 @@ H.show_table(["instruction", "people", "caught at rank 1", "within top 10", "med
     {
       id: "llm",
       title: "Step 3 · (c) LLM strategies: ask a language model to rewrite the review",
-      md: `Now John Doe asks an AI model to rewrite his review. Pick a strategy (the exact prompt is shown), then run the box. The rewrite comes through the class proxy if you typed the class passcode at the top; otherwise from a **cached** rewrite.
+      md: `Now John Doe asks an AI model to rewrite his review. Pick a strategy (the exact prompt is shown), then run the box. The rewrite comes from a **cached** (placeholder) rewrite.
 
 !!Placeholder warning:!! the cached rewrites in this prototype were written by hand to test the page. They are **not** output of a model, so do not read the attacker's numbers for them as evidence about LLM defenses.
 The word diff shows what changed. Does the rewrite still say what John Doe meant?`,

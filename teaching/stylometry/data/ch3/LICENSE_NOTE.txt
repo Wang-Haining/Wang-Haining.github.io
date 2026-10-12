@@ -1,0 +1,1 @@
+Source: https://github.com/Wang-Haining/the_many_voices . Its README: "The corpus is designated to the public domain. All other materials are licensed under 0BSD."

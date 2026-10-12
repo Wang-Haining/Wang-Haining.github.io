@@ -1,0 +1,1 @@
+Riddell-Juola corpus: CC0 1.0 Universal (see DATA_LICENSE in https://github.com/Wang-Haining/reproduction-and-replication-adversarial-stylometry). The rewrites in rewrites_cache.json are hand-written placeholders.

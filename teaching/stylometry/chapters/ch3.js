@@ -15,7 +15,7 @@ Four disputed essays from that period appeared under the pen name **Du Ying** (o
 **之** (of, him, it), **而** (and, yet), **矣** (a sentence-ending particle), **惟** (only). We count 31 of them, train a logistic regression on essays whose author is known,
 and ask what it says about the disputed four. Chinese is not split into words, so the features are characters and a few two-character words.
 
-This is the lecturer's own study, so every number below can be checked against the published repository.`,
+This is the published study of Haining Wang and co-authors, so every number below can be checked against its public repository.`,
   credits: `Texts and English translations: the_many_voices (corpus dedicated to the public domain, other materials 0BSD). Method: Xie Xin, Li Jiangqiong and Haining Wang, *The many voices of Du Ying: revisiting the disputed writings of Lu Xun and Zhou Zuoren*, Digital Scholarship in the Humanities 40(1), 2024.`,
   cells: [
     {

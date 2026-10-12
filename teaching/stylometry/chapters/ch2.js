@@ -20,7 +20,8 @@ We ask: **is the manifesto closer to the 1971 essay than writers who argue the s
 
 **Our names:** T-2 = Kaczynski's 1971 essay (about 6,300 words). U-14 = the 1995 manifesto (about 30,500 words). Impostors = 19 other writers on technology and society,
 such as Mumford, Ellul, Illich, Postman, Zerzan (about 294,000 words). We use only **function-word counts** per 1,000-word chunk; no impostor text is shipped.
-The results here come from a pre-registered analysis (seed 20261011) and are reproduced step by step below.`,
+The results here come from a pre-registered analysis (seed 20261011) and are reproduced step by step below.
+Note: this case uses its own pre-registered list of 224 function words, slightly different from the Koppel-512 list of Cases 1 and 4, because the analysis was validated and fixed in advance and we do not change a pre-registered result.`,
   credits: `Data: derived function-word counts built from the Ted K Archive texts and an FBI-document transcription of T-2 (see data notes). No impostor or post-arrest text is shipped, only counts. The two short quotations are shown for illustration with attribution. Analysis plan and results: \`unabom/PREREG.md\`, \`unabom/results/SUMMARY.md\`.`,
   cells: [
     {

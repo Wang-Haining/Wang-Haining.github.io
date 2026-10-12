@@ -24,7 +24,7 @@ Click the round **▶** on the left of a code box to run it. Run the boxes from 
 
 This first box loads both translations, already cut into pieces ("chunks") of about 300 words each, and a list of 512 small English words
 such as *the*, *and*, *of*, *which*. These are **function words**: they carry grammar, not topic.
-The list is the "Koppel-512" function-word list used in published authorship studies (it comes with the reproduction code of Haining Wang's own study; credit in the footer).`,
+The list is the "Koppel-512" function-word list used in published authorship studies (it ships with the code of Haining Wang's published reproduction study; credit below).`,
       code: String.raw`# Load the lab's data (the files sit next to this web page).
 import json
 import lab_helpers as H            # small helper functions written for this lab
@@ -155,7 +155,8 @@ print(f"Held-out chunks, all {len(fw)} function words: {acc_all:.0%} correct")`,
       id: "weights",
       title: "Step 6 · What did the model learn?",
       md: `A positive weight pushes a text towards Giles, a negative weight towards Eno. These are the ten strongest words on each side.
-Do they match your sense of British versus American translation style? Words are habits; no single word decides, but together they add up.`,
+Do they match your sense of British versus American translation style? Words are habits; no single word decides, but together they add up.
+(A lone *t* or *s* is what is left of a contraction such as *don't*: the Koppel rule counts it as a word of its own.)`,
       code: String.raw`coef = model[-1].coef_[0]                 # one weight per function word (the last step of the pipeline)
 order = np.argsort(coef)                  # most "Eno" first ... most "Giles" last
 

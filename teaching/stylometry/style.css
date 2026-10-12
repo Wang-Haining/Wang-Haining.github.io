@@ -131,3 +131,22 @@ table.data th { background: var(--code-bg); }
 .cell.usercell .uhead { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 0.85rem; color: var(--muted); }
 .delbtn { font: inherit; font-size: 0.8rem; color: var(--err); background: none; border: 1px solid var(--line); border-radius: 6px; padding: 2px 10px; cursor: pointer; }
 .delbtn:hover { border-color: var(--err); }
+
+/* ---- MOOC intro, "ready" banner, paste box ---- */
+.howto { margin: 16px auto 0; padding: 12px 16px; background: var(--card); border: 1px solid var(--line); border-radius: 8px; }
+.howto h2 { margin: 0 0 6px; font-size: 1.05rem; }
+.howto ul { margin: 6px 0; padding-left: 1.2em; }
+.howto p { margin: 6px 0; }
+.howto .privacy { color: var(--muted); font-size: 0.88rem; }
+.ready { margin: 8px 0 12px; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--line); font-size: 0.92rem; }
+.ready[data-state="loading"] { background: #fff7e0; color: #4a3b00; border-color: #ecd58a; }
+.ready[data-state="ok"] { background: #e8f6ec; color: #14532d; border-color: #b6e0c3; }
+.ready[data-state="fail"] { background: #fdecea; color: #7a1c14; border-color: #f2b8b2; }
+@media (prefers-color-scheme: dark) {
+  .ready[data-state="loading"] { background: #3a3110; color: #f5e6a8; border-color: #5a4b14; }
+  .ready[data-state="ok"] { background: #12301d; color: #a9e8bd; border-color: #1f5a35; }
+  .ready[data-state="fail"] { background: #3a1511; color: #ffc0b8; border-color: #6e2a22; }
+}
+.btn.small { font-size: 0.8rem; padding: 2px 8px; margin-left: 6px; }
+.copybox { width: 100%; font: 0.85rem/1.45 system-ui, sans-serif; padding: 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--out-bg); color: var(--ink); }
+.dl { font-weight: 600; }
