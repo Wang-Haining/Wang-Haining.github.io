@@ -109,6 +109,12 @@ Hi 👋, I'm a postdoctoral fellow in Biostatistics and Health Data Science at t
 
 ### What's New
 
+* (Oct 13, 2026) Two more preprints on federal funding and research careers 📈
+
+    * ["NIH's Dedicated K23 Trial Pathway Was Associated with More K-Trial Leadership but No Detectable Gain in New Trials"](https://doi.org/10.64898/2026.10.09.758109): more K23 awardees led the trial their award paid for, but not more new trials.
+
+    * ["The Prestige Precedes the Prize: Top-Journal Papers and New Federal Grants"](https://doi.org/10.31235/osf.io/cf5u8_v1): scientists with top-journal papers win more NIH and NSF grants, but the gap is already there before the paper comes out.
+
 * (Oct 9, 2026) I gave a talk, ["LLMs for Knowledge Extraction and Phenotyping: Systems 1, 2, and Beyond"](https://docs.google.com/presentation/d/15hKXCZrcalAw1tPTERviEkrZv3_v0n3u/edit?usp=sharing), in the ARDaC session of the *AlcHepNet–ITAALD Annual Meeting* in Indianapolis: when should an LLM answer fast, and when should it slow down and reason? 🧠
 
 * (Oct 4, 2026) Two new preprints on how US funders count and fund science 📊
@@ -302,6 +308,8 @@ DualReasoning shows great promise in incorporating messy medication information 
 
 ## Preprints
 
+- Wang, H., Fu, H., & Tian, Z. (2026). NIH's dedicated K23 trial pathway was associated with more K-trial leadership but no detectable gain in new trials. *bioRxiv*. https://doi.org/10.64898/2026.10.09.758109 (pdf: https://www.biorxiv.org/content/10.64898/2026.10.09.758109v1.full.pdf, code: https://github.com/Wang-Haining/k) [topics: metasci, health]
+- Wang, H. (2026). The prestige precedes the prize: Top-journal papers and new federal grants. *SocArXiv*. https://doi.org/10.31235/osf.io/cf5u8_v1 (code: https://github.com/Wang-Haining/prestige-precedes-prize) [topics: metasci]
 - Zhang, J., Fu, H., & Wang, H. (2026). The shape of NSF openness to newcomers: Same share, fewer doors. *SocArXiv*. https://doi.org/10.31235/osf.io/9qpb7_v1 (code: https://github.com/Wang-Haining/open) [topics: metasci]
 - Xie, F., Zhang, J., & Wang, H. (2026). Still funded, no longer counted: How NIH's 2025 award reviews changed what the government counts as minority health research. *arXiv:2610.03443*. https://arxiv.org/abs/2610.03443 (pdf: https://arxiv.org/pdf/2610.03443) [topics: metasci, health]
 - Wang, H. (2026). Authorship identification under domain shift: A survey of stylistic measures and learned author representations. *arXiv:2310.00436*. https://arxiv.org/abs/2310.00436 (pdf: https://arxiv.org/pdf/2310.00436) [topics: nlp]
@@ -384,6 +392,16 @@ Each entry: citation, link, and abstract or summary. Haining Wang is 'Wang, H.'.
 Link: (no public link yet)
 
 This study evaluates the ability of large language models (LLMs) to classify text according to the computer-mediated discourse analysis (CMDA) research paradigm developed by the first author. Three LLMs (ChatGPT-4o, Claude Sonnet 4, Gemini Pro 2.5) were prompted to apply three CMDA methods ((im)politeness, speech acts, and two meta-acts: non-bona fide communication and reported perspective) to two public Reddit threads, and the results were compared with coding by humans skilled in CMDA. LLM-human agreement was below the threshold expected of trained human coders but within the range of novice CMDA learners, especially considering the LLMs' reasoning and the subjectivity of some categories. Gemini did better on rarer, harder phenomena and somewhat worse on the most common categories, and all three models varied across the two threads. The paper discusses implications for using LLMs in qualitative discourse research and pedagogy.
+
+## Wang, Fu & Tian (2026), NIH's dedicated K23 trial pathway was associated with more K-trial leadership but no detectable gain in new trials, bioRxiv
+Link: https://doi.org/10.64898/2026.10.09.758109
+
+Research funders often train investigators by funding a project, expecting the experience to produce leaders of the next one. Delivering the funded project and leading new work are different outcomes. In 2018 the US National Institutes of Health (NIH) created a dedicated clinical trial pathway for its K23 mentored career development awards. Using registry records for 1,847 K23 awardees and a language-model measurement corrected against blinded human review, we compared awardees whose awarded plans proposed their own trial with those whose plans did not, before and after the change. The pathway was followed by more leadership of the award-supported trial (difference in differences, 13.7 percentage points; 95% confidence interval, 5.7 to 21.2) but no detectable gain in leadership of distinct new trials (-3.8; -14.4 to 6.9), including over seven years. The K-trial estimate exceeded the new-trial estimate by 17.4 points (5.3 to 29.7) under every measurement correction. The additional supported trials were registered with the awardee as principal investigator and started at rates similar to earlier ones, whereas whether more awardees led any trial depended on the correction. Because groups were defined by awarded plans, the design cannot fully separate changes in behaviour from changes in who was funded. A training pathway can raise delivery of the work it funds without a detectable increase in leadership of further trials. As NIH consolidates its career awards and ends K support for trial conduct, evaluations should measure both outcomes.
+
+## Wang (2026), The prestige precedes the prize: Top-journal papers and new federal grants, SocArXiv
+Link: https://doi.org/10.31235/osf.io/cf5u8_v1
+
+Evaluators and scientists treat a top-journal paper as a step toward the next grant. We asked whether it is one. We linked 2.19 million last-authored papers by 1.07 million US scientists, 2014–2021, to new lead-investigator awards from the National Institutes of Health and the National Science Foundation, defining top journals as the 5% most cited in their topic and year. The design rests on timing and on holding the scientist fixed: if a top-journal paper brings grants, the advantage should open after the paper. Top-journal papers were followed by a new award twice as often as other papers (55.3 against 26.3 per 1,000), yet the difference was as large two years before publication. For the same scientist, award rates after a top-journal paper and another paper differed by −0.3 per 1,000 (95% confidence interval −8.0 to 7.4), an upper limit at 25% of the difference between scientists. Researchers' small lead over matched researchers was similar before and after their first top-journal paper (3.1 and 3.3 per 1,000). Within three years, journal prestige worked mainly as a record of accumulated advantage, and the funding gap should not be read as the return on one more top-journal paper.
 
 ## Zhang, Fu & Wang (2026), The shape of NSF openness to newcomers: Same share, fewer doors, SocArXiv
 Link: https://doi.org/10.31235/osf.io/9qpb7_v1
