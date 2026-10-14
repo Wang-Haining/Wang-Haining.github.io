@@ -260,3 +260,33 @@ def alarm_hist(others, line):
     ax.set_xlabel("score of a whole text:   less like Ted ←   → more like Ted"); ax.set_ylabel("number of texts")
     ax.set_title("29 texts by other writers, each scored by a model that never saw it")
     return fig
+
+
+def similarity_rank(D, X, n_ted):
+    """Who writes most like the manifesto? Each writer's average profile (shares, rescaled) against the manifesto's
+    (cosine similarity). Returns the figure and the ranking [(name, similarity), ...], most alike first."""
+    from sklearn.pipeline import make_pipeline
+    from sklearn.preprocessing import Normalizer, StandardScaler
+    plt = _plt()
+    pre = make_pipeline(Normalizer(norm="l1"), StandardScaler()).fit(X)
+    u = pre.transform(counts(D["u14"])).mean(0)
+    cos = lambda a: float(a @ u / np.linalg.norm(a) / np.linalg.norm(u))
+    by = {}
+    for r in D["impostors"]:
+        by.setdefault(r["name"], []).append(counts(r))
+    rank = [("Ted Kaczynski (1971 essay)", cos(pre.transform(X[:n_ted]).mean(0)))]
+    rank += [(name, cos(pre.transform(np.vstack(rows)).mean(0))) for name, rows in by.items()]
+    rank.sort(key=lambda t: -t[1])
+    fig, ax = plt.subplots(figsize=(8.2, 6.4))
+    names, vals = [n for n, _ in rank][::-1], [v for _, v in rank][::-1]
+    ted = [n.startswith("Ted") for n in names]
+    ax.barh(range(len(vals)), vals, color=[BLUE if t else GREY for t in ted], height=0.72)
+    ax.set_yticks(range(len(vals))); ax.set_yticklabels(names)
+    for lab, t in zip(ax.get_yticklabels(), ted):
+        if t: lab.set_color(BLUE); lab.set_fontweight("bold")
+    ax.axvline(0, color=INK, lw=1)
+    ax.set_xticks([])
+    ax.set_xlabel("←  less like the manifesto            more like the manifesto  →")
+    ax.set_title("Who writes most like the manifesto?")
+    ax.spines["left"].set_visible(False)
+    return fig, rank

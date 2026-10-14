@@ -156,16 +156,17 @@ H.show_plot(G.scale_hist(shares, scaled, fw))
 {w: round(float(v), 2) for w, v in zip(show, scaled[0, cols])}     # piece 1, after rescaling`,
     },
     {
-      id: "map",
-      title: "Step 9 · A map of all 224 words",
-      md: `Each piece is now a point in a space with 224 directions, which nobody can picture. **PCA** (principal component analysis) squeezes those 224 directions into the 2 that spread the points out most, so we can draw a map. Points close together use small words alike.
+      id: "rank",
+      title: "Step 9 · Who writes most like the manifesto?",
+      md: `Before any training, a first look. For each writer we take the average of all their pieces (after Steps 7 and 8), which gives one **profile** of 224 numbers per writer. Then we measure how closely each profile points the same way as the manifesto's. This measure is called **cosine similarity**: 1 means the same pattern, 0 means unrelated, below 0 means opposite habits.
 
-The manifesto was not used to build the map; we only place it on it.
+The manifesto is not used to make the profiles; we only compare against it.
 
-**What you'll see:** a grey cloud of other writers; Ted's 1971 pieces (blue) and the manifesto's pieces (orange) on the same side of it.`,
+**What you'll see:** 20 bars, one per writer. Ted's 1971 essay (blue) is far ahead of the 19 other writers, who wrote about the same topics in the same decades.`,
       packages: ["numpy", "scikit-learn", "matplotlib"],
-      code: String.raw`U = G.counts(D["u14"])                          # the manifesto's 30 pieces (only placed on the map)
-H.show_plot(G.pca_map(X, T, U, n_ted=len(T)))`,
+      code: String.raw`fig, rank = G.similarity_rank(D, X, n_ted=len(T))
+H.show_plot(fig)
+[(name, round(sim, 2)) for name, sim in rank[:3]]      # the three closest writers, with their similarity`,
     },
     {
       id: "train",

@@ -113,26 +113,14 @@ Speaker notes: A human reader notices a twisted idiom. A computer can do somethi
 
 ---
 
-## Slide 9 (ted-map)
-On screen: Part 1 · Your writing has a fingerprint
- What the computer sees
- Each dot is 500 words of text, placed on a map by how it uses about 200 small words.
- Nobody told the map who wrote what. Still, the manifesto's pieces land right on top of Ted's 1971 essay.
- This flat map is only a picture. The real decision, next, uses all 200 words at once.
- Principal component analysis of 224 function-word frequencies, 500-word pieces; zoomed to the core (46 of 582 outlying pieces by other writers fall outside the frame)
-Figures: Map of 500-word pieces placed by how they use about 200 small words. Grey dots, other writers, fill the left and lower part of the map; Ted's 1971 essay (blue diamonds) and the manifesto (orange stars) sit together, apart from most of the crowd.
-Speaker notes: Here is a way to see what the computer sees. We cut every text into pieces of 500 words. For each piece we measure how often it uses about two hundred small words. That is two hundred numbers per piece, too many to draw, so we squash them onto a flat map, keeping the directions in which the pieces differ most. Each grey dot is a piece by one of the 19 other writers. The blue diamonds are Ted's 1971 essay. The orange stars are the manifesto. Here is the remarkable part: we never told the map who wrote what. It only saw the small words. And yet the manifesto's pieces land right on top of Ted's essay, apart from most of the crowd. This flat map is only a picture, a shadow of two hundred dimensions; the computer's real decision, on the next slide, uses all two hundred words at once.
-
----
-
-## Slide 10 (unabomber-computer)
+## Slide 9 (unabomber-computer)
 On screen: Part 1 · Your writing has a fingerprint
  Let the computer decide
  ① It reads
  ■ Ted's 1971 essay 
  about 6,300 words · labelled "Ted" 
  ● 19 other anti-tech writers 
- labelled "not Ted" 
+ same topics, same decades · labelled "not Ted" 
  ↓ learns which small-word habits are Ted's ↓
  ② It scores texts it never saw
  ● other writers' texts, held back
@@ -141,11 +129,11 @@ On screen: Part 1 · Your writing has a fingerprint
  Each dot is one whole text. The alarm line lets through only 2 of the 29 other writers' texts.
  Our re-analysis: ~200 small words + logistic regression · try it yourself in Lab chapter 2
 Figures: Three rows, one dot per whole text, scored by how Ted-like it is, with an alarm line. Other writers' texts the computer never saw: 2 of 29 flagged. Ted's later essays (known Ted, a check): 7 of 8 flagged. The manifesto (the question): flagged, far to the right.
-Speaker notes: Now let the computer do it, with all two hundred small words. On the left is what it reads: Ted's 1971 essay, labelled "Ted", and texts by nineteen other anti-technology writers, labelled "not Ted". From these it learns Ted's small-word habits. Then we give it texts it has never seen, and it scores each one: how Ted-like is it? Each dot on the right is one text. The red line is the alarm: right of it, the computer says "this is Ted." Top row, other writers: almost all stay left, only two of twenty-nine cross. Middle row, essays Ted wrote decades later in prison. We know these are Ted, so this is our check, and seven of eight cross. The computer knows Ted when it sees him. Bottom row, the manifesto: far to the right. The computer points at Ted. In 1996 the FBI compared these texts by hand. Today a computer does it in seconds, and you will do it yourself in lab chapter 2. [Later essays used: Morality and Revolution (1999); Hit Where It Hurts, The System's Neatest Trick, The Coming Revolution (2002); The Road to Revolution (2008); Afterthoughts (2010); Why the Technological System Will Destroy Itself (2011); Anti-Tech Revolution, ch. 1 (2016).]
+Speaker notes: Now let the computer do it, with all two hundred small words at once: the, of, which, because, and so on. On the left is what it reads. Ted's 1971 essay, labelled "Ted". And texts by nineteen other writers who attacked technology in the same decades, Ellul, Mumford, Illich, Postman and others, labelled "not Ted". They wrote about the same topics, so topic gives nothing away; only the small words can. From these examples the computer learns which small-word habits are Ted's. Then we give it texts it has never seen, and it scores each one: how Ted-like is it? We never tell it who wrote what. Each dot on the right is one whole text. The dashed line is the alarm: right of it, the computer says "this is Ted." Top row, other writers' texts it never saw: almost all stay left, only two of twenty-nine cross. Middle row, essays Ted wrote decades later in prison. We know these are Ted, so this is our check, and seven of eight cross. The computer knows Ted when it sees him. Bottom row, the manifesto: far to the right. The computer points at Ted. In 1996 the FBI compared these texts by hand. Today a computer does it in seconds, and you will do it yourself in lab chapter 2. [Later essays used: Morality and Revolution (1999); Hit Where It Hurts, The System's Neatest Trick, The Coming Revolution (2002); The Road to Revolution (2008); Afterthoughts (2010); Why the Technological System Will Destroy Itself (2011); Anti-Tech Revolution, ch. 1 (2016).]
 
 ---
 
-## Slide 11 (duying)
+## Slide 10 (duying)
 On screen: Part 1 · Your writing has a fingerprint
  Case 3: The Lu Xun brothers
  To trace how a thinker's ideas grew, you first need to know which texts are really theirs.
@@ -156,7 +144,7 @@ Speaker notes: Does this only work in English? Let's go to China, and to a real 
 
 ---
 
-## Slide 12 (duying-method)
+## Slide 11 (duying-method)
 On screen: Part 1 · Your writing has a fingerprint
  Same idea, in classical Chinese
  31 small characters, counted per 1,000 characters in essays we know each brother wrote.
@@ -188,7 +176,7 @@ Speaker notes: Now the same idea we used on Ted, in a different language and a d
 
 ---
 
-## Slide 13 (duying-verdict)
+## Slide 12 (duying-verdict)
 On screen: Part 1 · Your writing has a fingerprint
  Who was "Du Ying"?
  "Looking at the Country of China" (望华国篇), signed 独应 (Du Ying), Yueduo Daily , Shaoxing, 22 January 1912
@@ -207,7 +195,7 @@ Speaker notes: Here is one of the essays as it was printed, in vertical columns,
 
 ---
 
-## Slide 14 (four-hands)
+## Slide 13 (four-hands)
 On screen: Part 1 · Your writing has a fingerprint
  Four hands, one essay
  "The Strings of Melancholy" (哀弦篇, 1908), signed Du Ying, has long been read as Zhou Zuoren's alone.
@@ -223,7 +211,7 @@ Speaker notes: One more, from our newest study. This essay, "The Strings of Mela
 
 ---
 
-## Slide 15 (deep-learning)
+## Slide 14 (deep-learning)
 On screen: Part 1 · Your writing has a fingerprint
  Your writing fingerprint can single you out from thousands
  20%
@@ -243,7 +231,7 @@ Speaker notes: Computer scientists took this question to scale. Top left: resear
 
 ---
 
-## Slide 16 (part2)
+## Slide 15 (part2)
 On screen: Part 2
  Part 1
  Your writing has a fingerprint
@@ -264,7 +252,7 @@ Speaker notes: That was part one: your writing gives you away, in any language, 
 
 ---
 
-## Slide 17 (why-anon)
+## Slide 16 (why-anon)
 On screen: Part 2 · When the fingerprint becomes a threat
  Who needs to stay anonymous?
  Journalism
@@ -295,7 +283,7 @@ Speaker notes: Why would anyone need to hide? Think of who writes without a name
 
 ---
 
-## Slide 18 (threat)
+## Slide 17 (threat)
 On screen: A hypothetical; the court record reports no stylometry · review paraphrased · map and odds are illustrations, not measurements · icons: Cookie Art Studio (licensed)
  Part 2 · When the fingerprint becomes a threat
  What if Machine Zone didn't need Glassdoor?
@@ -310,7 +298,7 @@ Speaker notes: Now the uncomfortable question. What if Machine Zone had not need
 
 ---
 
-## Slide 19 (three-ways)
+## Slide 18 (three-ways)
 On screen: Part 2 · When the fingerprint becomes a threat
  Three ways to hide your hand
  By hand
@@ -323,7 +311,7 @@ Speaker notes: So if you were John Doe, how could you hide? People have tried th
 
 ---
 
-## Slide 20 (adversarial)
+## Slide 19 (adversarial)
 On screen: Brennan, Afroz and Greenstadt 2012; replication with new writers: Wang, Juola and Riddell 2026 · SVM attacker, 10 candidates · error bars: 95% CI over 1,000 random candidate draws
  Part 2 · When the fingerprint becomes a threat
  By hand: it works
@@ -337,7 +325,7 @@ Speaker notes: The oldest way to hide is to do it yourself. In a classic study f
 
 ---
 
-## Slide 21 (helper-tool)
+## Slide 20 (helper-tool)
 On screen: Part 2 · When the fingerprint becomes a threat
  With software: Google Translate, and back
  It helps: the computer's hits fall from 37% to 24–29%.
@@ -351,7 +339,7 @@ Speaker notes: Remember Bob, our John Doe? This is exactly what he could try: pa
 
 ---
 
-## Slide 22 (llms)
+## Slide 21 (llms)
 On screen: Part 2 · When the fingerprint becomes a threat
  LLMs: just ask
  One sentence to a free, open model you run yourself: "rewrite this so no one can tell it's me."
@@ -368,7 +356,7 @@ Speaker notes: Now the newest way to hide: just ask a language model. One senten
 
 ---
 
-## Slide 23 (takeaways)
+## Slide 22 (takeaways)
 On screen: Close
  Wrapping up
  Your words carry a fingerprint, in any language, mostly in the small words.
@@ -385,7 +373,7 @@ Speaker notes: Let me pull today together. On the left, the first half: your wor
 
 ---
 
-## Slide 24 (field-map)
+## Slide 23 (field-map)
 On screen: Close · The field
  Where stylometry meets other fields
  Statistics and machine learning
@@ -401,7 +389,7 @@ Speaker notes: Stylometry also sits at a crossroads with other fields. Top left,
 
 ---
 
-## Slide 25 (field-history)
+## Slide 24 (field-history)
 On screen: Close · The field
  Nearly two centuries of telling writers apart
  still rising 1851
@@ -421,7 +409,7 @@ Speaker notes: People have been asking this for a long time. In 1851, the mathem
 
 ---
 
-## Slide 26 (lab)
+## Slide 25 (lab)
 On screen: Close
  Lab: be the detective
  1 · The Analects 
@@ -910,15 +898,16 @@ scaled = StandardScaler().fit_transform(shares)
 H.show_plot(G.scale_hist(shares, scaled, fw))
 {w: round(float(v), 2) for w, v in zip(show, scaled[0, cols])}     # piece 1, after rescaling
 ```
-### Step 9 · A map of all 224 words
-Each piece is now a point in a space with 224 directions, which nobody can picture. **PCA** (principal component analysis) squeezes those 224 directions into the 2 that spread the points out most, so we can draw a map. Points close together use small words alike.
+### Step 9 · Who writes most like the manifesto?
+Before any training, a first look. For each writer we take the average of all their pieces (after Steps 7 and 8), which gives one **profile** of 224 numbers per writer. Then we measure how closely each profile points the same way as the manifesto's. This measure is called **cosine similarity**: 1 means the same pattern, 0 means unrelated, below 0 means opposite habits.
 
-The manifesto was not used to build the map; we only place it on it.
+The manifesto is not used to make the profiles; we only compare against it.
 
-**What you'll see:** a grey cloud of other writers; Ted's 1971 pieces (blue) and the manifesto's pieces (orange) on the same side of it.
+**What you'll see:** 20 bars, one per writer. Ted's 1971 essay (blue) is far ahead of the 19 other writers, who wrote about the same topics in the same decades.
 ```python
-U = G.counts(D["u14"])                          # the manifesto's 30 pieces (only placed on the map)
-H.show_plot(G.pca_map(X, T, U, n_ted=len(T)))
+fig, rank = G.similarity_rank(D, X, n_ted=len(T))
+H.show_plot(fig)
+[(name, round(sim, 2)) for name, sim in rank[:3]]      # the three closest writers, with their similarity
 ```
 ### Step 10 · Train the model
 Now the computer learns. **Logistic regression** gives every small word a **weight**. To score a piece, it multiplies each word's (rescaled) value by its weight and adds everything up: a big total means "Ted", a low total means "not Ted".
@@ -2186,6 +2175,36 @@ def alarm_hist(others, line):
     ax.set_xlabel("score of a whole text:   less like Ted ←   → more like Ted"); ax.set_ylabel("number of texts")
     ax.set_title("29 texts by other writers, each scored by a model that never saw it")
     return fig
+
+
+def similarity_rank(D, X, n_ted):
+    """Who writes most like the manifesto? Each writer's average profile (shares, rescaled) against the manifesto's
+    (cosine similarity). Returns the figure and the ranking [(name, similarity), ...], most alike first."""
+    from sklearn.pipeline import make_pipeline
+    from sklearn.preprocessing import Normalizer, StandardScaler
+    plt = _plt()
+    pre = make_pipeline(Normalizer(norm="l1"), StandardScaler()).fit(X)
+    u = pre.transform(counts(D["u14"])).mean(0)
+    cos = lambda a: float(a @ u / np.linalg.norm(a) / np.linalg.norm(u))
+    by = {}
+    for r in D["impostors"]:
+        by.setdefault(r["name"], []).append(counts(r))
+    rank = [("Ted Kaczynski (1971 essay)", cos(pre.transform(X[:n_ted]).mean(0)))]
+    rank += [(name, cos(pre.transform(np.vstack(rows)).mean(0))) for name, rows in by.items()]
+    rank.sort(key=lambda t: -t[1])
+    fig, ax = plt.subplots(figsize=(8.2, 6.4))
+    names, vals = [n for n, _ in rank][::-1], [v for _, v in rank][::-1]
+    ted = [n.startswith("Ted") for n in names]
+    ax.barh(range(len(vals)), vals, color=[BLUE if t else GREY for t in ted], height=0.72)
+    ax.set_yticks(range(len(vals))); ax.set_yticklabels(names)
+    for lab, t in zip(ax.get_yticklabels(), ted):
+        if t: lab.set_color(BLUE); lab.set_fontweight("bold")
+    ax.axvline(0, color=INK, lw=1)
+    ax.set_xticks([])
+    ax.set_xlabel("←  less like the manifesto            more like the manifesto  →")
+    ax.set_title("Who writes most like the manifesto?")
+    ax.spines["left"].set_visible(False)
+    return fig, rank
 ```
 
 ---
