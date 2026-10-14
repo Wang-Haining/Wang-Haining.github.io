@@ -1,5 +1,5 @@
 // Case 2: The Unabomber (the "statistics" generation).
-// Data: derived function-word counts only (data/ch2/fw_counts.json). Analysis reproduces unabom/results/SUMMARY.md.
+// Data: derived function-word counts only (data/ch2/fw_counts.json). Method: unabom/scripts/text_level.py (lecture slide 9).
 window.LAB_CHAPTERS = window.LAB_CHAPTERS || [];
 window.LAB_CHAPTERS.push({
   id: "ch2",
@@ -9,316 +9,311 @@ window.LAB_CHAPTERS.push({
   llm: false,
   data: ["data/ch2/fw_counts.json", "data/ch2/excerpts.json"],
   intro: `**The story.** From 1978 to 1995, someone the FBI called the "Unabomber" sent 16 bombs, killing 3 people and injuring 23.
-In 1995 he promised to stop if his 35,000-word essay, *Industrial Society and Its Future*, was published; the Washington Post printed it on September 19, 1995, with the New York Times sharing the cost.
+In 1995 he promised to stop if his 35,000-word essay, *Industrial Society and Its Future* (the manifesto), was published; the Washington Post printed it on September 19, 1995.
 Linda Patrik and her husband David Kaczynski read it and feared it was David's brother, Ted. From February 1996 they worked with the FBI through a lawyer, handing over Ted's letters and a 1971 essay.
-FBI agents compared the documents **by hand** and listed over 160 similarities; by the FBI's count, 35 of the 1971 essay's 47 paragraphs match the manifesto by subject.
-Ted Kaczynski was arrested at his Montana cabin on April 3, 1996, and pleaded guilty in 1998. No statistical stylometry was used, and no court ever tested the linguistic comparison.
-(Sources: the April 3, 1996 search-warrant affidavit; contemporaneous news reports. Not the TV series.)
+FBI agents compared the documents **by hand**. Ted Kaczynski was arrested at his Montana cabin on April 3, 1996, and pleaded guilty in 1998.
+(Sources: the April 3, 1996 search-warrant affidavit; contemporaneous news reports.)
 
-**The question for statistics** is harder than it sounds. Two texts that make the *same argument* will look alike whoever wrote them. So we do not ask "are these similar?"
-We ask: **is the manifesto closer to the 1971 essay than writers who argue the same kind of thing?** This is called *verification*, and the competing writers are called *impostors*.
-
-**Our names:** T-2 = Kaczynski's 1971 essay (about 6,300 words). U-14 = the 1995 manifesto (about 30,500 words). Impostors = 19 other writers on technology and society,
-such as Mumford, Ellul, Illich, Postman, Zerzan (about 294,000 words). We use only **function-word counts** per piece of text (500 or 1,000 words); no impostor text is shipped.
-Steps 1 to 4 are a plain-language, exploratory walk-through. The pre-registered analysis (seed 20261011) is reproduced in the Advanced section at the end.
-Note: this case uses the pre-registered list of 224 function words, the same list that Cases 1 and 4 use.`,
-  credits: `Data: derived function-word counts built from the Ted K Archive texts and an FBI-document transcription of T-2 (see data notes). No impostor or post-arrest text is shipped, only counts. The two short quotations are shown for illustration with attribution. Classifier steps: exploratory, \`unabom/results/SUMMARY.md\` ("Exploratory classifier" and "Classifier comparison"). Analysis plan and results: \`unabom/PREREG.md\`, \`unabom/results/SUMMARY.md\`.`,
+**Our question:** can a computer learn Ted's small-word habits from his 1971 essay, and does the manifesto show them?
+We show the computer Ted's 1971 essay labelled "Ted", and 19 other anti-technology writers (Mumford, Ellul, Illich, Postman, Zerzan and others) labelled "not Ted". Then we let it score texts it has never seen.
+It only counts **224 small words** (*the, of, which, nevertheless, ...*), in pieces of 1,000 words. No text is shipped, only counts.`,
+  credits: `Data: derived function-word counts built from the Ted K Archive texts and an FBI-document transcription of the 1971 essay (see data notes). No impostor or post-arrest text is shipped, only counts. The two short quotations are shown for illustration with attribution. Method: \`unabom/scripts/text_level.py\`.`,
   cells: [
     {
       id: "setup",
-      title: "Step 0 · Load the counts and read two short samples",
-      md: `The data are **counts only**: for every piece of text (500 or 1,000 words), how many times each of **224 small words** appears (*the, of, which, nevertheless, ...*). No impostor text is shipped.
+      title: "Step 0 · Open the box",
+      md: `Welcome to your first machine-learning project. Click the round **▶** next to a code box to run it, and go from top to bottom. Every box shows what it did.
 
-First, two short samples. Do they sound alike? They should: they argue the same thing. That is exactly why "sounds alike" proves little here.`,
+Like in Google Colab, the **last line** of a box shows its value: write a name such as \`fw[:10]\` on the last line and you see it, no \`print\` needed.
+
+Our data are **counts only**: for every 1,000-word piece of text, how many times each of **224 small words** appears. No sentences are shipped.
+
+**What you'll see:** what is in the box, then the first ten small words.`,
       packages: ["numpy"],
       code: String.raw`import json
 import numpy as np
-import lab_helpers as H
-import lab_ch2 as G                       # helpers written for this lab
+import lab_helpers as H                   # small display helpers written for this lab
+import lab_ch2 as G                       # the Unabomber data and pictures
 
-D = G.load()                              # counts per piece of text; no raw text
-fw = D["fw"]                              # the 224 small words (pre-registered list)
+D = G.load()                              # all the counts
+fw = D["fw"]                              # the 224 small words, in a fixed order
 
-for e in json.load(open("data/ch2/excerpts.json")):
-    print(e["source"]); print('   "' + e["text"] + '"\n')
-print(f"{len(fw)} small words; first ten: {fw[:10]}")`,
+print(f"Ted's 1971 essay:    {len(D['t2']['n'])} pieces of 1,000 words")
+print(f"other writers:       {len(D['impostors'])} texts by {len({r['author'] for r in D['impostors']})} anti-technology writers")
+print(f"Ted's later essays:  {len(D['ted_post'])} texts, written 1999-2016")
+print(f"the manifesto:       {len(D['u14']['n'])} pieces")
+fw[:10]                                   # the last line shows its value`,
+    },
+    {
+      id: "samples",
+      title: "Step 1 · Read two short samples",
+      md: `Ted's 1971 essay and the 1995 manifesto argue the same kind of thing. But many writers attacked technology in those years, so "it sounds like him" proves little.
+
+The computer will ignore the topic and look at something writers hardly notice: their **small words**.
+
+**What you'll see:** the opening line of each text.`,
+      code: String.raw`for e in json.load(open("data/ch2/excerpts.json")):
+    print(e["source"])
+    print('   "' + e["text"] + '"\n')`,
+    },
+    {
+      id: "one-piece",
+      title: "Step 2 · What the computer actually sees",
+      md: `This is the whole input for one piece of text: **224 numbers**, one per small word, always in the same order. No topic, no meaning, no sentences.
+
+In machine learning, these numbers are called **features**: the measurable things the computer is allowed to look at.
+
+**What you'll see:** the first 24 of the 224 numbers. The order follows the word list from Step 0: \`a\`, \`about\`, \`above\`, ...`,
+      code: String.raw`piece = np.array(D["t2"]["counts"][0])           # Ted's 1971 essay, piece 1: 224 numbers
+piece[:24]`,
+    },
+    {
+      id: "piece-bars",
+      title: "Step 3 · Draw that piece",
+      md: `Numbers are easier to read as a picture. Here are the 15 small words this piece uses most.
+
+**What you'll see:** "the", "of" and "to" lead, as in almost any English text. The differences between writers hide further down, in how often they use words like *which*, *because* or *any*.
+
+**Try it:** change \`[0]\` to \`[3]\` to draw piece 4 instead.`,
+      packages: ["numpy", "matplotlib"],
+      code: String.raw`piece = np.array(D["t2"]["counts"][0])
+H.show_plot(G.piece_bars(piece, fw))
+int(piece.sum())                     # how many of the 1,000 words are small words`,
     },
     {
       id: "strip",
-      title: "Step 1 · From noticing to counting",
-      md: `The FBI's investigators noticed habits: small words that Ted used a lot, or hardly at all. We can **count** them. Each row below is one word. Each dot is how often a writer uses it **per 1,000 words**: 19 other writers on technology and society (grey), Ted's 1971 essay (blue diamond), and the 1995 manifesto (orange star).
+      title: "Step 4 · Ted's small-word habits",
+      md: `Now compare writers. Each row is one small word. Each dot is how often a writer uses it **per 1,000 words**: 19 other writers (grey), Ted's 1971 essay (blue diamond), and the manifesto (orange star).
 
-Look for rows where the blue diamond and the orange star sit close together, away from the grey crowd. **These four words were hand-picked for illustration.** Change the list and run again to see that not every word behaves this way.`,
+**What you'll see:** in some rows the diamond and the star sit together, away from the grey crowd. That is a habit Ted carried from 1971 into the manifesto.
+
+**Try it:** put other words in the list, e.g. \`"which"\`, \`"of"\`, \`"however"\`, and run again.`,
       packages: ["numpy", "matplotlib"],
-      code: String.raw`WORDS = ["because", "any", "and", "the"]      # try other words from the list in Step 0, e.g. "which", "of", "however"
+      code: String.raw`WORDS = ["because", "any", "and", "the"]
 H.show_plot(G.dot_strip(D, WORDS))`,
     },
     {
-      id: "pca",
-      title: "Step 2 · What the computer sees",
-      md: `One word at a time is a weak clue. The computer looks at **all 224 small words at once**. Each piece of text becomes a point in a space with 224 directions, which we cannot draw. So we squash it flat with **PCA**, a standard method that keeps the two directions along which the pieces differ most.
+      id: "table",
+      title: "Step 5 · Build the training table",
+      md: `Machine learning learns from examples with the right answers. We need two things:
 
-Here every dot is a **500-word piece**: grey = the 19 other writers, blue diamonds = Ted's 1971 essay, orange stars = the manifesto. The shaded side is "Ted's side" of a straight line.`,
+- **X**, a table of features: one row per piece, one column per small word.
+- **y**, the **labels** (the right answers): 1 for "Ted", 0 for "not Ted".
+
+We use Ted's 1971 essay and the 29 texts by other writers. Ted's later essays and the manifesto stay out: the computer must never see them while learning.
+
+**What you'll see:** the size of the table, rows by columns.`,
+      code: String.raw`T = G.counts(D["t2"])                                   # Ted's 6 pieces
+I = np.vstack([G.counts(r) for r in D["impostors"]])    # the other writers' 282 pieces
+
+X = np.vstack([T, I])                                   # stack them: Ted first, then the others
+y = np.r_[np.ones(len(T)), np.zeros(len(I))]            # 1 for each Ted piece, 0 for each other piece
+
+print("labels of the first 10 rows:", y[:10].astype(int))
+X.shape                                                 # (rows, columns)`,
+    },
+    {
+      id: "heatmap",
+      title: "Step 6 · Look at a corner of the table",
+      md: `A table this big is hard to read, so here is one corner: 6 Ted pieces above the line, 6 other-writer pieces below, and 16 of the 224 columns. Darker = used more. The column **y** on the right holds the answers.
+
+**What you'll see:** some columns already differ: look at *will*, high in every Ted row. But one column is not enough to decide. The computer's job is to combine all 224 columns into one judgement.`,
+      packages: ["numpy", "matplotlib"],
+      code: String.raw`H.show_plot(G.table_heatmap(X, fw, n_ted=len(T)))`,
+    },
+    {
+      id: "shares",
+      title: "Step 7 · Turn counts into shares",
+      md: `Some pieces happen to contain more small words overall. To compare fairly, we divide each row by its total, so every row adds up to 1. A count of 65 "the" becomes a **share**: "the" is 12.5% of this piece's small words.
+
+This tool is called a **Normalizer**. Tools in scikit-learn (the machine-learning library we use) all work the same way: \`fit\` looks at the data, \`transform\` changes it.
+
+**What you'll see:** one row before and after; the shares add up to 1.`,
+      packages: ["numpy", "scikit-learn"],
+      code: String.raw`from sklearn.preprocessing import Normalizer
+
+shares = Normalizer(norm="l1").fit_transform(X)        # divide each row by its total
+
+show = ["the", "of", "and", "which", "because", "any"]
+cols = [fw.index(w) for w in show]
+print("counts:", X[0, cols].astype(int))
+print("shares:", shares[0, cols].round(3))
+shares[0].sum()                                          # every row now adds up to 1`,
+    },
+    {
+      id: "scale",
+      title: "Step 8 · Put every word on the same scale",
+      md: `"the" fills about 13% of small words; "because" fills 0.2%. Left like this, big words would drown out small ones.
+
+So we **rescale** each column: subtract its average and divide by its usual spread. After that, 0 means "as usual", +1 means "a bit more than usual", -1 "a bit less", for every word alike. This tool is a **StandardScaler**.
+
+**What you'll see:** top row, the raw shares of "the" and "because" across all 288 pieces (very different ranges); bottom row, the same words after rescaling, both centred on 0.`,
       packages: ["numpy", "scikit-learn", "matplotlib"],
       code: String.raw`from sklearn.preprocessing import StandardScaler
-from sklearn.decomposition import PCA
-from sklearn.linear_model import LogisticRegression
-import matplotlib
-matplotlib.use("agg")
-import matplotlib.pyplot as plt
 
-p = D["p500"]                                            # counts per 500-word piece
-share = lambda b: np.array(b["counts"], float) / np.array(b["n"])[:, None]   # each word as a share of its piece
-ted, manifesto = share(p["t2"]), share(p["u14"])
-others = np.vstack([share(b) for b in p["imp_author"]])  # the 19 other writers
-
-train = np.vstack([ted, others])
-scale = StandardScaler().fit(train)                      # put all 224 words on one scale
-pca = PCA(2, random_state=0).fit(scale.transform(train)) # the two directions with the most spread
-xy = lambda X: pca.transform(scale.transform(X))
-
-# a straight line in the 2D picture that best separates Ted from the others (drawn for illustration only)
-line = LogisticRegression(C=1, max_iter=5000, class_weight="balanced").fit(xy(train), np.r_[np.ones(len(ted)), np.zeros(len(others))])
-A, B, C = xy(others), xy(ted), xy(manifesto)
-
-fig, ax = plt.subplots(figsize=(6.4, 4.6))
-allxy = np.vstack([A, B, C]); lo, hi = allxy.min(0) - 1, allxy.max(0) + 1
-gx, gy = np.meshgrid(np.linspace(lo[0], hi[0], 300), np.linspace(lo[1], hi[1], 300))
-side = line.predict_proba(np.c_[gx.ravel(), gy.ravel()])[:, 1].reshape(gx.shape)
-ax.contourf(gx, gy, side, levels=[0, .5, 1], colors=["#ECE8E0", "#DCE6F2"])
-ax.contour(gx, gy, side, levels=[.5], colors=[G.BLUE], linewidths=2)
-ax.scatter(*A.T, s=14, color=G.GREY, label="19 other writers")
-ax.scatter(*B.T, s=70, marker="D", color=G.BLUE, edgecolors="white", label="Ted's 1971 essay")
-ax.scatter(*C.T, s=110, marker="*", color=G.ORANGE, edgecolors="white", label="the manifesto")
-ax.set_xticks([]); ax.set_yticks([]); ax.legend(loc="upper left", fontsize=8)
-ax.set_title("500-word pieces, 224 small words, squashed to 2D", fontsize=9, loc="left")
-H.show_plot(fig)
-print(f"{(line.predict(xy(manifesto)) == 1).mean():.0%} of the manifesto's {len(manifesto)} pieces fall on Ted's side of the line.")
-print("Caption: the line is drawn in 2D for illustration only. The real classifier (Step 3) works with all 224 words at once.")`,
+scaled = StandardScaler().fit_transform(shares)
+H.show_plot(G.scale_hist(shares, scaled, fw))
+{w: round(float(v), 2) for w, v in zip(show, scaled[0, cols])}     # piece 1, after rescaling`,
     },
     {
-      id: "lr",
-      title: "Step 3 · Let the computer decide",
-      md: `Now we skip the picture. A **logistic regression** learns, from **Ted's 1971 essay against the 19 other writers**, which mix of the 224 small words says "Ted". Then it gives any piece of text a **Ted-likeness score**.
+      id: "map",
+      title: "Step 9 · A map of all 224 words",
+      md: `Each piece is now a point in a space with 224 directions, which nobody can picture. **PCA** (principal component analysis) squeezes those 224 directions into the 2 that spread the points out most, so we can draw a map. Points close together use small words alike.
 
-Pieces are 1,000 words. To keep it fair, every other-writer piece is scored **held out**: the computer never saw that whole text when it was trained (5-fold, grouped by text). Then we ask: where do the manifesto's pieces fall, compared with pieces by the other writers?
+The manifesto was not used to build the map; we only place it on it.
 
-**An honest limit.** The computer learned Ted from a single essay of about 6,300 words, and people's writing changes over 25 years. Run the box and read the last line: Ted's own later writings (1999-2016) are flagged far less often than the manifesto is. A flag is a weak clue, and a missing flag proves little.
-
-The readout is an **alarm line**. We set it so that only **5% of the other writers' pieces** set it off (a 5% false-alarm rate). Anything scoring above the line is "flagged as Ted". Then we count how many manifesto pieces are flagged.`,
+**What you'll see:** a grey cloud of other writers; Ted's 1971 pieces (blue) and the manifesto's pieces (orange) on the same side of it.`,
       packages: ["numpy", "scikit-learn", "matplotlib"],
-      code: String.raw`r = G.ted_likeness(D, size=1000)             # Ted: 6 pieces of 1,000 words; other writers: 282 pieces
-a = G.alarm(r, false_alarm=0.05)                # the line: 5% of the other writers' held-out pieces score above it
-H.show_plot(G.flag_plot(r, false_alarm=0.05))
-
-print(f"Other writers' pieces flagged (false alarms): {a['held_flagged']:.0%}")
-print(f"Manifesto pieces flagged: {a['manifesto_flagged']} of {a['manifesto_n']} = {a['manifesto_flagged'] / a['manifesto_n']:.0%}")
-print(f"Aside: the typical manifesto piece scores higher than {r['beats_manifesto']:.1f}% of the other writers' held-out pieces.")
-print(f"An honest limit: at this same line, Ted's later writings (1999-2016) are flagged {a['later_flagged']} of {a['later_n']} = {a['later_flagged'] / a['later_n']:.0%}.")`,
+      code: String.raw`U = G.counts(D["u14"])                          # the manifesto's 30 pieces (only placed on the map)
+H.show_plot(G.pca_map(X, T, U, n_ted=len(T)))`,
     },
     {
-      id: "lr_drop",
-      title: "Step 3b · The same, with the FBI-matched passages removed",
-      md: `The FBI matched many passages of the 1971 essay and the manifesto **by subject**. Perhaps the computer is just picking up on shared content. So we delete every T-2 paragraph the FBI aligned (and the manifesto paragraphs they match), and run Step 3 again. Ted's essay shrinks to about 1,700 words, so he is now learned from **one 1,000-word piece**.
+      id: "train",
+      title: "Step 10 · Train the model",
+      md: `Now the computer learns. **Logistic regression** gives every small word a **weight**. To score a piece, it multiplies each word's (rescaled) value by its weight and adds everything up: a big total means "Ted", a low total means "not Ted".
 
-**An honest note:** the probabilities are low, because the computer learns Ted from very little text. So we do not read any one score as "chance that Ted wrote it". We only ask which pieces cross the alarm line. The line is **recomputed on this run's held-out scores**, again with a 5% false-alarm rate.`,
-      packages: ["numpy", "scikit-learn", "matplotlib"],
-      code: String.raw`r2 = G.ted_likeness(D, size=1000, drop_fbi=True)   # Ted: 1 piece; manifesto: 22 pieces
-a2 = G.alarm(r2, false_alarm=0.05)                  # new line, from this run's held-out scores
-H.show_plot(G.flag_plot(r2, false_alarm=0.05))
+**Training** means finding the weights that make Ted's pieces score high and the others score low. \`fit\` does it in a second.
 
-print(f"Other writers' pieces flagged (false alarms): {a2['held_flagged']:.0%}")
-print(f"Without the FBI-matched passages, manifesto pieces flagged: {a2['manifesto_flagged']} of {a2['manifesto_n']} = {a2['manifesto_flagged'] / a2['manifesto_n']:.0%}")
-print(f"Aside: the typical manifesto piece scores higher than {r2['beats_manifesto']:.1f}% of the other writers' held-out pieces.")`,
+We chain the three tools (shares, rescale, logistic regression) into one **pipeline**, so new text always goes through the same steps.
+
+**What you'll see:** the pipeline, then the model's answers for a few training pieces.`,
+      code: String.raw`model = G.make_model()          # Normalizer -> StandardScaler -> LogisticRegression
+model.fit(X, y)                 # learning happens here
+
+print("answers for the first 3 Ted pieces:         ", model.predict(T[:3]).astype(int))
+print("answers for the first 3 other-writer pieces:", model.predict(I[:3]).astype(int))
+model`,
     },
     {
-      id: "tryit",
-      title: "Step 4 · Try it yourself",
-      md: `Change a setting in the first four lines and press ▶ again. Things to try:
+      id: "weights",
+      title: "Step 11 · Look inside: which words say \"Ted\"?",
+      md: `Each word got a **weight**. Blue bars push a piece toward "Ted"; grey bars push it away.
 
-- **Piece size:** \`SIZE = 500\`. Shorter pieces carry less evidence. What happens to the percentages?
-- **Only four words:** \`WORDS = ["because", "any", "and", "the"]\`. The score will look excellent. But careful: these four were picked *after* looking at where the manifesto falls, so using them to judge the manifesto is circular, like grading a test with the answers you already peeked at. Now try four words picked *without* looking (e.g. \`["of", "in", "is", "that"]\`). This is why the real test uses all 224 words, chosen in advance.
-- **Drop one word:** \`WORDS = [w for w in fw if w != "the"]\`. Does the result depend on a single word?
-- **Remove the FBI-matched passages:** \`DROP_FBI = True\`.
-- **Move the alarm line:** \`FALSE_ALARM = 0.01\` or \`0.10\`. A stricter line (1%) flags fewer other writers but also fewer manifesto pieces; a looser one (10%) flags more of both. Watch how the two flag rates move together. (For the main run: 10% gives 27 of 30 manifesto pieces, 1% gives 9 of 30.)
+**What you'll see:** future-tense and argument words such as *will* and *be* on Ted's side; this is how a writer who argues about where society is heading sounds.
 
-This is a laboratory: only 500 and 1,000 are available as piece sizes, because only counts are shipped.`,
-      packages: ["numpy", "scikit-learn", "matplotlib"],
-      code: String.raw`SIZE = 1000        # 500 or 1000 words per piece
-WORDS = None       # None = all 224 small words; or a list of words
-DROP_FBI = False   # True = remove the passages the FBI matched
-FALSE_ALARM = 0.05 # share of other writers' pieces allowed to set off the alarm (try 0.01 or 0.10)
-
-r3 = G.ted_likeness(D, size=SIZE, drop_fbi=DROP_FBI, words=WORDS)
-a3 = G.alarm(r3, FALSE_ALARM)
-H.show_plot(G.flag_plot(r3, FALSE_ALARM))
-print(f"Ted is learned from {r3['n_ted']} piece(s). Other writers flagged: {a3['held_flagged']:.0%}. Manifesto pieces flagged: {a3['manifesto_flagged']} of {a3['manifesto_n']} = {a3['manifesto_flagged'] / a3['manifesto_n']:.0%}. Ted's later writings: {a3['later_flagged']} of {a3['later_n']} = {a3['later_flagged'] / a3['later_n']:.0%}.")`,
-    },
-    {
-      id: "adv",
-      title: "Advanced · the pre-registered checks, and two methods that did not work",
-      md: `Everything below is optional. It reproduces the **pre-registered** analysis (Burrows's Delta and General Impostors, seed 20261011), which is the confirmatory result. Steps 1 to 4 were added afterwards for teaching; they are exploratory.`,
-    },
-    {
-      id: "adv_setup",
-      title: "Advanced 0 · Set up the 1,000-word chunks",
-      md: `For the pre-registered analysis, every text is cut into 1,000-word chunks, and each word is measured as a frequency per 1,000 words.`,
-      packages: ["numpy"],
-      code: String.raw`by_author = G.authors(D)                  # 19 impostor authors -> their texts
-freq = {a: G.stack(texts) for a, texts in by_author.items()}   # chunks x words, per 1,000 words
-t2, u14 = G.rel(D["t2"]), G.rel(D["u14"])  # Ted's 1971 essay and the 1995 manifesto
-post = G.stack(D["ted_post"])             # Ted's later writings (1999-2016), the "same author" check
-ref = np.vstack([t2] + list(freq.values()))   # the yardstick that puts every word on one scale
-
-rows = [[texts[0]["name"], len(texts), f'{min(t["year"] for t in texts)}-{max(t["year"] for t in texts)}', len(freq[a])] for a, texts in by_author.items()]
-H.show_table(["impostor author", "texts", "years", "1,000-word chunks"], rows, "The 19 impostors")
-print(f"T-2: {len(t2)} chunks | U-14: {len(u14)} chunks | Ted's later writings: {len(post)} chunks | {len(fw)} function words")`,
-    },
-    {
-      id: "delta",
-      title: "Advanced 1 · Burrows's Delta: which profile is each manifesto chunk nearest?",
-      md: `The classic tool is **Burrows's Delta**. Build a profile for every candidate (T-2 and each of the 19 impostors): the average of their word frequencies, each word measured in "standard units".
-Then take each 1,000-word chunk of the manifesto and find the **nearest profile**. If the manifesto were written by the T-2 author, most chunks should land on T-2.
-
-With 20 candidates, landing on T-2 by luck would happen about 5% of the time.`,
-      code: String.raw`profiles = dict(freq)
-profiles["TED T-2"] = t2
-
-nearest = G.delta_nearest(u14, profiles, ref)       # one nearest profile per manifesto chunk
-from collections import Counter
-tally = Counter(nearest).most_common()
-
-rows = [[name, n, f"{n / len(u14):.0%}"] for name, n in tally[:6]]
-H.show_table(["nearest profile", "manifesto chunks", "share"], rows, "Where do the 30 manifesto chunks land?")
-share = nearest.count("TED T-2") / len(nearest)
-print(f"Share of manifesto chunks nearest to T-2: {share:.2f}   (luck would give {1 / len(profiles):.2f})")`,
-    },
-    {
-      id: "validity",
-      title: "Advanced 2 · The sobering check: can Delta even tell the impostors apart?",
-      md: `Before trusting that 43%, test the ruler. Take impostors who have two or more texts. Hide one text, and ask Delta to assign its chunks to the right author among all 20 candidates.
-If the method cannot do that, a result for Ted means nothing. The plan said the accuracy had to reach **0.70**.`,
-      code: String.raw`hits = total = 0
-for a, texts in by_author.items():
-    if len(texts) < 2:
-        continue
-    texts = sorted(texts, key=lambda r: -r["n_chars"])   # longest first
-    held, rest = G.rel(texts[-1]), G.stack(texts[:-1])    # hide the shortest text
-    prof = {b: f for b, f in freq.items() if b != a}
-    prof[a] = rest                                        # the author's profile without the hidden text
-    prof["TED T-2"] = t2
-    got = G.delta_nearest(held, prof, ref)
-    hits += got.count(a); total += len(got)
-
-print(f"Held-out chunks given to the right author: {hits} of {total} = {hits / total:.2f}")
-print("Required by the plan: 0.70.  Chance with 20 candidates: 0.05.")
-print("So the 43% above is NOT interpreted: this ruler does not separate these writers.")`,
-    },
-    {
-      id: "gi",
-      title: "Advanced 3 · General Impostors: a line-up with many random witnesses",
-      md: `**General Impostors** asks a sharper question. Imagine a police line-up: the questioned text (the manifesto), the suspect (T-2), and 19 impostors.
-Repeat 200 times: pick a random **half of the function words**, and ask whether the suspect is closer to the manifesto than *every* impostor.
-The **score** is the share of rounds the suspect wins. A score of 1.00 means the suspect won every round.
-
-A score alone is meaningless, so we calibrate it: we also score **every pair of different impostor authors** (342 ordered pairs). That shows what a "no match" looks like.`,
+**Try it:** change \`k=12\` to \`k=20\` to see more words.`,
       packages: ["numpy", "matplotlib"],
-      code: String.raw`import matplotlib
-matplotlib.use("agg")
-import matplotlib.pyplot as plt
-
-rng = np.random.default_rng(G.SEED)               # same seed as the report
-pool = np.vstack([G.profile(f, ref) for f in freq.values()])   # the 19 impostors
-p_t2, p_u14, p_post = (G.profile(x, ref) for x in (t2, u14, post))
-gi_u_given_t2 = G.gi_score(p_u14, p_t2, pool, rng, iters=200)
-gi_t2_given_u = G.gi_score(p_t2, p_u14, pool, rng, iters=200)
-gi_post_given_t2 = G.gi_score(p_post, p_t2, pool, rng, iters=200)
-
-# Calibration: different authors (100 rounds each, as in the report)
-diff = np.array(list(G.different_author_scores(freq, t2, ref, np.random.default_rng(G.SEED), iters=100).values()))
-print(f"different-author pairs: n={len(diff)}  mean={diff.mean():.2f}  99th percentile={np.quantile(diff, .99):.2f}  max={diff.max():.2f}")
-print(f"GI: manifesto given T-2   = {gi_u_given_t2:.2f}")
-print(f"GI: T-2 given manifesto   = {gi_t2_given_u:.2f}")
-print(f"GI: Ted's later writings given T-2 (same author, 25+ years apart) = {gi_post_given_t2:.2f}")
-
-fig, ax = plt.subplots(figsize=(6.4, 3.6))
-ax.hist(diff, bins=np.linspace(0, 1, 21), color="0.7", label="two different authors (342 pairs)")
-for v, c, lab in [(gi_u_given_t2, "crimson", "manifesto vs T-2"), (gi_post_given_t2, "tab:blue", "Ted's later texts vs T-2")]:
-    ax.axvline(v, color=c, lw=2.5, label=f"{lab}: {v:.2f}")
-ax.set_xlabel("General Impostors score"); ax.set_ylabel("number of pairs"); ax.legend(fontsize=8)
-H.show_plot(fig)`,
+      code: String.raw`w = model[-1].coef_[0]            # the 224 learned weights, in the order of fw
+H.show_plot(G.weight_bars(w, fw, k=12))
+fw[int(np.argmax(w))]             # the single most Ted-like word`,
     },
     {
-      id: "same",
-      title: "Advanced 4 · How high can a true match score? And Ted's later writings",
-      md: `Two more yardsticks. First, **known same-author pairs** among the impostors (one text against the same writer's other texts): they should score high, but General Impostors is cautious, and some true pairs score **0.00**. So a high score carries information; a low one would not.
+      id: "one-score",
+      title: "Step 12 · Score one piece it has never seen",
+      md: `Ted wrote this essay in prison, decades after 1971. The model never saw it.
 
-Second, the cleanest test of "is it Ted, without help from the draft?": the manifesto against his **later writings** (1999-2016, no overlap with the manifesto, quotations of it removed).`,
-      code: String.raw`same = G.same_author_scores(by_author, freq, t2, ref, rng, iters=200)    # continues the same random stream as Advanced 3
-print("same-author impostor pairs:", {a: round(v, 2) for a, v in same.items()})
-print(f"range: {min(same.values()):.2f} to {max(same.values()):.2f}  (true matches can score low)\n")
+The model's **score** for a piece is that weighted sum. The higher, the more like Ted. A score means little alone, so we compare it with the pieces the model trained on.
 
-for seed in (1, 2, 3):                       # post-hoc check, three seeds
-    r = np.random.default_rng(seed)
-    a = G.gi_score(p_u14, p_post, pool, r, iters=200)
-    b = G.gi_score(p_post, p_u14, pool, r, iters=200)
-    print(f"seed {seed}: manifesto given Ted's later texts = {a:.2f} | later texts given manifesto = {b:.2f}")
-print("Caveat: Ted's later texts share his anti-technology vocabulary, but only function words are used here.")`,
+**What you'll see:** this unseen piece scores far above the other writers' average and below Ted's own 1971 pieces.`,
+      code: String.raw`essay = D["ted_post"][0]
+P = G.counts(essay)                                      # its pieces, one row each
+
+print(f'{essay["title"]} ({essay["year"]}), piece 1')
+print(f"   training average, Ted's 1971 essay: {model.decision_function(T).mean():+.2f}")
+print(f"   training average, other writers:    {model.decision_function(I).mean():+.2f}")
+model.decision_function(P[:1])[0]                        # the new piece's score`,
     },
     {
-      id: "leak",
-      title: "Advanced 5 · The topic-leak test: remove every paragraph the FBI matched",
-      md: `The worry: T-2 and the manifesto share *content and phrasing*, and function words can ride along with content. So **delete every T-2 paragraph the FBI aligned (33 of 56)
-and the manifesto paragraphs they match**, and score again. T-2 shrinks from 6,331 to **1,712 words**, written 24 years before the manifesto.
+      id: "inside-score",
+      title: "Step 13 · Take that score apart",
+      md: `A score is just many small pushes added up: for each word, weight × how much more (or less) than usual this piece uses it.
 
-We run it two ways: the report's main run (first 1,000 words of what is left), and a post-hoc check that keeps all 1,712 words, with three random seeds. One seed is not enough.`,
-      code: String.raw`t2r_first = G.rel(D["t2_r1_first1000"])      # reduced T-2, first 1,000 words (main run)
-t2r_all = G.rel(D["t2_r1_all"])              # reduced T-2, all 1,712 words (post-hoc)
-u14r = G.rel(D["u14_r1"])                    # reduced manifesto: 22 chunks
-ref_r = np.vstack([t2r_first] + list(freq.values()))
-pool_r = np.vstack([G.profile(f, ref_r) for f in freq.values()])
-
-# main run, same seed as the report
-r = np.random.default_rng(G.SEED)
-a = G.gi_score(G.profile(u14r, ref_r), G.profile(t2r_first, ref_r), pool_r, r, iters=200)
-b = G.gi_score(G.profile(t2r_first, ref_r), G.profile(u14r, ref_r), pool_r, r, iters=200)
-print(f"main run : manifesto given T-2 = {a:.2f} | T-2 given manifesto = {b:.2f}")
-
-# post-hoc: all 1,712 words of T-2, three seeds (yardstick built from the full T-2, as in the check)
-pool_f = np.vstack([G.profile(f, ref) for f in freq.values()])
-for seed in (1, 2, 3):
-    r = np.random.default_rng(seed)
-    a = G.gi_score(G.profile(u14r, ref), G.profile(t2r_all, ref), pool_f, r, iters=200)
-    b = G.gi_score(G.profile(t2r_all, ref), G.profile(u14r, ref), pool_f, r, iters=200)
-    print(f"seed {seed}   : manifesto given T-2 = {a:.2f} | T-2 given manifesto = {b:.2f}")
-
-# how high do two DIFFERENT authors score under the same removal? (the report's calibration continues one random stream)
-rr = np.random.default_rng(G.SEED)
-G.different_author_scores(freq, t2, ref, rr, iters=100)                       # first pass (all text), as in the report
-dr = np.array(list(G.different_author_scores(freq, t2r_first, ref_r, rr, iters=100).values()))
-print(f"different-author pairs under the removal: mean={dr.mean():.2f}  99th percentile={np.quantile(dr, .99):.2f}  max={dr.max():.2f}")
-
-# Delta again: with a one-chunk T-2 profile it is underpowered
-prof = dict(freq); prof["TED T-2"] = t2r_first
-near = G.delta_nearest(u14r, prof, ref_r)
-print(f"Delta after removal: share nearest to T-2 = {near.count('TED T-2') / len(near):.2f} (one-chunk profile: underpowered)")`,
+**What you'll see:** the words that pushed this piece's score up (blue) and down (grey). Adding all 224 pushes, plus a fixed starting value, gives exactly the score from Step 12.`,
+      packages: ["numpy", "matplotlib"],
+      code: String.raw`fig, total = G.contributions(model, P[0], fw)
+H.show_plot(fig)
+round(total, 2)                   # the same number as in Step 12`,
     },
     {
-      id: "adv_notes",
-      title: "Advanced · two lessons from methods that did not work",
-      md: `**Supervised UMAP was rejected.** UMAP is a popular way to draw high-dimensional data in 2D, and a "supervised" version can use the labels to pull the groups apart. (UMAP is not available in this browser lab, so this is text only.) With only 12 Ted pieces of 500 words, it simply memorizes them: the picture looks beautiful, but even Ted's *own later writings* land 0% in "Ted's region". A lesson about fancy methods on tiny data: a clean picture is not evidence.
+      id: "whole",
+      title: "Step 14 · Score a whole text",
+      md: `One piece can be noisy. For a whole text we score **every** piece and take the average.
 
-**Fewer "most Ted-like" words made results worse.** We also tried keeping only the 10, 20, 50 or 100 words that best separate Ted from the others. With 10 words, the typical manifesto piece beat only about 55% of the held-out pieces (1,000-word pieces; with all 224 words: about 98%). It climbed as words were added: about 94% with 30 words and 97% with 50 (\`unabom/results/feature_selection.json\`). Ted's idiolect is not a few signature words: it is spread over **many small habits**, which is why Step 3 uses all 224.`,
+**What you'll see:** the four piece scores, then the whole-text score.`,
+      code: String.raw`scores = model.decision_function(P)
+print("score of each piece:", scores.round(2))
+scores.mean()                     # the whole-text score`,
+    },
+    {
+      id: "alarm",
+      title: "Step 15 · A fair test, and the alarm line",
+      md: `How high must a score be before we say "Ted"? We ask the other writers.
+
+There is a catch: a model gives high marks to texts it has already seen, like a student who memorized the answer key. So each other-writer text must be scored by a model trained **without** it. We split their texts into 5 groups and train 5 times, each time holding one group out. This is called **cross-validation**.
+
+The **alarm line** is set so that only 1 in 20 of their texts crosses it.
+
+**What you'll see:** the 5 rounds, then the alarm line.`,
+      code: String.raw`groups = np.array([r["author"] + "/" + r["text"] for r in D["impostors"] for _ in r["n"]])
+held = np.zeros(len(I))
+for rnd, (train, test) in enumerate(G.group_folds(groups), 1):       # whole texts stay together
+    m = G.make_model().fit(np.vstack([T, I[train]]), np.r_[np.ones(len(T)), np.zeros(len(train))])
+    held[test] = m.decision_function(I[test])                       # scores from a model that never saw them
+    print(f"round {rnd}: trained without {len(test)} pieces, then scored them")
+
+texts = sorted(set(groups))
+others = np.array([held[groups == g].mean() for g in texts])         # one score per whole text
+line = float(np.quantile(others, 0.95))                               # only 1 in 20 above it
+line`,
+    },
+    {
+      id: "alarm-plot",
+      title: "Step 16 · See the alarm line",
+      md: `**What you'll see:** the 29 other-writer texts as a histogram (how many texts got each score), and the dashed alarm line near their top edge.`,
+      packages: ["numpy", "matplotlib"],
+      code: String.raw`H.show_plot(G.alarm_hist(others, line))`,
+    },
+    {
+      id: "verdict",
+      title: "Step 17 · Score Ted's later essays and the manifesto",
+      md: `Now the real test. Ted's later essays are a **check**: we know he wrote them, so they should cross the line. The manifesto is the **question**.
+
+**What you'll see:** one row per text, its score, and whether it crosses the alarm line.`,
+      code: String.raw`later = np.array([model.decision_function(G.counts(r)).mean() for r in D["ted_post"]])
+manifesto = float(model.decision_function(G.counts(D["u14"])).mean())
+
+rows = [[r["title"][:52], r["year"], f"{s:+.2f}", "yes" if s > line else "no"] for r, s in zip(D["ted_post"], later)]
+rows.append(["The manifesto", 1995, f"{manifesto:+.2f}", "YES" if manifesto > line else "no"])
+H.show_table(["text", "year", "score", "flagged?"], rows, f"Alarm line = {line:.2f}")`,
+    },
+    {
+      id: "plot",
+      title: "Step 18 · Draw the picture",
+      md: `Everything in one picture. Each dot is one **whole text**; everything right of the dashed **alarm line** is flagged as Ted. This is the figure from the lecture, and you just made it.
+
+**What you'll see:** grey dots mostly left of the line, blue diamonds mostly right, and the orange star far right.`,
+      packages: ["numpy", "matplotlib"],
+      code: String.raw`r = {"others": others, "later": later, "manifesto": manifesto, "line": line}
+H.show_plot(G.score_plot(r))
+
+print(f"Other writers flagged:      {int((others > line).sum())} of {len(others)}")
+print(f"Ted's later essays flagged: {int((later > line).sum())} of {len(later)}")
+print("The manifesto:", "flagged" if manifesto > line else "not flagged")`,
+    },
+    {
+      id: "threshold",
+      title: "Step 19 · Move the alarm line yourself",
+      md: `The alarm line is a choice. A lower line catches more of Ted's essays but also flags more innocent writers; a higher line does the opposite.
+
+**What you'll see:** for four lines, how many of each group cross it.
+
+**Try it:** add \`0.75\` to the list.`,
+      code: String.raw`for q in [0.80, 0.90, 0.95, 1.00]:                      # 1.00 = above every other writer
+    cut = np.quantile(others, q)
+    print(f"line at the {int(q * 100)}th percentile ({cut:+.2f}):  "
+          f"other writers {int((others > cut).sum()):2d}/29 | later essays {int((later > cut).sum())}/8 | manifesto {'yes' if manifesto > cut else 'no'}")`,
     },
     {
       id: "takeaway",
-      title: "Takeaway",
-      md: `**What we can say:** measured against 19 other anti-technology writers, the manifesto's function words match Kaczynski's 1971 essay more closely than any two different writers in our set match each other.
-The match weakens but holds after we remove every passage the FBI matched, and it is perfect against his later prison writings (a known same author, with no draft overlap).
+      title: "You just finished a machine-learning project",
+      md: `- **Features:** you turned texts into numbers (224 small-word counts), then into shares on one scale.
+- **Labels:** you gave the right answers (Ted or not).
+- **Training:** logistic regression learned a weight for every word.
+- **Looking inside:** you saw which words say "Ted" and how one score adds up.
+- **Testing:** you scored texts the model never saw, and set an alarm line with cross-validation.
+- **Decision:** it flagged Ted's later essays and the manifesto, and passed almost every other writer.
 
-**What we cannot say.** Delta, the simpler method, could not even tell the impostors apart (accuracy 0.26), so its 43% means nothing: a method that fails its own check stays silent.
-Only one calibrated method carries the result. The impostor pool is limited to what one archive hosts, texts come from different sources (an FBI transcription, typescripts, scanned books),
-four authors are translated or non-native, and a high score is not a probability of guilt. The FBI's own case did not rest on this kind of analysis.`,
+In 1996 the FBI compared these texts by hand. You did it in a few minutes. Stuck on a step, or curious why? Ask **B'lawd**, bottom right.`,
     },
   ],
 });

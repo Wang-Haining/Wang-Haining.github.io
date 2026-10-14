@@ -136,3 +136,22 @@ def show_plot(fig):
 def load_json(path):
     with open(path, encoding="utf-8") as f:
         return json.load(f)
+
+
+def display(value):
+    """Show the value of a cell's last line, the way Colab and Jupyter do (figures as plots, containers pretty-printed)."""
+    if value is None:
+        return
+    import sys
+    if "matplotlib" in sys.modules:
+        import matplotlib.figure
+        if isinstance(value, matplotlib.figure.Figure):
+            show_plot(value)
+            return
+    if type(value).__module__ == "numpy" and hasattr(value, "item") and getattr(value, "ndim", 1) == 0:
+        value = value.item()                   # show np.float64(0.5) as 0.5
+    if isinstance(value, (dict, list, tuple, set)):
+        import pprint
+        print(pprint.pformat(value, width=100, compact=True, sort_dicts=False))
+    else:
+        print(repr(value))

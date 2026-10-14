@@ -1,16 +1,16 @@
 # Who wrote this? A free stylometry lab (runs in your browser)
 
 A free, self-paced lab in four short cases (about 15-20 minutes each). Python runs inside your browser: **no account, no install, no server-side compute**.
-Every code box is editable, you can add your own cells, and nothing you type leaves your browser.
+Every code box is editable and you can add your own cells. Your code and data never leave your browser; the one exception is a question you choose to send to **B'lawd**, the lab's helper (see below).
 
 By Haining Wang, Indiana University. Live at https://hainingwang.org/teaching/stylometry/ (chapters `#ch1` ... `#ch4`).
 
 | URL | Case | What it does |
 |---|---|---|
 | `#ch1` | Two translations of Confucius's *Analects* (Giles vs Eno) | guess by reading, spelling clue, `and`/`the` scatter, then the lab's simple attacker (224 function words + logistic regression) |
-| `#ch2` | The Unabomber (T-2 vs U-14) | counting four small words, a PCA map of 500-word pieces, a "Ted or not?" logistic regression on 224 small words (an "alarm line" set at 5% false alarms: how many manifesto pieces it flags), then, as Advanced, Burrows's Delta and its failed validity check and General Impostors (pre-registered; its own 224-word list, unchanged) |
+| `#ch2` | The Unabomber (T-2 vs U-14) | counting small words, training a "Ted or not?" logistic regression on 224 small words, and scoring whole texts it never saw: other writers, Ted's later essays, and the manifesto, drawn against an alarm line |
 | `#ch3` | The Lu Xun brothers | 31 function characters + L2 logistic regression, disputed essays, weights, highlighted passage |
-| `#ch4` | Machine Zone vs. John Doe (Glassdoor v. Superior Court; a what-if) | the same attacker against 45 writers: no defense, human obfuscation and imitation, four LLM strategies x four models (ready-made rewrites), and **your own disguise** |
+| `#ch4` | Protect John Doe (a what-if on Glassdoor v. Superior Court / Machine Zone) | defense, not attribution: you are on the anonymous reviewer's side. The same simple attacker over 45 writers finds 21 at rank 1 with no disguise; then hiding by hand, four LLM rewriting strategies x four models (ready-made rewrites), and **your own disguise**, each judged on two goals: hide him, keep what he said |
 
 Every chapter starts with a "Check that everything works" banner (green = ready; red says what failed and what to try).
 
@@ -58,6 +58,10 @@ python3 serve.py            # or: python3 -m http.server 8000
 # open http://localhost:8000/#ch1   (or #ch2, #ch3, #ch4)
 ```
 
+## B'lawd, the lab's helper
+
+`blawd/blawd-chat.js` adds a pixel cat in the bottom-right corner. It answers questions about the lecture and the lab through `https://api.hainingwang.org/lab` (the `/lab` route of the site's Cloudflare Worker, `ask-haining-worker/src/lab.ts`; model Claude Haiku). Its knowledge is `blawd/knowledge.md`, built by `python3 tools/build_blawd_knowledge.py` from the lecture slides (with speaker notes), every chapter, the helper modules and DATA_NOTES.md; the Worker's `npm run build:knowledge` copies it in. The Worker only answers pages served from hainingwang.org, so on a self-hosted copy or on localhost the chat says it can't reach B'lawd; set `data-endpoint` on the script tag to point it at your own server, or delete the tag.
+
 ## Optional: live LLM proxy (instructors only, off by default)
 
 Case 4 uses ready-made rewrites. A live path exists in `app.js` behind `PROXY_URL` (empty = the passcode box and every live control stay hidden). See `proxy/README.md` (Cloudflare Worker; not deployed, never called by default).
@@ -77,6 +81,5 @@ python3 -m venv .venv && .venv/bin/pip install pdfminer.six scikit-learn numpy
 
 - Pyodide runs on the page's main thread: the page freezes for a second or two while a cell computes or a package loads.
 - Code cells are plain textareas. Cells share one Python session per chapter; run them in order ("Run all up to here" helps after edits).
-- Case 2, Advanced 4 continues the random stream of Advanced 3; run Advanced 3 right before it.
 - The attacker is a deliberately simple stand-in; a stronger attacker could do better against every disguise.
 - The legacy `#ch4rj` page (20 authors, placeholder rewrites) is kept but has no tab.

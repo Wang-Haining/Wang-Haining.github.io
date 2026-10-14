@@ -14,7 +14,7 @@ const PROXY_TIMEOUT_MS = 40000;
 const PYODIDE_LOCAL = "vendor/pyodide/";
 const PYODIDE_CDN = "https://cdn.jsdelivr.net/pyodide/v0.27.7/full/";      // pinned version
 const PYODIDE_CDN_FALLBACK = true;
-const PY_MODULES = ["lab_helpers.py", "lab_ch2.py", "lab_ch3.py", "lab_ch4.py"];   // put on Python's import path at boot
+const PY_MODULES = ["lab_helpers.py", "lab_ch1.py", "lab_ch2.py", "lab_ch3.py", "lab_ch4.py"];   // put on Python's import path at boot
 
 // ---- tiny helpers -----------------------------------------------------------------------
 const $ = (s, r = document) => r.querySelector(s);
@@ -477,7 +477,9 @@ async function runCell(ch, i) {
     if (st.cell.controls === "llm") for (const [k, v] of Object.entries(currentChoice(ch))) ns.set(k, v);
     if (st.cell.controls === "paste") ns.set("my_text", built[ch.id].host.querySelector("#own-text").value);
     const t1 = performance.now();
-    await pyodide.runPythonAsync(st.ta.value, { globals: ns });
+    // Like Colab: a bare expression on the last line shows its value (a trailing ";" hides it). The value stays in Python.
+    ns.set("_lab_src", st.ta.value);
+    await pyodide.runPythonAsync("import lab_helpers as _lab_h\nfrom pyodide.code import eval_code_async as _lab_eval\n_lab_v = await _lab_eval(_lab_src, globals(), filename='<cell>')\n_lab_h.display(_lab_v)", { globals: ns });
     st.seconds = ((performance.now() - t1) / 1000).toFixed(1);
     st.sec.classList.add("done"); st.status.textContent = "done";
   } catch (err) {

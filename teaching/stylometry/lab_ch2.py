@@ -1,13 +1,12 @@
-"""Chapter 2 helpers (Unabomber case): the dot strip, the PCA map, the Ted-likeness classifier, Burrows's Delta and General Impostors.
+"""Chapter 2 helpers (Unabomber case): the dot strip, and the "Ted or not?" model that scores whole texts.
 
-Same recipe as unabom/scripts/verify.py, but vectorised so it runs in a browser in a few seconds.
-Input is the shipped table of function-word counts per 1,000-token chunk; no text is needed.
+Same recipe as unabom/scripts/text_level.py. Input is the shipped table of function-word counts per 1,000-word piece; no text is needed.
 """
-import itertools
 import json
 import numpy as np
 
-SEED = 20261011          # the seed used in unabom/results/SUMMARY.md
+BLUE, ORANGE, GREY, INK, TEAL = "#0F5C8C", "#B35F00", "#9E978A", "#1F2430", "#00876A"   # Ted, the manifesto, other writers, text, highlights (lecture palette)
+CREAM, MUTED, CRIM = "#F7F5F0", "#6B6458", "#1F2430"                      # page background, quiet text, the alarm line
 
 
 def load(path="data/ch2/fw_counts.json"):
@@ -15,96 +14,9 @@ def load(path="data/ch2/fw_counts.json"):
         return json.load(f)
 
 
-def arr(block):
-    """{'counts': ..., 'n': ...} -> (counts matrix, tokens per chunk)."""
-    return np.array(block["counts"], float), np.array(block["n"], float)
-
-
-def rel(block):
-    """Function-word counts -> frequency per 1,000 words (rows = chunks)."""
-    c, n = arr(block)
-    return c / n[:, None] * 1000
-
-
-def stack(blocks):
-    return np.vstack([rel(b) for b in blocks])
-
-
-def zscore(X, ref):
-    """Put every word on the same scale: (value - mean) / spread, measured on the reference chunks."""
-    mu, sd = ref.mean(0), ref.std(0)
-    sd = np.where(sd == 0, 1, sd)
-    return (X - mu) / sd
-
-
-def authors(D):
-    """{author_key: [text records]} for the impostors, in alphabetical order."""
-    out = {}
-    for rec in D["impostors"]:
-        out.setdefault(rec["author"], []).append(rec)
-    return out
-
-
-def author_freq(texts):
-    return stack(texts)
-
-
-def delta_nearest(Q, profiles, ref):
-    """Burrows's Delta: for each chunk in Q, find the profile with the smallest mean absolute z-score difference."""
-    names = list(profiles)
-    P = np.vstack([zscore(profiles[n], ref).mean(0) for n in names])
-    D = np.abs(zscore(Q, ref)[:, None, :] - P[None, :, :]).mean(2)
-    return [names[i] for i in D.argmin(1)]
-
-
-def gi_score(q, k, imps, rng, iters=200):
-    """General Impostors: in what share of random feature subsets is the suspect K closer to Q than every impostor?
-
-    q, k: z-scored profile vectors; imps: matrix of impostor profiles (rows). Each round keeps a random half of the words.
-    """
-    keep = rng.random((iters, len(q))) < 0.5            # iters x words: True = word is used this round
-
-    def cos(a, B):                                       # cosine of a with each row of B, on the kept words
-        num = (keep * a) @ B.T
-        den = np.sqrt((keep * a * a).sum(1))[:, None] * np.sqrt(keep @ (B * B).T) + 1e-12
-        return num / den
-
-    return float((cos(q, k[None, :])[:, 0] > cos(q, imps).max(1)).mean())
-
-
-def profile(freq, ref):
-    return zscore(freq, ref).mean(0)
-
-
-def different_author_scores(imp_freq, t2_freq, ref, rng, iters=100):
-    """GI score for every ordered pair of different impostor authors (A as questioned, B as suspect).
-    The other 17 impostors and Ted's T-2 act as the impostor pool. This is the 'what does a non-match look like' yardstick."""
-    prof = {a: profile(f, ref) for a, f in imp_freq.items()}
-    t2p = profile(t2_freq, ref)
-    out = {}
-    for a, b in itertools.permutations(prof, 2):
-        pool = np.vstack([prof[c] for c in prof if c not in (a, b)] + [t2p])
-        out[(a, b)] = gi_score(prof[a], prof[b], pool, rng, iters)
-    return out
-
-
-def same_author_scores(A, imp_freq, t2_freq, ref, rng, iters=200):
-    """GI score for 'known same author' pairs: for each impostor with 2+ texts, the shortest text is the questioned one and
-    the author's other texts are the suspect. The other impostors and T-2 form the pool. Shows how high a true match can score."""
-    out = {}
-    for a, texts in A.items():
-        if len(texts) < 2:
-            continue
-        ts = sorted(texts, key=lambda r: -r["n_chars"])
-        q, k = rel(ts[-1]), stack(ts[:-1])
-        pool = np.vstack([profile(f, ref) for b, f in imp_freq.items() if b != a] + [profile(t2_freq, ref)])
-        out[a] = gi_score(profile(q, ref), profile(k, ref), pool, rng, iters)
-    return out
-
-
-# ------------------------------------------------------------------ the classifier steps (Steps 1 to 4)
-BLUE, ORANGE, GREY, INK = "#2F5D8A", "#B45309", "#9E978A", "#1F2430"     # Ted's essay, the manifesto, other writers, text
-CREAM, MUTED, CRIM = "#F7F5F0", "#6B6458", "#9D2235"                      # page background, quiet text, the alarm line
+def counts(block):
+    """{'counts': ..., 'n': ...} -> matrix of function-word counts, one row per 1,000-word piece."""
+    return np.array(block["counts"], float)
 
 
 def per_1000(block):
@@ -140,21 +52,12 @@ def dot_strip(D, words):
     return fig
 
 
-def piece_counts(D, size, drop_fbi=False):
-    """Counts per piece for one piece size (500 or 1,000 words): Ted's 1971 essay, the manifesto, Ted's later writings, the other writers.
-    drop_fbi=True removes the passages the FBI matched. Returns (T, U, P, I, text_of_each_impostor_piece); every block is a counts matrix."""
-    if size == 500:
-        p = D["p500"]
-        blocks = (p["t2_drop"] if drop_fbi else p["t2"], p["u14_drop"] if drop_fbi else p["u14"], p["post"], p["imp"])
-    elif size == 1000:
-        blocks = (D["t2_r1_first1000"] if drop_fbi else D["t2"], D["u14_r1"] if drop_fbi else D["u14"], D["post1000"], D["impostors"])
-    else:
-        raise ValueError("This lab ships pieces of 500 and 1,000 words only.")
-    T, U, P = (np.array(b["counts"], float) for b in blocks[:3])
-    imp = blocks[3]
-    I = np.vstack([np.array(r["counts"], float) for r in imp])
-    groups = np.array([r["author"] + "__" + r["text"] for r in imp for _ in r["n"]])
-    return T, U, P, I, groups
+def make_model():
+    """Shares of words -> one scale per word -> logistic regression."""
+    from sklearn.pipeline import make_pipeline
+    from sklearn.preprocessing import Normalizer, StandardScaler
+    from sklearn.linear_model import LogisticRegression
+    return make_pipeline(Normalizer(norm="l1"), StandardScaler(), LogisticRegression(C=1.0, max_iter=5000, class_weight="balanced"))
 
 
 def group_folds(groups, k=5):
@@ -169,97 +72,191 @@ def group_folds(groups, k=5):
     return [(np.where(fold_of[which] != f)[0], np.where(fold_of[which] == f)[0]) for f in range(k)]
 
 
-def ted_likeness(D, size=1000, drop_fbi=False, words=None):
-    """Train 'Ted or not?' on Ted's 1971 essay vs the 19 other writers, then score three groups of pieces.
-    Other writers' pieces are scored HELD OUT: the model never saw that whole text (5-fold, grouped by text).
-    Returns the scores (probabilities of 'Ted') and the share of other writers' pieces that the median manifesto / later-Ted piece outscores."""
-    from sklearn.pipeline import make_pipeline
-    from sklearn.preprocessing import Normalizer, StandardScaler
-    from sklearn.linear_model import LogisticRegression
-    T, U, P, I, groups = piece_counts(D, size, drop_fbi)
-    if words is not None:                                     # keep only the chosen function words
-        cols = [D["fw"].index(w) for w in words]
-        T, U, P, I = T[:, cols], U[:, cols], P[:, cols], I[:, cols]
-
-    def model():                                              # shares of words -> one scale per word -> logistic regression
-        return make_pipeline(Normalizer(norm="l1"), StandardScaler(), LogisticRegression(C=1.0, max_iter=5000, class_weight="balanced"))
-
+def train_and_score(D):
+    """Train "Ted or not?" on Ted's 1971 essay (1) against the other writers' pieces (0), then score whole texts.
+    A text's score = the average log-odds of its 1,000-word pieces.
+    Other writers' texts are scored by a model that never saw them (5 folds, split by whole text).
+    Returns the three groups of scores and the alarm line (the 95th percentile of the other writers' scores)."""
+    T = counts(D["t2"])
+    imp = D["impostors"]
+    I = np.vstack([counts(r) for r in imp])
+    groups = np.array([r["author"] + "/" + r["text"] for r in imp for _ in r["n"]])
     held = np.zeros(len(I))
     for train, test in group_folds(groups):
-        m = model().fit(np.vstack([T, I[train]]), np.r_[np.ones(len(T)), np.zeros(len(train))])
-        held[test] = m.predict_proba(I[test])[:, 1]
-    m = model().fit(np.vstack([T, I]), np.r_[np.ones(len(T)), np.zeros(len(I))])
-    pu, pp = m.predict_proba(U)[:, 1], m.predict_proba(P)[:, 1]
-    return {"held": held, "manifesto": pu, "later": pp, "n_ted": len(T), "size": size,
-            "beats_manifesto": float((held < np.median(pu)).mean() * 100), "beats_later": float((held < np.median(pp)).mean() * 100)}
+        m = make_model().fit(np.vstack([T, I[train]]), np.r_[np.ones(len(T)), np.zeros(len(train))])
+        held[test] = m.decision_function(I[test])
+    texts = sorted(set(groups))
+    others = np.array([held[groups == g].mean() for g in texts])
+    m = make_model().fit(np.vstack([T, I]), np.r_[np.ones(len(T)), np.zeros(len(I))])
+    later = np.array([m.decision_function(counts(r)).mean() for r in D["ted_post"]])
+    manifesto = float(m.decision_function(counts(D["u14"])).mean())
+    return {"others": others, "later": later, "manifesto": manifesto, "line": float(np.quantile(others, 0.95))}
 
 
-def logit(p):
-    """Probability of 'Ted' -> log-odds (the score drawn on the plots)."""
-    p = np.clip(np.asarray(p, float), 1e-6, 1 - 1e-6)
-    return np.log(p / (1 - p))
-
-
-def alarm(r, false_alarm=0.05):
-    """Set the alarm line so that `false_alarm` of the other writers' held-out pieces are flagged (the matching percentile of their scores),
-    then count the flagged pieces in each group. Scores are log-odds of 'Ted'. Returns the line and the counts."""
-    held = logit(r["held"])
-    th = float(np.quantile(held, 1 - false_alarm))
-    out = {"threshold": th, "false_alarm": false_alarm, "held_flagged": float((held > th).mean())}
-    for k in ("manifesto", "later"):
-        v = logit(r[k])
-        out[k + "_flagged"], out[k + "_n"] = int((v > th).sum()), len(v)
-    return out
-
-
-def flag_plot(r, false_alarm=0.05):
-    """The alarm-line plot: other writers' pieces (grey dots) and manifesto pieces (orange stars) on one score axis.
-    Everything to the right of the dashed line is flagged as Ted. The labels sit in a column to the right of the plot."""
+def score_plot(r):
+    """Three rows, one dot per whole text. Everything right of the dashed line is flagged as Ted."""
     import matplotlib
     matplotlib.use("agg")
     import matplotlib.pyplot as plt
-    a = alarm(r, false_alarm)
-    th, imp, u = a["threshold"], logit(r["held"]), logit(r["manifesto"])
-    fig = plt.figure(figsize=(9.6, 3.9), dpi=100); fig.patch.set_facecolor(CREAM)
-    ax = fig.add_axes([0.17, 0.2, 0.58, 0.74]); ax.set_facecolor(CREAM)
+    th = r["line"]
+    rows = [(r["others"], "Other writers", "texts it never saw", GREY, "o", 45, True),
+            (r["later"], "Ted's later essays", "known Ted: a check", BLUE, "D", 90, True),
+            (np.array([r["manifesto"]]), "The manifesto", "the question", ORANGE, "*", 330, True)]
+    n = len(rows)
+    fig = plt.figure(figsize=(9.6, 1.35 * n + 0.9), dpi=100); fig.patch.set_facecolor(CREAM)
+    ax = fig.add_axes([0.30, 0.19, 0.46, 0.76]); ax.set_facecolor(CREAM)
+    allv = np.concatenate([x[0] for x in rows])
+    xmin, xmax = allv.min() - .5, allv.max() + .5
+    ax.set_xlim(xmin, xmax); ax.set_ylim(-.55, n - 1 + .85)
+    ax.axvspan(th, xmax, color="#ECE7DD", zorder=0); ax.axvline(th, color=CRIM, lw=2.5, ls="--", zorder=1)
     rng = np.random.default_rng(3)
-    xmax, xmin = max(imp.max(), u.max()) + .3, min(imp.min(), u.min()) - .3
-    ax.axvspan(th, xmax, color="#F4E3E3", zorder=0)
-    ax.scatter(imp, 1 + rng.uniform(-.25, .25, len(imp)), s=26, color=GREY, edgecolors="none", alpha=.9, zorder=2)
-    ax.scatter(u, 0 + rng.uniform(-.25, .25, len(u)), s=190, marker="*", color=ORANGE, edgecolors="white", linewidths=.8, zorder=3)
-    ax.axvline(th, color=CRIM, lw=2.5, ls="--", zorder=1)
-    ax.text(th + 0.12, 1.62, "flagged as Ted  \u2192", color=CRIM, fontsize=12, fontweight="bold", va="center")
-    ax.set_yticks([1, 0]); ax.set_yticklabels(["Other writers'\npieces", "Manifesto\npieces"], fontsize=11, color=INK)
-    ax.set_xticks([]); ax.set_xlim(xmin, xmax); ax.set_ylim(-.6, 1.85)
-    ax.set_xlabel("Computer's score:   less like Ted  \u2190            \u2192  more like Ted", fontsize=10, color=INK)
+    for (v, lab, role, col, mk, sz, _), yy in zip(rows, range(n - 1, -1, -1)):
+        jit = rng.uniform(-.28, .28, len(v)) if len(v) > 1 else np.zeros(1)
+        ax.scatter(v, yy + jit, s=sz, color=col, marker=mk, edgecolors="white", linewidths=.8, alpha=.9 if col == GREY else 1, zorder=3)
+        ylab = ax.transData.transform((0, yy))[1] / fig.bbox.height
+        fig.text(0.285, ylab + .018, lab, ha="right", va="center", fontsize=11.5, fontweight="bold", color=INK)
+        fig.text(0.285, ylab - .036, role, ha="right", va="center", fontsize=8.5, color=MUTED)
+        k = int((v > th).sum())
+        txt = ("flagged" if k else "not flagged") if len(v) == 1 else "%d of %d flagged" % (k, len(v))
+        fig.text(0.78, ylab, txt, ha="left", va="center", fontsize=11.5, fontweight="bold", color=MUTED if col == GREY else col)
+    ax.text(th + 0.12, n - 1 + .62, "flagged as Ted  →", color=CRIM, fontsize=12, fontweight="bold", va="center")
+    ax.set_yticks([]); ax.set_xticks([])
+    ax.set_xlabel("Computer's score:   less like Ted  ←            →  more like Ted", fontsize=10, color=INK)
     for k in ("top", "right", "left"):
         ax.spines[k].set_visible(False)
-    ylab = lambda yv: ax.transData.transform((0, yv))[1] / fig.bbox.height
-    fig.text(0.77, ylab(1), "%.0f%% flagged\n(false alarms)" % (a["held_flagged"] * 100), va="center", fontsize=12, fontweight="bold", color=MUTED)
-    fig.text(0.77, ylab(0), "%.0f%% flagged\n(%d of %d)" % (a["manifesto_flagged"] / a["manifesto_n"] * 100, a["manifesto_flagged"], a["manifesto_n"]),
-             va="center", fontsize=12, fontweight="bold", color=ORANGE)
     return fig
 
 
-def likeness_plot(r):
-    """The Ted-likeness dot plot: one dot per 1,000-word (or 500-word) piece; the black tick is each row's median."""
+# ---- extra pictures for the step-by-step chapter ------------------------------------------------------------------
+
+def _plt():
     import matplotlib
     matplotlib.use("agg")
     import matplotlib.pyplot as plt
-    lg = lambda p: np.log(np.clip(p, 1e-6, 1 - 1e-6) / (1 - np.clip(p, 1e-6, 1 - 1e-6)))
-    rows = [(r["held"], 2, GREY, "o", 30, "other writers\n(held out)"), (r["later"], 1, BLUE, "D", 50, "Ted's later\nwritings"),
-            (r["manifesto"], 0, ORANGE, "*", 130, "the manifesto")]
-    fig, ax = plt.subplots(figsize=(7.5, 3.8))
-    rng = np.random.default_rng(3)
-    for p, y, c, mk, s, lab in rows:
-        v = lg(p)
-        ax.scatter(v, y + rng.uniform(-0.25, 0.25, len(v)), s=s, color=c, marker=mk, alpha=0.85 if c == GREY else 1, zorder=3)
-        ax.plot([np.median(v)] * 2, [y - 0.35, y + 0.35], color=INK, lw=2, zorder=4)
-    ax.set_yticks([2, 1, 0]); ax.set_yticklabels([x[5] for x in rows], fontsize=10)
-    ax.set_xticks([]); ax.set_xlabel("computer's score:  less like Ted   <-    ->   more like Ted")
-    for sp in ("top", "right", "left"):
-        ax.spines[sp].set_visible(False)
-    ax.set_ylim(-1.7, 2.5)
-    ax.text(np.median(lg(r["manifesto"])), -0.55, "typical manifesto piece beats %.1f%%\nof other writers' pieces" % r["beats_manifesto"],
-            ha="center", va="top", fontsize=10, color=ORANGE, fontweight="bold")
+    plt.rcParams.update({"font.size": 10.5, "axes.spines.top": False, "axes.spines.right": False,
+                         "axes.titleweight": "bold", "axes.titlesize": 12, "axes.titlelocation": "left"})
+    return plt
+
+
+def piece_bars(piece, fw, k=15):
+    """The k most used small words in one 1,000-word piece."""
+    plt = _plt()
+    top = np.argsort(piece)[::-1][:k][::-1]
+    fig, ax = plt.subplots(figsize=(7.2, 4.2))
+    ax.barh([fw[j] for j in top], piece[top], color=BLUE)
+    for i, j in enumerate(top):
+        ax.text(piece[j] + 0.6, i, str(int(piece[j])), va="center", fontsize=9, color=MUTED)
+    ax.set_xlabel("times in this 1,000-word piece")
+    ax.set_title("One piece of Ted's 1971 essay, as the computer sees it")
+    return fig
+
+
+def table_heatmap(X, fw, n_ted, words=("the", "of", "and", "to", "a", "in", "that", "is", "which", "it", "be", "will", "not", "as", "because", "any"), k=6):
+    """A corner of the training table: k Ted pieces and k other-writer pieces, a few columns, with the label column y."""
+    plt = _plt()
+    rows = list(range(k)) + list(range(n_ted, n_ted + k))
+    cols = [fw.index(w) for w in words]
+    M = X[np.ix_(rows, cols)]
+    fig, (ax, ay) = plt.subplots(1, 2, figsize=(9.6, 4.6), gridspec_kw={"width_ratios": [len(cols), 1.4], "wspace": 0.05})
+    ax.imshow(M, cmap="Blues", aspect="auto")
+    for i in range(M.shape[0]):
+        for j in range(M.shape[1]):
+            ax.text(j, i, int(M[i, j]), ha="center", va="center", fontsize=8, color="white" if M[i, j] > M.max() * 0.55 else INK)
+    ax.set_xticks(range(len(cols))); ax.set_xticklabels(words, rotation=55, ha="right")
+    ax.set_yticks(range(len(rows))); ax.set_yticklabels([f"Ted 1971 · piece {i + 1}" for i in range(k)] + [f"other writer · piece {i + 1}" for i in range(k)], fontsize=9)
+    ax.axhline(k - 0.5, color=INK, lw=1.5)
+    ax.set_title("X: one row per piece, one column per small word (16 of 224 shown)")
+    ay.imshow(np.r_[np.ones(k), np.zeros(k)][:, None], cmap=matplotlib_cmap(), aspect="auto", vmin=0, vmax=1)
+    for i in range(2 * k):
+        ay.text(0, i, "1" if i < k else "0", ha="center", va="center", fontsize=10, fontweight="bold", color="white" if i < k else INK)
+    ay.set_xticks([0]); ay.set_xticklabels(["y"], fontweight="bold"); ay.set_yticks([])
+    for sp in ay.spines.values():
+        sp.set_visible(False)
+    return fig
+
+
+def matplotlib_cmap():
+    from matplotlib.colors import ListedColormap
+    return ListedColormap(["#ECE7DD", BLUE])
+
+
+def scale_hist(shares, scaled, fw, words=("the", "because")):
+    """Before and after rescaling: each word's values across all pieces."""
+    plt = _plt()
+    fig, axes = plt.subplots(2, len(words), figsize=(9.6, 5.2))
+    for c, w in enumerate(words):
+        j = fw.index(w)
+        axes[0, c].hist(shares[:, j], bins=30, color=GREY)
+        axes[0, c].set_title(f'"{w}" as a share of all small words')
+        axes[1, c].hist(scaled[:, j], bins=30, color=TEAL)
+        axes[1, c].axvline(0, color=INK, lw=1.2, ls="--")
+        axes[1, c].set_title(f'"{w}" after rescaling: 0 = usual')
+        axes[1, c].set_xlim(-4, 4)
+    for ax in axes.ravel():
+        ax.set_yticks([])
+    axes[1, 0].set_xlabel("below usual  ←   0   →  above usual"); axes[1, 1].set_xlabel("below usual  ←   0   →  above usual")
+    fig.tight_layout()
+    return fig
+
+
+def pca_map(X, T, U, n_ted):
+    """Every piece as one dot on a 2-D map of all 224 small words (PCA). Grey: other writers; blue: Ted 1971; orange: the manifesto."""
+    from sklearn.pipeline import make_pipeline
+    from sklearn.preprocessing import Normalizer, StandardScaler
+    from sklearn.decomposition import PCA
+    plt = _plt()
+    pre = make_pipeline(Normalizer(norm="l1"), StandardScaler()).fit(X)
+    pca = PCA(2).fit(pre.transform(X))
+    Zi, Zt, Zu = (pca.transform(pre.transform(M)) for M in (X[n_ted:], T, U))
+    fig, ax = plt.subplots(figsize=(7.6, 5.6))
+    ax.scatter(Zi[:, 0], Zi[:, 1], s=22, color=GREY, alpha=0.6, label="other writers (282 pieces)")
+    ax.scatter(Zu[:, 0], Zu[:, 1], s=110, marker="*", color=ORANGE, edgecolors="white", linewidths=0.5, label="the manifesto (30 pieces)")
+    ax.scatter(Zt[:, 0], Zt[:, 1], s=70, marker="D", color=BLUE, edgecolors="white", linewidths=0.6, label="Ted's 1971 essay (6 pieces)")
+    ax.set_xlabel("map direction 1"); ax.set_ylabel("map direction 2"); ax.set_xticks([]); ax.set_yticks([])
+    ax.set_title("All 224 small words, squeezed onto one map")
+    ax.legend(frameon=False, loc="lower right", fontsize=9)
+    return fig
+
+
+def weight_bars(w, fw, k=12):
+    """The k strongest words on each side of the model."""
+    plt = _plt()
+    order = np.argsort(w)
+    idx = list(order[:k]) + list(order[-k:])
+    fig, ax = plt.subplots(figsize=(7.6, 6.4))
+    vals = w[idx]
+    ax.barh(range(len(idx)), vals, color=[BLUE if v > 0 else GREY for v in vals])
+    ax.set_yticks(range(len(idx))); ax.set_yticklabels([fw[j] for j in idx])
+    ax.axvline(0, color=INK, lw=1)
+    ax.set_xlabel("weight:   ← says \"not Ted\"        says \"Ted\" →")
+    ax.set_title("What the model learned: the strongest small words")
+    return fig
+
+
+def contributions(model, row, fw, k=8):
+    """How one piece's score is added up: weight x (rescaled) value for each word; the biggest pushes either way."""
+    plt = _plt()
+    z = model[:-1].transform(row[None, :])[0]
+    w = model[-1].coef_[0]
+    c = w * z
+    order = np.argsort(c)
+    idx = list(order[:k]) + list(order[-k:])
+    fig, ax = plt.subplots(figsize=(7.6, 5.4))
+    ax.barh(range(len(idx)), c[idx], color=[BLUE if v > 0 else GREY for v in c[idx]])
+    ax.set_yticks(range(len(idx))); ax.set_yticklabels([fw[j] for j in idx])
+    ax.axvline(0, color=INK, lw=1)
+    ax.set_xlabel("push on the score:   ← less like Ted      more like Ted →")
+    ax.set_title("Inside one score: which words pushed it up or down")
+    return fig, float(c.sum() + model[-1].intercept_[0])
+
+
+def alarm_hist(others, line):
+    """The other writers' whole-text scores (from models that never saw them), with the alarm line."""
+    plt = _plt()
+    fig, ax = plt.subplots(figsize=(8.0, 3.6))
+    ax.hist(others, bins=14, color=GREY, edgecolor="white")
+    ax.axvline(line, color=INK, lw=2.2, ls="--")
+    ax.text(line + 0.1, ax.get_ylim()[1] * 0.92, "alarm line", fontweight="bold", color=INK)
+    ax.set_xlabel("score of a whole text:   less like Ted ←   → more like Ted"); ax.set_ylabel("number of texts")
+    ax.set_title("29 texts by other writers, each scored by a model that never saw it")
     return fig

@@ -30,68 +30,38 @@ Things to know:
 
 ## Case 2 · The Unabomber (`data/ch2/`)
 
-Built by `tools/build_ch2.py` from `unabom/` (it imports `FW`, `tokens`, `chunks`, `build` from `unabom/scripts/verify.py`, so tokenisation, the 224-word function-word list and 1,000-token chunking are identical to the validated analysis; the tail shorter than 1,000 tokens is dropped).
+Mirrors lecture slide 9. Built by `tools/build_ch2.py` from `unabom/` (it imports `FW`, `tokens`, `chunks`, `build` from `unabom/scripts/verify.py`, so tokenisation, the 224-word function-word list and 1,000-token pieces are identical to the reference; the tail shorter than 1,000 tokens is dropped). The shipped `fw_counts.json` was trimmed from the previous build with the same counts (numpy was not available to re-run the builder); `tools/build_ch2.py` now writes the trimmed file.
 
 | Item | Source | Shipped |
 |---|---|---|
-| T-2 (Ted Kaczynski, 1971 essay) | transcription of an FBI document (see `unabom/data/CORPUS_NOTES.md`) | counts per chunk; one 21-word quotation |
-| U-14 (*Industrial Society and Its Future*, 1995) | typescript transcription | counts per chunk; one 14-word quotation |
-| 19 impostor authors, 29 texts, 294k words (Mumford, Sale, Zerzan, Glendinning, Mander, Perlman, Illich, Berry, Postman, Goodman, Marcuse, Schumacher, Packard, Toffler, Bookchin, Shepard, Watson, Huxley, Ellul) | The Ted K Archive (AMuseWiki files), still in copyright | **counts only**, author name, title, year, translated flag. No text. |
-| Ted's post-arrest writings, 11 texts, 1999-2016 | The Ted K Archive | **counts only**, title and year. No text. |
-| Reduced T-2 and U-14 (33 FBI-aligned T-2 paragraphs and the U-14 paragraphs they align to removed) | derived from the two above | counts only: reduced T-2 as its first 1,000 tokens (what the main run used) and as all 1,712 tokens (what the post-hoc check used); reduced U-14 as 22 chunks |
+| T-2 (Ted Kaczynski, 1971 essay) | transcription of an FBI document (see `unabom/data/CORPUS_NOTES.md`) | counts per 1,000-word piece (6 pieces); one short quotation |
+| U-14 (*Industrial Society and Its Future*, 1995) | typescript transcription | counts per piece (30); one short quotation |
+| 19 other writers, 29 texts, 294k words (Mumford, Sale, Zerzan, Glendinning, Mander, Perlman, Illich, Berry, Postman, Goodman, Marcuse, Schumacher, Packard, Toffler, Bookchin, Shepard, Watson, Huxley, Ellul) | The Ted K Archive (AMuseWiki files), still in copyright | **counts only** (282 pieces), author name, title, year, translated flag. No text. |
+| Ted's later essays: the 8 "keep" texts of `unabom/data/ted_post_selected.json` (argumentative essays on technology and revolution, 1999-2016) | The Ted K Archive | **counts only** per text, title and year. No text. |
+| `totals` | derived | whole-text counts for T-2, U-14 and each of the 19 writers, for the dot strip |
 
-Files: `fw_counts.json` (about 0.9 MB; per-chunk counts and token counts), `excerpts.json` (two short quotations, each at most 60 words, shown with attribution). The context paragraph on the page is marked **[fact-check pending]**.
+Files: `fw_counts.json` (about 0.2 MB), `excerpts.json` (two short quotations, each at most 60 words, shown with attribution).
 
-**Classifier steps (Steps 1 to 4 of the page; exploratory, not pre-registered).** `tools/build_ch2.py` now also writes, into `fw_counts.json`, derived counts only:
+**Method** (`lab_ch2.train_and_score`, same as `unabom/scripts/text_level.py`, key `"main"` of `unabom/results/text_level_FW224_1000.json`): FW224 counts on 1,000-word pieces; pipeline `Normalizer(l1)` -> `StandardScaler` -> `LogisticRegression(C=1, class_weight="balanced", max_iter=5000)`; trained on T-2 pieces (1) against all other-writer pieces (0). Other writers' texts are scored held out by whole text in 5 folds (`lab_ch2.group_folds`, the rule of scikit-learn's `GroupKFold`, written out because the Pyodide scikit-learn breaks ties between equal-sized texts differently; groups are named `author/text` as in the reference). A text's score is the mean `decision_function` (log-odds) over its pieces. The alarm line is the 95th percentile of the 29 held-out other-writer text scores.
 
-- `totals`: whole-text function-word counts and token totals for T-2, U-14, Ted's later writings (joined) and each of the 19 impostor authors (texts joined). Used for the four-word dot strip (per 1,000 words, exact, tail included), as in `assets/figs/ted_chart.py` / `ted_rates.py`.
-- `p500`: counts per 500-word piece for T-2, U-14, the later writings (joined into one text before cutting), the same T-2 and U-14 with the FBI-matched paragraphs removed (`t2_drop`, `u14_drop`), the impostors per text (`imp`, 576 pieces; used by the classifier, in `build()` order because GroupKFold breaks ties by order) and the impostors joined per author (`imp_author`, 582 pieces; used by the PCA map, as in `ted_2d.py`).
-- `post1000`: the later writings joined, cut into 61 pieces of 1,000 words. The 1,000-word pieces of T-2, U-14, the impostors and the FBI-removed versions are the existing `t2`, `u14`, `impostors`, `t2_r1_first1000`, `u14_r1` (the old per-text `ted_post` is kept for the General Impostors cells).
-
-**Readout (Steps 3, 3b, 4).** The page reports an "alarm line" (`lab_ch2.alarm`, `lab_ch2.flag_plot`; plot replicates section A of `assets/figs/flag_figs.py`): scores are log-odds of P(Ted), clipped at 1e-6; the line is `np.quantile(held_out_scores, 0.95)` (5% false alarms; 15 of 282 other-writer pieces score above it, 5.3%); a piece is flagged if its score is strictly above the line. Ted's later writings (20 of 61, 33%) are stated in the text as an honest limit (Ted is learned from one essay of about 6,300 words; writing changes over 25 years), not as a headline. The old rank readout ("typical manifesto piece beats 97.9% / 95.7%") survives as a one-line aside.
-
-Features, model and scoring are those of `unabom/scripts/lr_binary.py FW224` (224 words, `Normalizer(l1)` -> `StandardScaler` -> `LogisticRegression(C=1, class_weight="balanced")`), with the other writers' pieces scored held out by whole text in 5 folds. The lab writes the fold rule out (`lab_ch2.group_folds`, the same rule as scikit-learn 1.9's `GroupKFold`) because the Pyodide copy of scikit-learn (1.6) breaks ties between equal-sized texts differently and gave 98.2% / 89.0% instead of 97.9% / 89.4%. PCA map: `StandardScaler` on relative frequencies of the 500-word pieces, `PCA(2, random_state=0)` fit on T-2 plus impostor pieces, boundary = balanced logistic regression refit on the 2D coordinates (illustration only).
-
-| Quantity | Reference (`SUMMARY.md`, `lr_binary_points_FW224_*.json`) | Lab (browser) |
+| Quantity | Reference | Lab (browser) |
 |---|---|---|
-| **Alarm line** (95th percentile of held-out other-writer scores, log-odds; 5% false alarms): manifesto pieces flagged, 1,000 words | 24 of 30 (80%) | 24 of 30 (80%) |
-| Same, FBI-matched passages removed (line recomputed on that run's held-out scores) | 12 of 22 (55%) | 12 of 22 (55%) |
-| Ted's later writings at the main line | 20 of 61 (33%) | 20 of 61 (33%) |
-| Step 4 false-alarm rate 10% / 1% (main run): manifesto pieces flagged | 27 / 9 of 30 | 27 / 9 of 30 |
-| Median manifesto piece beats held-out other-writer pieces, 1,000 words (one-line aside on the page) | 97.9% | 97.9% |
-| Same, FBI-matched passages removed | 95.7% | 95.7% |
-| Ted's later writings, 1,000 words | 89.4% | 89.4% |
-| Manifesto 500-word pieces on Ted's side of the PCA line | 67% | 67% (41 of 61) |
-| Held-out scores, all four variants (max absolute difference to the reference points, native scikit-learn 1.9.1) | | 0.0 |
+| Alarm line (log-odds) | -4.77 | -4.77 |
+| Other writers' texts over the line | 2 of 29 | 2 of 29 |
+| Ted's later essays over the line | 7 of 8 | 7 of 8 |
+| Manifesto | over the line (-1.88) | flagged |
 
-Notes: (1) With the FBI-matched passages removed, T-2 keeps about 1,700 words but yields **one** 1,000-word piece, so Ted is learned from one piece (as in the reference; the slide wording "about 1,700 words" is the text that is left, not the training pieces). (2) Absolute probabilities are low (median held-out 0.001, manifesto 0.11, later writings 0.015); the page says the evidence is the ranking. (3) The page's text-only notes on supervised UMAP (12 Ted pieces are memorised; later writings 0% in "Ted's region") and on feature selection (10 words: 55%; 30: 94%; 50: 97%; 224: 98%, `unabom/results/feature_selection.json`) are stated from the reference analysis and are not re-run in the browser (UMAP is not available in Pyodide). (4) The Delta and General Impostors cells are unchanged and moved to the page's Advanced section.
-
-Cases 1, 2 and 4 all use this 224-word list (Case 2's pre-registered analysis is unchanged).
-
-Numbers reproduced in the browser (FW, 1,000-token chunks, seed 20261011, same rule as `unabom/results/SUMMARY.md`; the General Impostors code is vectorised but draws the same random feature subsets):
-
-| Quantity | SUMMARY | Lab |
-|---|---|---|
-| GI manifesto given T-2 / T-2 given manifesto | 1.00 / 1.00 | 1.00 / 1.00 |
-| GI Ted's later writings given T-2 | 0.93 | 0.93 |
-| Different-author pairs (342 ordered, 100 rounds): mean / p99 / max | 0.05 / 0.75 / 0.81 | 0.05 / 0.75 / 0.81 (exact: 0.054 / 0.746 / 0.810) |
-| Same-author impostor pairs, range | 0.00-0.98 | 0.00-0.98 |
-| R1, main run (T-2 first 1,000 of 1,712 tokens) | 0.83 / 0.91 | 0.83 / 0.91 |
-| R1, post-hoc, 3 seeds (all 1,712 tokens), manifesto given T-2 | 0.73-0.79 | 0.77, 0.72, 0.79 (0.765, 0.725, 0.785) |
-| R1, post-hoc, 3 seeds, T-2 given manifesto | 0.69-0.71 | 0.69, 0.71, 0.69 (0.690, 0.710, 0.685) |
-| Different-author max under R1 | 0.79 | 0.79 |
-| U-14 vs Ted-post, both directions, 3 seeds | 1.00 | 1.00 |
-| Delta: share of U-14 chunks nearest T-2 | 0.43 (chance 0.05) | 0.43 (13 of 30) |
-| Delta V1, held-out accuracy | 0.26 | 0.26 (14 of 53) |
-| Delta under R1 | 0.00 | 0.00 |
-
-Not reproduced: the length-matched null (K = a random 1,712-token slice of one impostor; max 0.65), because it needs arbitrary token slices and only chunk counts are shipped; the MFW-k comparison; chunk sizes 500 and 2,000. The SUMMARY's "what this supports saying" paragraph is marked DRAFT there, and appears here as "draft wording, to be approved".
+Cases 1, 2 and 4 all use the same 224-word list.
 
 ## Case 3 · The Lu Xun brothers (`data/ch3/`)
 
 Source: https://github.com/Wang-Haining/the_many_voices (local clone `/Users/haining/Desktop/github/the_many_voices`). Its README: "The corpus is designated to the public domain. All other materials are licensed under 0BSD." So `corpus.json` ships the **full Chinese texts** (31 training pieces, 30 validation pieces, 4 disputed essays) and the **English translations** of the four disputed essays (`translation/`, 0BSD). Built by `tools/build_ch3.py`.
 
-The lab runs a port of `run.py`/`utils.py` (`lab_ch3.py`): same 31 features (27 characters and 4 bigrams), same `count_frequency` (verified on the repo's own docstring example: `[3, 1, 2]`), `StandardScaler` + L2 `LogisticRegression(C=1, tol=1e-9)`. The highlight uses a simplified red/grey shading instead of matplotlib's colour maps.
+The lab runs a port of `run.py`/`utils.py` (`lab_ch3.py`): same 31 features (27 characters and 4 bigrams), same `count_frequency` (verified on the repo's own docstring example: `[3, 1, 2]`), `StandardScaler` + L2 `LogisticRegression(C=1, tol=1e-9)`. The highlight uses a simplified orange/blue shading (Lu Xun orange, Zhou Zuoren blue) instead of matplotlib's colour maps.
+
+The chapter is written as a 22-step first machine-learning project; `lab_ch3.py` holds its plots (rates of the 31 characters, biggest gaps, two-character scatter, PCA map, S-curve, weights, held-out check, per-essay pushes, verdict). The extra figures it prints are derived from the same model and add no new claims: the two most telling characters (之, 惟, chosen by gap over spread among training pieces), PCA shares (0.32, 0.09), and the score of 望华国篇 as a sum (+0.59 start + 3.51 pushes = +4.10, P = 0.984).
+
+**Chinese font for plots.** Pyodide's matplotlib has no CJK font. `data/ch3/font.json` holds `{"name", "note", "b64"}`: Noto Sans SC (SIL OFL 1.1, licence in `data/ch3/FONT_LICENSE.txt`), instanced at wght 400 and subset to the 31 characters, all corpus titles, the four disputed essays' characters, ASCII and common punctuation (191 KB font, 255 KB as base64; base64 because `app.js` writes chapter data files as text). `lab_ch3.use_font()` decodes it to a temp file and registers it; each plot function runs inside `rc_context`, so other chapters' plots are unaffected. No bold weight is shipped, so the plots use no bold text. Rebuild (fontTools): download `NotoSansSC[wght].ttf`; `f = instancer.instantiateVariableFont(TTFont(src), {"wght": 400})`; `o = subset.Options(); o.hinting = False; o.layout_features = []; o.notdef_outline = True` (also drop DSIG, GPOS, GSUB, GDEF, STAT, BASE, kern); `sub = subset.Subsetter(o); sub.populate(text=T); sub.subset(f)` with T = the 31 characters + every `title` in `corpus.json` + the text of the four `test` essays + printable ASCII + `·→←—…、。，；：？！“”‘’《》（）「」×−±` + 鲁迅周作人; rename the family (name IDs 1, 4, 6) to "Noto Sans SC Lab Subset"; save, base64 the bytes into `font.json`. Source: https://github.com/google/fonts/tree/main/ofl/notosanssc. `data/LICENSES.md` still needs a row for it.
 
 Numbers reproduced, both natively (scikit-learn 1.9) and in the browser (Pyodide, scikit-learn 1.6):
 
@@ -103,7 +73,7 @@ Numbers reproduced, both natively (scikit-learn 1.9) and in the browser (Pyodide
 | P(Lu Xun), 望越篇 | 0.856 | 0.856 |
 | P(Lu Xun), 尔越人毋忘先民之训 / 民国之征何在 | not in README | 0.833 / 0.595 |
 
-All match. **Two things to know before the lecture:** (1) the validation set is 28 Lu Xun pieces and 2 Zhou Zuoren pieces (confusion matrix `[[1, 1], [1, 27]]`), so accuracy 0.933 equals the "always say Lu Xun" baseline, and F1 0.964 is for the Lu Xun class only (Zhou's F1 is 0.5). The page says this. (2) The README's corpus table lists 望越篇 under Validation, but in the repository it sits in `test_*` and is scored with the other disputed essays. The texts are very short (308-750 characters).
+All match. **Two things to know before the lecture:** (1) the validation set is 28 Lu Xun pieces and 2 Zhou Zuoren pieces (confusion matrix `[[1, 1], [1, 27]]`), so accuracy 0.933 equals the "always say Lu Xun" baseline, and F1 0.964 is for the Lu Xun class only (Zhou's F1 is 0.5). The page prints the confusion matrix and the per-brother hits ("27 of 28", "1 of 2") and draws every validation piece with the two misses ringed, but it does not state the baseline comparison. (2) The README's corpus table lists 望越篇 under Validation, but in the repository it sits in `test_*` and is scored with the other disputed essays. The texts are very short (308-750 characters).
 
 ## Case 4 · Glassdoor v. Machine Zone (`data/ch4/`, EBG corpus; legacy RJ version in `data/ch4_rj/`)
 
@@ -123,6 +93,8 @@ Verification (done by `tools/tempest_export_ebg_rewrites.py` on Tempest): each r
 **Licence:** these are machine rewrites of EBG texts, so they are derived from AGPL-3.0 data and carry the same notice (`_license` in the file). Note that `hlt/planning/PROVENANCE_MAP.md` says raw model outputs are not to be copied into Git; this lab folder is not that repository, but keep the cache out of the `hlt` repository.
 
 Results table of the page (224 words; caught at rank 1 / within top 5 / median rank; "all four models" pools 4 x 45 = 180 rewrites): no defense 21/45, 37/45, 2; human obfuscation 2/45, 10/45, 15; human imitation 2/45, 10/45, 13; obfuscation 43/180, 95/180, 5; imitation 28/180, 82/180, 7; simplification 23/180, 81/180, 7; round trip via Chinese 61/180, 112/180, 3. Human texts are NEW essays, not rewrites of the held-out text, so they are not like-for-like with the LLM rows. Per-model rows are on the page and in `../assets/figs/ch4_fw224_results.json`.
+
+**Page framing (defence project).** Case 4 is written from John Doe's side: baseline attack (21/45), then disguises (human obfuscation, four LLM strategies, the student's own rewrite). Human imitation of McCarthy is no longer on the page (still loaded by `load_ebg`; numbers above unchanged). "Words kept" (`lab_ch4.words_kept`: share of the original's words, with repeats, still in the new text) is the only meaning proxy; the data has no meaning score.
 
 Other files: `prompts.json` (verbatim from `hlt/experiments/ch07/prompts.json`, checked identical; used for the live path and shown on the page).
 Legacy RJ version (`#ch4rj`): see the previous notes in `tools/build_ch4_rj.py`. Riddell-Juola corpus, CC0, 20 candidates drawn with seed 0, placeholder rewrites (hand-written, marked `placeholder: true`), `data/ch4_rj/`. It is kept but is no longer the default and has no tab.

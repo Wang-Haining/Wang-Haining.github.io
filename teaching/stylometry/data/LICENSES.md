@@ -8,6 +8,7 @@ The lab's **code** is MIT (see `../LICENSE`). The data below keeps its own licen
 | `ch1/` | Per-chunk 224-function-word counts of Lionel Giles (1907, public domain; Project Gutenberg #46389) and Robert Eno (2015; **counts only**, no text) translations of the *Analects*; Giles passages; one short Eno excerpt | Giles: public domain. Eno: derived counts only; one short quotation for teaching |
 | `ch2/` | Function-word counts (no text) built from The Ted K Archive texts and an FBI-document transcription; two short quotations | Counts only; quotations with attribution |
 | `ch3/` | The Lu Xun / Zhou Zuoren corpus and English translations (the_many_voices) | Corpus dedicated to the public domain; other materials 0BSD |
+| `ch3/font.json` | Noto Sans SC, subset to the characters the Case 3 plots use, base64 (lets matplotlib draw Chinese in the browser); licence text in `ch3/FONT_LICENSE.txt` | SIL Open Font License 1.1 |
 | `ch4/ebg/` | Extended Brennan-Greenstadt (EBG) corpus, 793 files, copied unchanged from the PSAL Anonymouth repository | **AGPL-3.0**, Copyright 2011-2013 Privacy, Security and Automation lab, Drexel University (`ch4/ebg/COPYRIGHT_NOTICE.txt`, `ch4/ebg/LICENSE-AGPL-3.0.txt`) |
 | `ch4/rewrites_cache.json` | 720 machine rewrites of EBG texts (four open models, four strategies) | AGPL-3.0 (derived from EBG) |
 | `ch4/prompts.json`, `ch4/ebg_manifest.json` | Prompts; file names and SHA-256 values | MIT (part of the lab) |
