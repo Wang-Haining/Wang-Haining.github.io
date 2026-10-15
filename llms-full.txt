@@ -109,11 +109,13 @@ Hi 👋, I'm a postdoctoral fellow in Biostatistics and Health Data Science at t
 
 ### What's New
 
-* (Oct 13, 2026) Two more preprints on federal funding and research careers 📈
+* (Oct 14, 2026) Three more preprints on federal funding and research careers 📈
 
-    * ["NIH's Dedicated K23 Trial Pathway Was Associated with More K-Trial Leadership but No Detectable Gain in New Trials"](https://doi.org/10.64898/2026.10.09.758109): more K23 awardees led the trial their award paid for, but not more new trials.
+    * ["Funding Deadlines Act as a Zeitgeber for Science"](https://doi.org/10.64898/2026.10.10.758253): NIH grant deadlines set the rhythm of US biomedical preprints, which pile up in the weeks before each due date.
 
     * ["The Prestige Precedes the Prize: Top-Journal Papers and New Federal Grants"](https://doi.org/10.31235/osf.io/cf5u8_v1): scientists with top-journal papers win more NIH and NSF grants, but the gap is already there before the paper comes out.
+
+    * ["NIH's Dedicated K23 Trial Pathway Was Associated with More K-Trial Leadership but No Detectable Gain in New Trials"](https://doi.org/10.64898/2026.10.09.758109): more K23 awardees led the trial their award paid for, but not more new trials.
 
 * (Oct 9, 2026) I gave a talk, ["LLMs for Knowledge Extraction and Phenotyping: Systems 1, 2, and Beyond"](https://docs.google.com/presentation/d/15hKXCZrcalAw1tPTERviEkrZv3_v0n3u/edit?usp=sharing), in the ARDaC session of the *AlcHepNet–ITAALD Annual Meeting* in Indianapolis: when should an LLM answer fast, and when should it slow down and reason? 🧠
 
@@ -308,8 +310,9 @@ DualReasoning shows great promise in incorporating messy medication information 
 
 ## Preprints
 
-- Wang, H., Fu, H., & Tian, Z. (2026). NIH's dedicated K23 trial pathway was associated with more K-trial leadership but no detectable gain in new trials. *bioRxiv*. https://doi.org/10.64898/2026.10.09.758109 (pdf: https://www.biorxiv.org/content/10.64898/2026.10.09.758109v1.full.pdf, code: https://github.com/Wang-Haining/k) [topics: metasci, health]
+- Wang, H., & Su, J. (2026). Funding deadlines act as a zeitgeber for science. *bioRxiv*. https://doi.org/10.64898/2026.10.10.758253 (pdf: https://www.biorxiv.org/content/10.64898/2026.10.10.758253v1.full.pdf, code: https://github.com/Wang-Haining/zeitgeber) [topics: metasci]
 - Wang, H. (2026). The prestige precedes the prize: Top-journal papers and new federal grants. *SocArXiv*. https://doi.org/10.31235/osf.io/cf5u8_v1 (code: https://github.com/Wang-Haining/prestige-precedes-prize) [topics: metasci]
+- Wang, H., Fu, H., & Tian, Z. (2026). NIH's dedicated K23 trial pathway was associated with more K-trial leadership but no detectable gain in new trials. *bioRxiv*. https://doi.org/10.64898/2026.10.09.758109 (pdf: https://www.biorxiv.org/content/10.64898/2026.10.09.758109v1.full.pdf, code: https://github.com/Wang-Haining/k) [topics: metasci, health]
 - Zhang, J., Fu, H., & Wang, H. (2026). The shape of NSF openness to newcomers: Same share, fewer doors. *SocArXiv*. https://doi.org/10.31235/osf.io/9qpb7_v1 (code: https://github.com/Wang-Haining/open) [topics: metasci]
 - Xie, F., Zhang, J., & Wang, H. (2026). Still funded, no longer counted: How NIH's 2025 award reviews changed what the government counts as minority health research. *arXiv:2610.03443*. https://arxiv.org/abs/2610.03443 (pdf: https://arxiv.org/pdf/2610.03443) [topics: metasci, health]
 - Wang, H. (2026). Authorship identification under domain shift: A survey of stylistic measures and learned author representations. *arXiv:2310.00436*. https://arxiv.org/abs/2310.00436 (pdf: https://arxiv.org/pdf/2310.00436) [topics: nlp]
@@ -392,6 +395,11 @@ Each entry: citation, link, and abstract or summary. Haining Wang is 'Wang, H.'.
 Link: (no public link yet)
 
 This study evaluates the ability of large language models (LLMs) to classify text according to the computer-mediated discourse analysis (CMDA) research paradigm developed by the first author. Three LLMs (ChatGPT-4o, Claude Sonnet 4, Gemini Pro 2.5) were prompted to apply three CMDA methods ((im)politeness, speech acts, and two meta-acts: non-bona fide communication and reported perspective) to two public Reddit threads, and the results were compared with coding by humans skilled in CMDA. LLM-human agreement was below the threshold expected of trained human coders but within the range of novice CMDA learners, especially considering the LLMs' reasoning and the subjectivity of some categories. Gemini did better on rarer, harder phenomena and somewhat worse on the most common categories, and all three models varied across the two threads. The paper discusses implications for using LLMs in qualitative discourse research and pedagogy.
+
+## Wang & Su (2026), Funding deadlines act as a zeitgeber for science, bioRxiv
+Link: https://doi.org/10.64898/2026.10.10.758253
+
+Funders decide which science is paid for. Whether they also shape when it becomes public has been hard to test. Across 376,542 preprints on bioRxiv and medRxiv, the US share rose by 2.3 to 2.7 percentage points in the four weeks before due dates for the main research grant of the National Institutes of Health (NIH) and dropped on the date. About one in eleven US preprints in those weeks was attributable to the deadline, and fields that depend least on NIH rose least. Among 15,906 funded investigators, the share of preprints posted in the four weeks before their own deadline was 9% higher than in other four-month cycles, and these preprints resembled the later grant without being more highly cited. Repeated before every due date, this individual surge matches the national peak's timing within a week. NIH's application calendar, like its funding, shapes when US biomedical science becomes public.
 
 ## Wang, Fu & Tian (2026), NIH's dedicated K23 trial pathway was associated with more K-trial leadership but no detectable gain in new trials, bioRxiv
 Link: https://doi.org/10.64898/2026.10.09.758109
