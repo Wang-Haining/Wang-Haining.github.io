@@ -109,7 +109,7 @@ Hi 👋, I'm a postdoctoral fellow in Biostatistics and Health Data Science at t
 
 ### What's New
 
-* (Oct 15, 2026) I gave a guest lecture on stylometry, ["Who Wrote This? Fingerprints and Disguises in the Age of LLMs"](https://claude.ai/artifact/LnNRKuZYkALUte1VGEDhr3), in Dr. Allen Riddell's *Digital Humanities* course at Indiana University. The [stylometry lab](/teaching/stylometry/) that goes with it is free and open to anyone: four real cases you can run in your browser 🔍
+* (Oct 15, 2026) I gave a guest lecture on stylometry, ["Who Wrote This? Fingerprints and Disguises in the Age of LLMs"](https://claude.ai/artifact/1dbZhF4BwfGHwRs6nkYbDF), in Dr. Allen Riddell's *Digital Humanities* course at Indiana University. The [stylometry lab](/teaching/stylometry/) that goes with it is free and open to anyone: four real cases you can run in your browser 🔍
 
 * (Oct 14, 2026) Three more preprints on federal funding and research careers 📈
 
