@@ -109,7 +109,7 @@ Hi 👋, I'm a postdoctoral fellow in Biostatistics and Health Data Science at t
 
 ### What's New
 
-* (Oct 15, 2026) I gave a guest lecture on stylometry, ["Who Wrote This? Fingerprints and Disguises in the Age of LLMs"](https://claude.ai/artifact/1dbZhF4BwfGHwRs6nkYbDF), in Dr. Allen Riddell's *Digital Humanities* course at Indiana University. The [stylometry lab](/teaching/stylometry/) that goes with it is free and open to anyone: four real cases you can run in your browser 🔍
+* (Oct 15, 2026) I gave a guest lecture on stylometry, ["Who Wrote This? Fingerprints and Disguises in the Age of LLMs"](https://claude.ai/artifact/1dbZhF4BwfGHwRs6nkYbDF), in Dr. Allen Riddell's *Digital Humanities* course at Indiana University. The [stylometry lab](/teaching/stylometry/) that goes with it is free and open to anyone: four real cases you can run in your browser 🔍 The full lecture is now [on YouTube](https://youtu.be/JuK4hnNNmAE) too 🎬
 
 * (Oct 14, 2026) Three more preprints on federal funding and research careers 📈
 
@@ -139,27 +139,27 @@ Hi 👋, I'm a postdoctoral fellow in Biostatistics and Health Data Science at t
 
     * ["Reproduction and Replication of an Adversarial Stylometry Experiment"](https://doi.org/10.17879/replicationresearch-2026-9414), in *Replication Research*: manual obfuscation methods really do hold up against authorship attribution.
 
-* (Jul 21, 2026) I gave an invited lightning talk, "Can AI Serve Everyone Equally? Auditing Fairness in LLM-Powered Reference," at the AI Literacy & Learning for Libraries, Archives, and Museums (LAMs) Summit, *Library of Congress*, Washington, DC.
+* (Jul 21, 2026) I gave an invited lightning talk, "Can AI Serve Everyone Equally? Auditing Fairness in LLM-Powered Reference," at the *AI Literacy & Learning for Libraries, Archives, and Museums (LAMs) Summit*, *Library of Congress*, Washington, DC.
 
-* (May 27, 2026) Our half-day short course, ["Practical Large Language Models: Foundations and Applications,"](https://mbswonline.com/program/) was successfully delivered at *MBSW 2026* in Carmel, Indiana, together with Drs. Jiang Bian, Xing He, and Yuhang Jiang. 
+* (May 27, 2026) Our half-day short course, ["Practical Large Language Models: Foundations and Applications"](https://mbswonline.com/program/), was successfully delivered at *MBSW 2026* in Carmel, Indiana, together with Drs. Jiang Bian, Xing He, and Yuhang Jiang. 
 
 * (Mar 20, 2026) DualR is live! 💊 Our clinical risk tool is now at [dualr.hainingwang.org](https://dualr.hainingwang.org). DualR asks a simple question, *given that a patient took this drug, how likely are they to have this disease?*, and turns any medication list into a portable risk score. Across the All of Us Research Program and Indiana's largest clinical data network (N > 1.3M), it flagged alcohol use disorder more than 300 days before diagnosis and performed consistently across race, gender, and social determinants of health.
 
-* (Nov 17, 2025) Our poster, ["Thinking, Fast and Slow: DualReasoning Enhances Clinical Knowledge Extraction from Large Language Models,"](https://drive.google.com/file/d/1r9FAD9tLjCtWvCUjI-enLxQ4FxUeflFd/view?usp=sharing) was nominated as a distinguished poster at AMIA 2025!
+* (Nov 17, 2025) Our poster, ["Thinking, Fast and Slow: DualReasoning Enhances Clinical Knowledge Extraction from Large Language Models"](https://drive.google.com/file/d/1r9FAD9tLjCtWvCUjI-enLxQ4FxUeflFd/view?usp=sharing), was nominated as a distinguished poster at *AMIA 2025*!
 
-* (Nov 8, 2025) Our short course, "Practical Large Language Models: Foundations and Applications," has been accepted by MBSW 2026!
+* (Nov 8, 2025) Our short course, "Practical Large Language Models: Foundations and Applications," has been accepted by *MBSW 2026*!
 
 * (Oct 21, 2025) Our paper ["Building and Deploying the Digital Humanities Quarterly Recommender System"](https://journal.code4lib.org/articles/18501) is out in *Code4Lib Journal*! 🎉 As the Data Analytics team at *DHQ*, we open-sourced [*DHQ*'s recommender system](https://github.com/Digital-Humanities-Quarterly/DHQ-similar-papers). With *DHQ*'s corpus (also fully open) and self-explanatory code, it is a good starting point for CS/DS/LIS students interested in building their first retrieval system.
 
 * (Aug 18, 2025) Excited to share that our ACCESS Explore request, "Practice-Informed, Explainable Multi-Agent Decision Support for Immune-Related Acute Kidney Injury (irAKI) Phenotyping" (MED250055), has been approved!
 
-* (Aug 3, 2025) I gave an invited talk, ["Thinking, Fast and Slow: DualReasoning Enhances Clinical Knowledge Extraction from Large Language Models"](https://docs.google.com/presentation/d/1l9XvvgIIPtDGAPmZ9hQDdLs4AVYYyLYh2GQtTsA--rQ/edit?usp=sharing), at the International Conference on Intelligent Biology and Medicine (*ICIBM 2025*).
+* (Aug 3, 2025) I gave an invited talk, ["Thinking, Fast and Slow: DualReasoning Enhances Clinical Knowledge Extraction from Large Language Models"](https://docs.google.com/presentation/d/1l9XvvgIIPtDGAPmZ9hQDdLs4AVYYyLYh2GQtTsA--rQ/edit?usp=sharing), at the *International Conference on Intelligent Biology and Medicine (ICIBM 2025)*.
 
 * (Jul 19, 2025) Our paper ["Science Out of Its Ivory Tower: Improving Accessibility with Reinforcement Learning"](https://rdcu.be/ew0mK) is out in *Scientometrics*! 🎉
 
 * (Jul 8, 2025) Our new preprint ["Fairness Evaluation of Large Language Models in Academic Library Reference Services"](https://arxiv.org/pdf/2507.04224) is out! TL;DR: Current LLMs show a promising degree of readiness to support equitable and contextually appropriate communication in academic library reference services.
 
-* (May 20, 2025) I presented "Thinking, Fast and Slow: Knowledge Extraction to Facilitate Phenotyping Using Drug Records in Real-World Data" at the Midwest Biopharmaceutical Statistics Workshop (MBSW 2025). Check out our [DualReasoning](https://docs.google.com/presentation/d/1-Y8gy-lIWCWFLPSgMY0186Z2rNDb4-lLJhVsc3FnyXU/edit?usp=sharing), which enables effective and secure use of medication records through simple chat with LLMs.
+* (May 20, 2025) I presented "Thinking, Fast and Slow: Knowledge Extraction to Facilitate Phenotyping Using Drug Records in Real-World Data" at the *Midwest Biopharmaceutical Statistics Workshop (MBSW 2025)*. Check out our [DualReasoning](https://docs.google.com/presentation/d/1-Y8gy-lIWCWFLPSgMY0186Z2rNDb4-lLJhVsc3FnyXU/edit?usp=sharing), which enables effective and secure use of medication records through simple chat with LLMs.
 
 * (May 9, 2025) I successfully defended my PhD dissertation, *Defending Against Authorship Attribution Attacks with Large Language Models*. I am deeply grateful to my committee members: Dr. Allen Riddell (Chair), Dr. John Walsh, Dr. Kahyun Choi, Dr. Staša Milojević, and Dr. Xiaozhong Liu. I also extend my sincere thanks to Dr. Sandra Kübler for her guidance. Check out the [slides](https://docs.google.com/presentation/d/1-qUwhibta21vMB2wuhsTfsztl3sJVB6PLdg_6w9hwYQ/edit?usp=sharing) and [manuscript](https://hdl.handle.net/2022/33626).
 
@@ -212,9 +212,9 @@ DualReasoning shows great promise in incorporating messy medication information 
 
 * (Apr 14, 2023) I gave a lightning talk and presented a poster titled "The Many Voices of the Detached: Revisiting the Disputed Writings of Lu Xun and Zhou Zuoren" at the *IDAH HASTAC Symposium 2023*.
 
-* (Apr 13, 2023) I gave a guest lecture titled "Authorship Attribution: An Introduction" for Allen's *Digital Humanities* course.
+* (Apr 13, 2023) I gave a guest lecture titled "Authorship Attribution: An Introduction" for Dr. Allen Riddell's *Digital Humanities* course.
 
-* (Jan 9, 2023) I began working with Allen on the IARPA [HIATUS (Human Interpretable Attribution of Text Using Underlying Structure)](https://www.iarpa.gov/research-programs/hiatus) Task Three.
+* (Jan 9, 2023) I began working with Dr. Allen Riddell on the IARPA [HIATUS (Human Interpretable Attribution of Text Using Underlying Structure)](https://www.iarpa.gov/research-programs/hiatus) Task Three.
 
 * (Dec 12, 2022) Blog-1K was published on [Zenodo](https://zenodo.org/record/7455623#.Y5-tAOxAphG). It is a redistributable authorship identification testbed for contemporary English prose. As a midterm output of HASTAC, we will use it to benchmark a deep learning-based authorship verification model against a corresponding attribution model.
 
@@ -228,7 +228,7 @@ DualReasoning shows great promise in incorporating messy medication information 
 
 * (Aug 15, 2022) Our new paper ["Reproduction and Replication of an Adversarial Stylometry Experiment"](https://arxiv.org/abs/2208.07395) was released on arXiv.
 
-* (Jun 28, 2022) I presented our paper *The Many Voices of Du Ying: Revisiting the Disputed Writings of Lu Xun and Zhou Zuoren* at *DH 2022*. The Book of Abstracts is [available here](https://dh2022.dhii.asia/dh2022bookofabsts.pdf). [Watch the presentation](https://confit.atlas.jp/guide/event/dh2022/session/LP7-03/entries) if registered.
+* (Jun 28, 2022) I presented our paper "The Many Voices of Du Ying: Revisiting the Disputed Writings of Lu Xun and Zhou Zuoren" at *DH 2022*. The Book of Abstracts is [available here](https://dh2022.dhii.asia/dh2022bookofabsts.pdf). [Watch the presentation](https://confit.atlas.jp/guide/event/dh2022/session/LP7-03/entries) if registered.
 
 * (Jun 14, 2022) Our paper "Mandarin Tone Sandhi Realization: Evidence from Large Speech Corpora" was accepted by the *23rd INTERSPEECH Conference (INTERSPEECH 2022)*.
 
@@ -254,7 +254,7 @@ DualReasoning shows great promise in incorporating messy medication information 
 
 * (Nov 1, 2021) I gave a guest lecture on modern stylometry, authorship attribution, and adversarial stylometry at *Soochow University*.
 
-* (Oct 13, 2021) I gave a guest lecture on adversarial stylometry in Allen's *Social Media Mining* course.
+* (Oct 13, 2021) I gave a guest lecture on adversarial stylometry in Dr. Allen Riddell's *Social Media Mining* course.
 
 * (Sep 16, 2021) The *Cross-Register Authorship Attribution Corpus* (v1.0) was released on [Zenodo](https://zenodo.org/record/5513043).
 
@@ -287,19 +287,19 @@ DualReasoning shows great promise in incorporating messy medication information 
 - Wang, H., Clark, J., Yan, Y., Bradley, S., Chen, R., Zhang, Y., Fu, H., & Tian, Z. (2026). Fairness evaluation of large language models in academic library reference services. *Humanities and Social Sciences Communications*. https://doi.org/10.1057/s41599-026-08465-5 (pdf: https://www.nature.com/articles/s41599-026-08465-5.pdf, code: https://github.com/AI4Library/FEP, preprint: https://arxiv.org/abs/2507.04224) [topics: nlp]
 - Wang, H., Juola, P., & Riddell, A. (2026). Reproduction and replication of an adversarial stylometry experiment. *Replication Research*, 2. https://doi.org/10.17879/replicationresearch-2026-9414 (code: https://github.com/Wang-Haining/reproduction-and-replication-adversarial-stylometry, data: https://doi.org/10.5281/zenodo.18729526, preprint: https://arxiv.org/abs/2208.07395) [topics: nlp]
 - Wang, H., Lee, J., Walsh, J. A., Flanders, J., & Lee, B. C. G. (2025). Building and deploying the Digital Humanities Quarterly recommender system. *Code4Lib Journal*, (61). https://journal.code4lib.org/articles/18501 (code: https://github.com/Digital-Humanities-Quarterly/DHQ-similar-papers) [topics: nlp]
-- Wang, H., Clark, J., McKelvey, H., Sterman, L., Gao, Z., Tian, Z., Kübler, S., & Liu, X. (2025). Science out of its Ivory Tower: Improving accessibility with reinforcement learning. *Scientometrics*, 130(8), 4519–4543. https://doi.org/10.1007/s11192-025-05386-z (read: https://rdcu.be/ew0mK, code: https://github.com/Wang-Haining/RLAM, slides: https://drive.google.com/file/d/151F-KPfJtaGgt6jn-tIjrK0HgMNve_1P/view?usp=sharing, preprint: https://arxiv.org/abs/2410.17088) [topics: nlp]
+- Wang, H., Clark, J., McKelvey, H., Sterman, L., Gao, Z., Tian, Z., Kübler, S., & Liu, X. (2025). Science out of its ivory tower: Improving accessibility with reinforcement learning. *Scientometrics*, 130(8), 4519–4543. https://doi.org/10.1007/s11192-025-05386-z (read: https://rdcu.be/ew0mK, code: https://github.com/Wang-Haining/RLAM, slides: https://drive.google.com/file/d/151F-KPfJtaGgt6jn-tIjrK0HgMNve_1P/view?usp=sharing, preprint: https://arxiv.org/abs/2410.17088) [topics: nlp]
 - Wang, H., Clark, J., McKelvey, H., Sterman, L., Gao, Z., Tian, Z., & Liu, X. (2025). Improving scholarship accessibility with reinforcement learning. *Information Research*, 30(iConf), 203–218. https://doi.org/10.47989/ir30iConf47530 (pdf: https://publicera.kb.se/ir/article/download/47530/36955/108904, code: https://github.com/Wang-Haining/RLAM) [topics: nlp]
 - Xie, X., Li, J., & Wang, H. (2025). The many voices of Duying: Revisiting the disputed essays between Lu Xun and Zhou Zuoren. *Digital Scholarship in the Humanities*, 40(1), 338–353. https://doi.org/10.1093/llc/fqae084 (code: https://github.com/Wang-Haining/the_many_voices) [topics: nlp]
 
 ## Conference papers
 
 - Wang, H., & Clark, J. (2024). Simplifying scholarly abstracts for accessible digital libraries using language models. *Proceedings of the 2024 ACM/IEEE Joint Conference on Digital Libraries (JCDL '24)*. https://doi.org/10.1145/3677389.3702490 (code: https://github.com/Wang-Haining/scholarly_abstract_simplification, poster: https://drive.google.com/file/d/1zKazj-khPamNUSwZMxdbOqQMQ8vYFEfg/view?usp=share_link, preprint: https://arxiv.org/abs/2408.03899) [topics: nlp]
-- Wang, H. (2024). A content-based novelty measure for scholarly publications: A proof of concept. *iConference 2024 (LNCS)*, 409–420. https://link.springer.com/chapter/10.1007/978-3-031-57867-0_31 (code: https://github.com/Wang-Haining/noveval, demo: https://zenodo.org/records/10485173) [topics: nlp, metasci]
+- Wang, H. (2024). A content-based novelty measure for scholarly publications: A proof of concept. *Wisdom, Well-Being, Win-Win: Proceedings of iConference 2024 (Lecture Notes in Computer Science)*, 409–420. https://link.springer.com/chapter/10.1007/978-3-031-57867-0_31 (code: https://github.com/Wang-Haining/noveval, demo: https://zenodo.org/records/10485173) [topics: nlp, metasci]
 - Wang, H., & Riddell, A. (2022). CCTAA: A reproducible corpus for Chinese authorship attribution research. *Proceedings of the 13th Language Resources and Evaluation Conference (LREC 2022)*, 5889–5893. https://aclanthology.org/2022.lrec-1.633/ (pdf: https://aclanthology.org/2022.lrec-1.633.pdf, code: https://codeberg.org/haining/cctaa) [topics: nlp]
-- Tian, Z., Dong, X., Gao, F., Wang, H., & Lin, C. (2022). Mandarin tone sandhi realization: Evidence from large speech corpora. *INTERSPEECH 2022*, 5273–5277. https://www.isca-archive.org/interspeech_2022/tian22e_interspeech.html (pdf: https://www.isca-archive.org/interspeech_2022/tian22e_interspeech.pdf) [topics: nlp]
+- Tian, Z., Dong, X., Gao, F., Wang, H., & Lin, C. (2022). Mandarin tone sandhi realization: Evidence from large speech corpora. *Proceedings of Interspeech 2022*, 5273–5277. https://www.isca-archive.org/interspeech_2022/tian22e_interspeech.html (pdf: https://www.isca-archive.org/interspeech_2022/tian22e_interspeech.pdf) [topics: nlp]
 - Wang, H., Xie, X., & Riddell, A. (2021). The challenge of vernacular and classical Chinese cross-register authorship attribution. *Proceedings of the Computational Humanities Research Conference (CHR 2021)*, 299–309. http://ceur-ws.org/Vol-2989/long_paper41.pdf (data: https://zenodo.org/record/5513043) [topics: nlp]
 - Riddell, A., Wang, H., & Juola, P. (2021). A call for clarity in contemporary authorship attribution evaluation. *Proceedings of Recent Advances in Natural Language Processing (RANLP 2021)*, 1178–1183. https://doi.org/10.26615/978-954-452-072-4_133 (data: https://zenodo.org/record/5213898) [topics: nlp]
-- Wang, H., Riddell, A., & Juola, P. (2021). Mode effects' challenge to authorship attribution. *Proceedings of the 16th Conference of the European Chapter of the ACL (EACL 2021)*, 1146–1155. https://aclanthology.org/2021.eacl-main.97/ (pdf: https://aclanthology.org/2021.eacl-main.97.pdf, poster: https://drive.google.com/file/d/1teLOJTU4RNAIVEOkH7s5-2uLpPkw19qn/view?usp=sharing) [topics: nlp]
+- Wang, H., Riddell, A., & Juola, P. (2021). Mode effects' challenge to authorship attribution. *Proceedings of the 16th Conference of the European Chapter of the Association for Computational Linguistics (EACL 2021)*, 1146–1155. https://aclanthology.org/2021.eacl-main.97/ (pdf: https://aclanthology.org/2021.eacl-main.97.pdf, poster: https://drive.google.com/file/d/1teLOJTU4RNAIVEOkH7s5-2uLpPkw19qn/view?usp=sharing) [topics: nlp]
 
 ## Books
 
@@ -316,11 +316,11 @@ DualReasoning shows great promise in incorporating messy medication information 
 - Wang, H. (2026). The prestige precedes the prize: Top-journal papers and new federal grants. *SocArXiv*. https://doi.org/10.31235/osf.io/cf5u8_v1 (code: https://github.com/Wang-Haining/prestige-precedes-prize) [topics: metasci]
 - Wang, H., Fu, H., & Tian, Z. (2026). NIH's dedicated K23 trial pathway was associated with more K-trial leadership but no detectable gain in new trials. *bioRxiv*. https://doi.org/10.64898/2026.10.09.758109 (pdf: https://www.biorxiv.org/content/10.64898/2026.10.09.758109v1.full.pdf, code: https://github.com/Wang-Haining/k) [topics: metasci, health]
 - Zhang, J., Fu, H., & Wang, H. (2026). The shape of NSF openness to newcomers: Same share, fewer doors. *SocArXiv*. https://doi.org/10.31235/osf.io/9qpb7_v1 (code: https://github.com/Wang-Haining/open) [topics: metasci]
-- Xie, F., Zhang, J., & Wang, H. (2026). Still funded, no longer counted: How NIH's 2025 award reviews changed what the government counts as minority health research. *arXiv:2610.03443*. https://arxiv.org/abs/2610.03443 (pdf: https://arxiv.org/pdf/2610.03443) [topics: metasci, health]
-- Wang, H. (2026). Authorship identification under domain shift: A survey of stylistic measures and learned author representations. *arXiv:2310.00436*. https://arxiv.org/abs/2310.00436 (pdf: https://arxiv.org/pdf/2310.00436) [topics: nlp]
-- Wang, H. (2026). Funding the runners-up beats a golden ticket. *arXiv:2609.19552*. https://arxiv.org/abs/2609.19552 (pdf: https://arxiv.org/pdf/2609.19552, code: https://github.com/Wang-Haining/wonka) [topics: metasci]
-- Wang, H. (2026). Ending the NIH embargo accelerated public access to funded research, but substantial delays remain. *arXiv:2609.14842*. https://arxiv.org/abs/2609.14842 (pdf: https://arxiv.org/pdf/2609.14842, code: https://github.com/Wang-Haining/nih_embargo) [topics: metasci, health]
-- Wang, H. (2023). Defending against authorship identification attacks. *arXiv:2310.01568*. https://arxiv.org/abs/2310.01568 (pdf: https://arxiv.org/pdf/2310.01568) [topics: nlp]
+- Xie, F., Zhang, J., & Wang, H. (2026). Still funded, no longer counted: How NIH's 2025 award reviews changed what the government counts as minority health research. *arXiv*. https://arxiv.org/abs/2610.03443 (pdf: https://arxiv.org/pdf/2610.03443) [topics: metasci, health]
+- Wang, H. (2026). Authorship identification under domain shift: A survey of stylistic measures and learned author representations. *arXiv*. https://arxiv.org/abs/2310.00436 (pdf: https://arxiv.org/pdf/2310.00436) [topics: nlp]
+- Wang, H. (2026). Funding the runners-up beats a golden ticket. *arXiv*. https://arxiv.org/abs/2609.19552 (pdf: https://arxiv.org/pdf/2609.19552, code: https://github.com/Wang-Haining/wonka) [topics: metasci]
+- Wang, H. (2026). Ending the NIH embargo accelerated public access to funded research, but substantial delays remain. *arXiv*. https://arxiv.org/abs/2609.14842 (pdf: https://arxiv.org/pdf/2609.14842, code: https://github.com/Wang-Haining/nih_embargo) [topics: metasci, health]
+- Wang, H. (2023). Defending against authorship identification attacks. *arXiv*. https://arxiv.org/abs/2310.01568 (pdf: https://arxiv.org/pdf/2310.01568) [topics: nlp]
 
 ## In the media
 
@@ -345,13 +345,16 @@ I teach students to apply statistical and machine learning methods to real-world
 
 ### Workshops
 
-* ["Practical Large Language Models: Foundations and Applications,"](https://mbswonline.com/program/) Midwest Biopharmaceutical Statistics Workshop (May 27, 2026, Carmel, Indiana)  
+* [Practical Large Language Models: Foundations and Applications](https://mbswonline.com/program/), Midwest Biopharmaceutical Statistics Workshop (May 27, 2026, Carmel, Indiana)  
     - A half-day short course on large language models for biomedical data analysis; co-designed and co-taught with Drs. Jiang Bian, Xing He, and Yuhang Jiang.
 
 ### Open Materials
 
-* [*Who Wrote This? A Stylometry Lab*](/teaching/stylometry/), free and self-paced (2026)  
-    - Run Python in your browser, with no installation or login, on four real authorship cases: two translations of Confucius's *Analects*, the Unabomber, the Lu Xun brothers, and an anonymous reviewer in *Glassdoor v. Superior Court*, with B'lawd, a pixel cat, to answer questions along the way.
+* *Who Wrote This? Fingerprints and Disguises in the Age of LLMs*, a free public lecture (2026)  
+    - How writing reveals its author, and how writers can stay anonymous.
+    - [Video](https://youtu.be/JuK4hnNNmAE): 29 minutes, with chapters and captions, narrated with a synthetic clone of my voice.
+    - [Lab](/teaching/stylometry/): run Python in your browser, with no installation or login, on four real authorship cases: two translations of Confucius's *Analects*, the Unabomber, the Lu Xun brothers, and an anonymous reviewer in *Glassdoor v. Superior Court*, with B'lawd, a pixel cat, to answer questions along the way.
+    - [Slides](https://claude.ai/artifact/1dbZhF4BwfGHwRs6nkYbDF)
 
 ---
 
