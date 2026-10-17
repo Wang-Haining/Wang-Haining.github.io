@@ -109,7 +109,7 @@ Hi 👋, I'm a postdoctoral fellow in Biostatistics and Health Data Science at t
 
 ### What's New
 
-* (Oct 15, 2026) I gave a guest lecture on stylometry, ["Who Wrote This? Fingerprints and Disguises in the Age of LLMs"](https://claude.ai/artifact/1dbZhF4BwfGHwRs6nkYbDF), in Dr. Allen Riddell's *Digital Humanities* course at Indiana University. The [stylometry lab](/teaching/stylometry/) that goes with it is free and open to anyone: four real cases you can run in your browser 🔍 The full lecture is now [on YouTube](https://youtu.be/JuK4hnNNmAE) too 🎬
+* (Oct 15, 2026) I gave a guest lecture on stylometry, ["Who Wrote This? Fingerprints and Disguises in the Age of LLMs"](https://claude.ai/artifact/1dbZhF4BwfGHwRs6nkYbDF), in Dr. Allen Riddell's *Digital Humanities* course at Indiana University. The [stylometry lab](/teaching/stylometry/) that goes with it is free and open to anyone: four real cases you can run in your browser 🔍 The full lecture is now [on YouTube](https://youtu.be/PBQCpIYYFSo) too 🎬
 
 * (Oct 14, 2026) Three more preprints on federal funding and research careers 📈
 
@@ -352,7 +352,7 @@ I teach students to apply statistical and machine learning methods to real-world
 
 Free lectures and labs on computational methods, open to anyone. The name nods to von Neumann's quip, as Fermi told it to Freeman Dyson ([Dyson, 2004](https://doi.org/10.1038/427297a)): "With four parameters I can fit an elephant, and with five I can make him wiggle his trunk." Fitting is easy; understanding is the point. [Watch the series on YouTube](https://www.youtube.com/playlist?list=PLamS_Ppdju2s).
 
-* [Unit 1: Who Wrote This? Fingerprints and Disguises in the Age of LLMs](https://youtu.be/JuK4hnNNmAE) (2026) &nbsp;<a class="pub-btn" href="https://youtu.be/JuK4hnNNmAE" target="_blank" rel="noopener">Video</a> <a class="pub-btn" href="/teaching/stylometry/">Lab</a> <a class="pub-btn" href="https://claude.ai/artifact/1dbZhF4BwfGHwRs6nkYbDF" target="_blank" rel="noopener">Slides</a>  
+* [Unit 1: Who Wrote This? Fingerprints and Disguises in the Age of LLMs](https://youtu.be/PBQCpIYYFSo) (2026) &nbsp;<a class="pub-btn" href="https://youtu.be/PBQCpIYYFSo" target="_blank" rel="noopener">Video</a> <a class="pub-btn" href="/teaching/stylometry/">Lab</a> <a class="pub-btn" href="https://claude.ai/artifact/1dbZhF4BwfGHwRs6nkYbDF" target="_blank" rel="noopener">Slides</a>  
     - How writing gives away its author, and how writers can stay anonymous, told through four real cases you can rerun in your browser. Narrated with a synthetic clone of my voice.
 
 ---
