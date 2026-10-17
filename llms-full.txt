@@ -74,10 +74,10 @@ Haining does NLP with real-world data. A common thread: building computational m
 - Research Assistant, NSF-funded "Defending Against Authorship Attribution Attacks," IU Bloomington, 2019-2022.
 
 ## Teaching
-- Co-instructor, DSCI-D 590 Biomedical Data Science in Practice, Indiana University (Summer 2025): a new course applying AI and biostatistics to NIH All of Us data, co-designed with Drs. Haixu Tang and Jing Su.
+- Co-instructor, DSCI-D 590 Biomedical Data Science in Practice, Indiana University (Summer 2025, Fall 2025, Spring 2026): a new course applying AI and biostatistics to NIH All of Us data, co-designed and co-taught with Drs. Haixu Tang and Jing Su in the summer, then co-taught with Dr. Jiangqiong Li in the fall and spring.
 - Co-instructor, "Practical Large Language Models: Foundations and Applications," half-day short course at the Midwest Biopharmaceutical Statistics Workshop (May 27, 2026), with Drs. Jiang Bian, Xing He, and Yuhang Jiang.
 - Associate Instructor, Music Data Mining (Fall 2022): ML/DL labs for audio and text.
-- Guest lectures on stylometry, authorship attribution, and AI for libraries at Nankai, Soochow, Wuhan, Shanghai Normal Universities and Indiana University (2021-2024).
+- Guest lectures on stylometry, authorship attribution, and AI for libraries at Nankai, Soochow, Wuhan, Shanghai Normal Universities and Indiana University (2021-2026), most recently "Who Wrote This? Fingerprints and Disguises in the Age of LLMs" in ILS-Z 657 Digital Humanities at IU Bloomington (Oct 15, 2026), recorded as Unit 1 of Haining's free Under Five lecture series.
 - Mentoring: Haining mentors master's and undergraduate students and research interns on clinical NLP, health disparities, and aging projects; one undergraduate intern is first author on a manuscript in preparation.
 
 ## Selected invited talks
@@ -337,8 +337,8 @@ I teach students to apply statistical and machine learning methods to real-world
 
 ### Courses Taught
 
-* *DSCI-D 590 Biomedical Data Science in Practice*, Indiana University (online, Summer and Fall 2025)  
-    - A new course applying AI and biostatistical methods using NIH *All of Us* data. Co-designed and co-taught with Drs. Haixu Tang and Jing Su in the summer; co-taught with Dr. Jingqiong Li in the fall.
+* *DSCI-D 590 Biomedical Data Science in Practice*, Indiana University (online, Summer 2025, Fall 2025, and Spring 2026)  
+    - A new course applying AI and biostatistical methods using NIH *All of Us* data. Co-designed and co-taught with Drs. Haixu Tang and Jing Su in the summer; co-taught with Dr. Jiangqiong Li in the fall and spring.
 
 * *ILS-Z 604 Music Data Mining*, Indiana University (in person, Fall 2022)  
     - Led lab sessions on machine and deep learning for audio and text analysis.
