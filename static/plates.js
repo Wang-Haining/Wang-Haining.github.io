@@ -1,5 +1,5 @@
-// Plate of the day: a small glyph mosaic at the foot of the sidebar, built from real material in Haining's work.
-// One plate per local day (preview any with ?plate=N). Glyphs are white on the palette's sidebar color; highlights
+// Plate of the hour: a small glyph mosaic at the foot of the sidebar, built from real material in Haining's work.
+// One plate per local hour, like the palette (preview any with ?plate=N). Glyphs are white on the palette's sidebar color; highlights
 // use the palette's pop color, so each plate also changes with the palette of the hour.
 (function () {
   "use strict";
@@ -506,8 +506,8 @@
   function mount() {
     var host = document.querySelector("aside .sidebar-inner");
     if (!host || !window.SVGElement) return;
-    var day = Math.floor((Date.now() - new Date().getTimezoneOffset() * 60000) / 86400000);
-    var i = ((day % PLATES.length) + PLATES.length) % PLATES.length;
+    var hour = Math.floor((Date.now() - new Date().getTimezoneOffset() * 60000) / 3600000); // same clock as the palette
+    var i = ((hour % PLATES.length) + PLATES.length) % PLATES.length;
     try { var q = new URLSearchParams(location.search).get("plate"); if (q !== null && PLATES[+q]) i = +q; } catch (e) {}
     var P = PLATES[i];
     var fig = document.createElement("figure"); fig.className = "plate";
