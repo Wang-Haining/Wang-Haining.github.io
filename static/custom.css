@@ -286,4 +286,13 @@ aside .plate .pl-th { fill: var(--pl-hi-ink, var(--pal-pop-ink, #1a1a1a)); }
 aside .plate figcaption { margin-top: 10px; font: 400 11px/1.45 "Source Code Pro", ui-monospace, monospace; color: rgba(255, 255, 255, .72); text-align: left; }
 aside .plate figcaption a { color: #fff; text-decoration: underline; text-underline-offset: .15em; }
 aside .plate .pl-n { color: var(--pl-hi, var(--pal-pop, #ffd23f)); }
-@media screen and (max-width: 767px), screen and (max-height: 700px) { aside .plate { display: none; } }
+/* Desktop: profile at the top, the plate takes the rest of the column and shrinks to fit, so the sidebar never scrolls */
+@media screen and (min-width: 768px) {
+    aside .sidebar-inner:has(.plate) { height: 100vh; min-height: 0; justify-content: flex-start; padding-top: 28px; padding-bottom: 16px; }
+    aside .sidebar-inner:has(.plate) .site-name { margin-top: 14px; }
+    aside .sidebar-inner:has(.plate) ul.social { padding-top: 16px; }
+    aside .plate { flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; justify-content: center; margin: 12px auto 0; }
+    aside .plate svg { flex: 0 1 auto; min-height: 0; height: auto; max-height: 100%; }
+    aside .plate figcaption { flex: 0 0 auto; }
+}
+@media screen and (max-width: 767px), screen and (max-height: 560px) { aside .plate { display: none; } }
