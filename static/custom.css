@@ -271,3 +271,19 @@ a.pub-title:hover { color: var(--pal-accent, #d9411e) !important; text-decoratio
 @media (prefers-color-scheme: dark) {
     .media-outlet, .media-note { color: #a8a8a8; }
 }
+
+/* ── Plate of the day (static/plates.js): a glyph mosaic at the foot of the sidebar ── */
+aside .plate { margin: 26px auto 0; width: 100%; max-width: 280px; }
+aside .plate svg { display: block; width: 100%; height: auto; overflow: visible; }
+aside .plate .pl-g, aside .plate .pl-dot { fill: rgba(255, 255, 255, .78); }
+aside .plate .pl-r { fill: none; stroke: rgba(255, 255, 255, .78); stroke-width: 1.3; }
+aside .plate .pl-h { fill: var(--pl-hi, var(--pal-pop, #ffd23f)); }
+aside .plate .pl-rh { fill: none; stroke: var(--pl-hi, var(--pal-pop, #ffd23f)); stroke-width: 1.3; }
+aside .plate .pl-bg { fill: rgba(255, 255, 255, .28); }
+aside .plate text { font: 700 7px "Source Code Pro", ui-monospace, monospace; text-anchor: middle; }
+aside .plate .pl-t { fill: var(--pal-sidebar, #5c8374); }
+aside .plate .pl-th { fill: var(--pl-hi-ink, var(--pal-pop-ink, #1a1a1a)); }
+aside .plate figcaption { margin-top: 10px; font: 400 11px/1.45 "Source Code Pro", ui-monospace, monospace; color: rgba(255, 255, 255, .72); text-align: left; }
+aside .plate figcaption a { color: #fff; text-decoration: underline; text-underline-offset: .15em; }
+aside .plate .pl-n { color: var(--pl-hi, var(--pal-pop, #ffd23f)); }
+@media screen and (max-width: 767px), screen and (max-height: 700px) { aside .plate { display: none; } }
