@@ -46,6 +46,9 @@
     if (kind === "tile") {
       el("rect", { x: x + 0.6, y: y + 0.6, width: S - 1.2, height: S - 1.2, "class": cls }, g);
       if (ch) { var t = el("text", { x: cx, y: cy + 2.6, "class": hi ? "pl-th" : "pl-t" }, g); t.textContent = ch; }
+    } else if (kind === "char") {
+      var tc = el("text", { x: cx, y: cy + 3.4, fill: hi ? "var(--pl-hi, var(--pal-pop, #ffd23f))" : "rgba(255,255,255,0.92)", style: "font-size:10px" }, g);
+      tc.textContent = ch;
     } else if (kind === "disc") el("circle", { cx: cx, cy: cy, r: 4, "class": cls }, g);
     else if (kind === "ring") el("circle", { cx: cx, cy: cy, r: 3.4, "class": (hi ? "pl-rh" : "pl-r") }, g);
     else if (kind === "diamond") el("rect", { x: cx - 2.9, y: cy - 2.9, width: 5.8, height: 5.8, transform: "rotate(45 " + cx + " " + cy + ")", "class": cls }, g);
@@ -231,23 +234,67 @@
     return { cols: cols, rows: rows };
   }
 
-  // ── Authorship: a fingerprint whorl spelled in function words; the core in the pop color. ──
+  // ── Authorship: a tilted loop fingerprint, every ridge spelled out in glyphs (the, of, and, to, a), core in the pop color.
+  //    Ridges follow a core-and-delta orientation field (evenly spaced streamlines), two grid cells apart on a 53 x 37 grid. ──
   function fingerprint(svg) {
-    var cols = 30, rows = 21, g = el("g", {}, svg);
-    var ridges = coverage(cols, rows, function (x) {
-      x.translate(150, 106); x.rotate(-0.2); x.lineWidth = 10;
-      [[26, 32, 0.9], [54, 62, 0.5], [82, 92, 0.25]].forEach(function (e, k) {
-        x.beginPath(); x.ellipse(0, 0, e[0], e[1], 0, e[2], Math.PI * 2 - 0.1 - k * 0.12); x.stroke();
+    var COLS = 53, ROWS = 37, K = 1.325, OX = 265, OY = 188, SEP = 15;
+    var bg = el("g", {}, svg), g = el("g", {}, svg), ridges = [], bins = {}, seeds = [], seen = {};
+    var ca = Math.cos(25 * Math.PI / 180), sa = Math.sin(25 * Math.PI / 180), core = [8, -30], delta = [-44, 48];
+    function turn(p) { return [OX + K * (p[0] * ca - p[1] * sa), OY + K * (p[0] * sa + p[1] * ca)]; }
+    function inPad(p) { return p[0] * p[0] / 10000 + p[1] * p[1] / 16384 <= 1; }
+    function direction(p, v) {
+      var a = 0.5 * (Math.atan2(p[1] - core[1], 2 * (p[0] - core[0])) - Math.atan2(p[1] - delta[1], 2 * (p[0] - delta[0]))) + 0.46;
+      a = Math.atan2(2 * Math.sin(a), Math.cos(a));
+      var w = Math.max(0, Math.min(0.85, (-p[1] - 35) / 90)), arch = Math.atan(0.018 * p[0]);
+      a = 0.5 * Math.atan2((1 - w) * Math.sin(2 * a) + w * Math.sin(2 * arch), (1 - w) * Math.cos(2 * a) + w * Math.cos(2 * arch));
+      var u = [Math.cos(a), Math.sin(a)];
+      return v && u[0] * v[0] + u[1] * v[1] < 0 ? [-u[0], -u[1]] : u;
+    }
+    function near(p, d) {
+      var bx = Math.floor(p[0] / SEP), by = Math.floor(p[1] / SEP);
+      for (var x = bx - 1; x <= bx + 1; x++) for (var y = by - 1; y <= by + 1; y++) {
+        var cell = bins[x + "," + y] || [];
+        for (var j = 0; j < cell.length; j++) if (Math.pow(p[0] - cell[j][0], 2) + Math.pow(p[1] - cell[j][1], 2) < d * d) return true;
+      }
+      return false;
+    }
+    function trace(seed, sign) {
+      var pts = [], p = seed, v = direction(p).map(function (x) { return x * sign; });
+      for (var i = 0; i < 400; i++) {
+        v = direction(p, v);
+        var u = direction([p[0] + v[0], p[1] + v[1]], v), next = [p[0] + 2 * u[0], p[1] + 2 * u[1]];
+        if (!inPad(next) || near(next, SEP * 0.72) || Math.hypot(next[0] - core[0], next[1] - core[1]) < 5 || Math.hypot(next[0] - delta[0], next[1] - delta[1]) < 5) break;
+        if (pts.length > 20 && pts.some(function (q, j) { return j < pts.length - 16 && Math.hypot(q[0] - next[0], q[1] - next[1]) < 4; })) break;
+        pts.push(next); p = next; v = u;
+      }
+      return pts;
+    }
+    function plant(seed) {
+      if (!inPad(seed) || near(seed, SEP * 0.95)) return;
+      var pts = trace(seed, -1).reverse().concat([seed], trace(seed, 1));
+      if (pts.length < 8) return;
+      ridges.push(pts);
+      pts.forEach(function (p, i) {
+        var key = Math.floor(p[0] / SEP) + "," + Math.floor(p[1] / SEP);
+        (bins[key] = bins[key] || []).push(p);
+        if (i % 5 === 0) { var v = direction(p); seeds.push([p[0] - SEP * v[1], p[1] + SEP * v[0]], [p[0] + SEP * v[1], p[1] - SEP * v[0]]); }
+      });
+    }
+    for (var top = -35; top > -128; top -= SEP) seeds.push([8, top]);
+    for (var i = 0; i < seeds.length; i++) plant(seeds[i]);
+    for (var yy = -120; yy <= 120; yy += 7) for (var xx = -96; xx <= 96; xx += 7) plant([xx, yy]);
+    wash(bg, "ellipse", { cx: OX, cy: OY, rx: 100 * K, ry: 128 * K, transform: "rotate(25 " + OX + " " + OY + ")" }, 0.05);
+    var words = "theofandtoa", n = 0;
+    var c0 = turn(core), cq = Math.floor(c0[0] / S), cr = Math.floor(c0[1] / S);
+    [[0, 0], [1, 0], [0, 1], [1, 1]].forEach(function (o) { seen[(cq + o[0]) + "," + (cr + o[1])] = 1; glyph(g, cq + o[0], cr + o[1], "tile", "", true); });
+    ridges.forEach(function (pts, k) {
+      pts.forEach(function (p) {
+        var q = turn(p), c = Math.floor(q[0] / S), r = Math.floor(q[1] / S), key = c + "," + r;
+        if (seen[key]) return; seen[key] = 1;
+        glyph(g, c, r, k % 2 ? "char" : "tile", words[n++ % words.length], false); // one style per ridge, so each reads as a line
       });
     });
-    var core = coverage(cols, rows, function (x) {
-      x.translate(150, 106); x.rotate(-0.2); x.beginPath(); x.ellipse(0, 0, 8, 12, 0, 0, 7); x.fill();
-    });
-    mosaic(g, cols, rows, [
-      { cov: core, hi: true, edge: false, mix: [["tile", 1]] },
-      { cov: ridges, chars: "theofandtoa", edge: false, mix: [["tile", 1]] }
-    ], 71);
-    return { cols: cols, rows: rows };
+    return { cols: COLS, rows: ROWS };
   }
 
   // ── Golden ticket: a ticket in the pop color, spelled "lottery", with notched sides and a perforated stub. ──
