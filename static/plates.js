@@ -222,6 +222,99 @@
     return { cols: cols, rows: rows };
   }
 
+  // ── Golden ticket: a ticket in the pop color, spelled "lottery", with notched sides and a perforated stub. ──
+  function ticket(svg) {
+    var cols = 30, rows = 21, g = el("g", {}, svg);
+    var body = coverage(cols, rows, function (x) {
+      x.fillRect(20, 44, 260, 122);
+      x.globalCompositeOperation = "destination-out";
+      [[20, 105], [280, 105]].forEach(function (c) { x.beginPath(); x.arc(c[0], c[1], 24, 0, 7); x.fill(); });
+      x.fillRect(210, 44, 10, 122);
+      x.fillRect(50, 74, 140, 2);
+    });
+    var perf = coverage(cols, rows, function (x) { x.fillRect(210, 44, 10, 122); });
+    mosaic(g, cols, rows, [
+      { cov: perf, edge: false, mix: [["dot", 1]] },
+      { cov: body, hi: true, chars: "lottery", edge: false, mix: [["tile", 70], ["disc", 14], ["ring", 6], ["dot", 10]] }
+    ], 91);
+    return { cols: cols, rows: rows };
+  }
+
+  // ── NIH embargo: an open padlock; the lifted shackle in the pop color, the body spelled "PMC". ──
+  function padlock(svg) {
+    var cols = 30, rows = 21, g = el("g", {}, svg);
+    var body = coverage(cols, rows, function (x) {
+      x.fillRect(84, 96, 132, 104);
+      x.globalCompositeOperation = "destination-out";
+      x.beginPath(); x.arc(150, 136, 11, 0, 7); x.fill(); x.fillRect(145, 136, 10, 34);
+    });
+    var shackle = coverage(cols, rows, function (x) {
+      x.lineWidth = 18; x.lineCap = "butt"; x.beginPath();
+      x.moveTo(110, 96); x.lineTo(110, 52); x.arc(150, 52, 40, Math.PI, 0); x.lineTo(190, 70); x.stroke();
+    });
+    mosaic(g, cols, rows, [
+      { cov: shackle, hi: true, mix: [["tile", 50], ["disc", 30], ["dot", 20]] },
+      { cov: body, chars: "PMC", mix: [["tile", 48], ["disc", 18], ["ring", 12], ["diamond", 8], ["plus", 6], ["dot", 8]] }
+    ], 101);
+    return { cols: cols, rows: rows };
+  }
+
+  // ── NSF newcomers: ten doorways, three of them shut; light falls through the open ones. ──
+  function doors(svg) {
+    var cols = 30, rows = 21, g = el("g", {}, svg), shut = [1, 5, 8];
+    for (var d = 0; d < 10; d++) {
+      var q0 = 1 + (d % 5) * 6, r0 = d < 5 ? 1 : 11, closed = shut.indexOf(d) >= 0;
+      for (var r = r0; r < r0 + 9; r++) for (var q = q0; q < q0 + 4; q++) {
+        var edge = q === q0 || q === q0 + 3 || r === r0, u = rnd(q, r, 111);
+        if (closed) glyph(g, q, r, (q === q0 + 2 && r === r0 + 5) ? "dot" : "tile", "", false);
+        else if (edge) glyph(g, q, r, u < 0.5 ? "tile" : "disc", "", false);
+        else if (r > r0 + 2) glyph(g, q, r, u < 0.55 ? "disc" : u < 0.8 ? "ring" : "dot", "", true);
+      }
+    }
+    return { cols: cols, rows: rows };
+  }
+
+  // ── Still funded, no longer counted: five-bar tally gates; three gates are still there, but hollow. ──
+  function tally(svg) {
+    var cols = 30, rows = 21, g = el("g", {}, svg), lost = [1, 5, 6];
+    for (var t = 0; t < 9; t++) {
+      var q0 = 1 + (t % 3) * 10, r0 = 1 + Math.floor(t / 3) * 7, gone = lost.indexOf(t) >= 0, slash = {};
+      for (var m = 0; m <= 8; m++) slash[(q0 + m) + "," + Math.round(r0 + 5 - m * 5 / 8)] = 1;
+      for (var q = q0; q <= q0 + 8; q++) for (var r = r0; r <= r0 + 5; r++) {
+        var bar = (q - q0) % 2 === 1 && q - q0 <= 7, onSlash = slash[q + "," + r];
+        if (onSlash) glyph(g, q, r, gone ? "ring" : "tile", "", gone);
+        else if (bar) glyph(g, q, r, gone ? "ring" : (rnd(q, r, 121) < 0.55 ? "tile" : "disc"), "", gone);
+      }
+    }
+    return { cols: cols, rows: rows };
+  }
+
+  // ── DHQ recommender: a constellation of articles; one in the pop color, linked to its five nearest. ──
+  function stars(svg) {
+    var cols = 30, rows = 21, g = el("g", {}, svg), P = [], k, j;
+    for (k = 0; k < 40; k++) P.push([1 + Math.floor(rnd(k, 1, 131) * 28), 1 + Math.floor(rnd(k, 2, 131) * 19)]);
+    var hub = 0, best = 1e9;
+    P.forEach(function (p, i) { var d = Math.pow(p[0] - 15, 2) + Math.pow(p[1] - 10, 2); if (d < best) { best = d; hub = i; } });
+    function line(a, b, hi) {
+      var n = Math.max(Math.abs(b[0] - a[0]), Math.abs(b[1] - a[1]));
+      for (var s = 1; s < n; s++) glyph(g, Math.round(a[0] + (b[0] - a[0]) * s / n), Math.round(a[1] + (b[1] - a[1]) * s / n), "dot", "", hi);
+    }
+    for (k = 0; k < P.length; k++) {
+      var near = P.map(function (p, i) { return [Math.pow(p[0] - P[k][0], 2) + Math.pow(p[1] - P[k][1], 2), i]; })
+        .sort(function (a, b) { return a[0] - b[0]; });
+      if (k !== hub && rnd(k, 3, 131) < 0.8 && near[1][0] < 90) line(P[k], P[near[1][1]], false);
+    }
+    var hubNear = P.map(function (p, i) { return [Math.pow(p[0] - P[hub][0], 2) + Math.pow(p[1] - P[hub][1], 2), i]; })
+      .filter(function (x) { return x[0] >= 16; }).sort(function (a, b) { return a[0] - b[0]; }).slice(0, 5).map(function (x) { return x[1]; });
+    hubNear.forEach(function (i) { line(P[hub], P[i], true); });
+    P.forEach(function (p, i) {
+      var u = rnd(i, 4, 131);
+      if (i === hub) glyph(g, p[0], p[1], "tile", "", true);
+      else glyph(g, p[0], p[1], hubNear.indexOf(i) >= 0 ? "disc" : u < 0.35 ? "plus" : u < 0.7 ? "disc" : "ring", "", hubNear.indexOf(i) >= 0);
+    });
+    return { cols: cols, rows: rows };
+  }
+
   // ── Plate 2: a year of new bioRxiv preprints, one mark per day; NIH R01 due dates in the pop color. ──
   var CAL = null; // filled from /static/plates-data.json
   function calendar(svg) {
@@ -255,6 +348,16 @@
       note: 'Signed 独应 (Du Ying) in 1912, &lsquo;Looking at the Country of China&rsquo; was written by Lu Xun. <a href="https://doi.org/10.1093/llc/fqae084">Du Ying</a>' },
     { draw: fingerprint, label: "A fingerprint spelled in the words the, of, and, to, a",
       note: 'The, of, and: small words no one chooses on purpose add up to a writer&rsquo;s fingerprint. <a href="/teaching/stylometry/">Stylometry lab</a>' },
+    { draw: ticket, label: "A golden ticket spelled in the letters of lottery",
+      note: 'On 10,625 rejected conference submissions, the golden ticket picked like a lottery; ranking by the panel mean picked papers cited 7.75 percentile points higher. <a href="https://arxiv.org/abs/2609.19552">Golden ticket</a>' },
+    { draw: padlock, label: "An open padlock whose body spells PMC",
+      note: 'After NIH ended its 12-month embargo, NIH-funded papers in PubMed Central within a week of publication doubled from 11% to 22% in journals outside DOAJ. <a href="https://arxiv.org/abs/2609.14842">Embargo</a>' },
+    { draw: doors, label: "Ten doorways, three of them shut",
+      note: 'In FY2026 NSF made 30% fewer new research projects; newcomers kept the same share (34.5% to 34.3%), through fewer doors. <a href="https://doi.org/10.31235/osf.io/9qpb7_v1">Newcomers</a>' },
+    { draw: tally, label: "Nine five-bar tally gates, three of them hollow",
+      note: 'NIH&rsquo;s minority health label stayed on 99.4% of projects with unchanged summaries, but on 15.7% of those that no longer named a population; the funding stayed. <a href="https://arxiv.org/abs/2610.03443">Uncounted</a>' },
+    { draw: stars, label: "A constellation of articles, one linked to its five nearest",
+      note: 'Over 750 articles in <i>Digital Humanities Quarterly</i>, each now shown with its nearest neighbors, found three ways. <a href="https://journal.code4lib.org/articles/18501">DHQ recommender</a>' },
     { draw: calendar, needs: "cal", label: "A year of bioRxiv preprints, one mark per day",
       note: 'Every new bioRxiv preprint of 2025, one mark per day; bigger marks, busier days. Crosses: NIH R01 due dates. In the four weeks before each (colored), the US share of preprints rises 2.3 to 2.7 percentage points. <a href="https://doi.org/10.64898/2026.10.10.758253">Zeitgeber</a>' }
   ];
