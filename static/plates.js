@@ -61,6 +61,32 @@
       v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); });
     return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
   }
+  // Background washes and beams, drawn under the glyphs (white at low opacity, like light or water).
+  var gid = 0;
+  function wash(g, tag, attrs, op) { attrs.fill = "rgba(255,255,255," + op + ")"; return el(tag, attrs, g); }
+  function beam(g, points, x1, y1, x2, y2, op) { // a polygon fading from opacity op to 0 along (x1,y1)->(x2,y2)
+    var id = "plg" + (++gid), defs = el("defs", {}, g);
+    var lg = el("linearGradient", { id: id, gradientUnits: "userSpaceOnUse", x1: x1, y1: y1, x2: x2, y2: y2 }, defs);
+    el("stop", { offset: "0", "stop-color": "#fff", "stop-opacity": op }, lg);
+    el("stop", { offset: "1", "stop-color": "#fff", "stop-opacity": 0 }, lg);
+    return el("polygon", { points: points, fill: "url(#" + id + ")" }, g);
+  }
+  function glow(g, cx, cy, r, op) {
+    var id = "plg" + (++gid), defs = el("defs", {}, g);
+    var rg = el("radialGradient", { id: id, cx: cx, cy: cy, r: r, gradientUnits: "userSpaceOnUse" }, defs);
+    el("stop", { offset: "0", "stop-color": "#fff", "stop-opacity": op }, rg);
+    el("stop", { offset: "1", "stop-color": "#fff", "stop-opacity": 0 }, rg);
+    return el("circle", { cx: cx, cy: cy, r: r, fill: "url(#" + id + ")" }, g);
+  }
+  function water(g, y, W, H) { // a water band from y down, with a few ripple lines
+    wash(g, "rect", { x: 0, y: y, width: W, height: (H || 210) - y }, 0.07);
+    for (var k = 0; k < 4; k++) {
+      var yy = y + 8 + k * 11, d = "M0 " + yy;
+      for (var t = 0; t <= W; t += 10) d += " L" + t + " " + (yy + 2 * Math.sin(t / 12 + k));
+      el("path", { d: d, fill: "none", stroke: "rgba(255,255,255," + (0.16 - k * 0.03) + ")", "stroke-width": 1.2 }, g);
+    }
+  }
+
   function pick(u, mix) { // mix: [[kind, weight], ...]
     var s = 0, i;
     for (i = 0; i < mix.length; i++) s += mix[i][1];
@@ -90,7 +116,8 @@
 
   // ── Plate 1: Under Five. The elephant; its trunk, the fifth parameter, wiggles. ──
   function elephant(svg, t) {
-    var cols = 30, rows = 21, g = el("g", {}, svg);
+    var cols = 30, rows = 21, bg = el("g", {}, svg), g = el("g", {}, svg);
+    wash(bg, "ellipse", { cx: 176, cy: 200, rx: 112, ry: 8 }, 0.1);
     var body = coverage(cols, rows, function (x) {
       x.beginPath(); x.ellipse(170, 100, 82, 56, 0, 0, 7); x.fill();
       x.beginPath(); x.arc(86, 82, 40, 0, 7); x.fill();
@@ -117,7 +144,8 @@
 
   // ── Ivory tower: built from the letters of "jargon"; six lit steps come down to the door. ──
   function tower(svg) {
-    var cols = 30, rows = 21, g = el("g", {}, svg);
+    var cols = 30, rows = 21, bg = el("g", {}, svg), g = el("g", {}, svg);
+    glow(bg, 236, 52, 70, 0.16); wash(bg, "circle", { cx: 236, cy: 52, r: 24 }, 0.1);
     var body = coverage(cols, rows, function (x) {
       x.fillRect(110, 52, 82, 146);
       x.fillRect(98, 38, 106, 18);
@@ -224,7 +252,8 @@
 
   // ── Golden ticket: a ticket in the pop color, spelled "lottery", with notched sides and a perforated stub. ──
   function ticket(svg) {
-    var cols = 30, rows = 21, g = el("g", {}, svg);
+    var cols = 30, rows = 21, bg = el("g", {}, svg), g = el("g", {}, svg);
+    beam(bg, "130 0 170 0 290 210 10 210", 150, 0, 150, 210, 0.14);
     var body = coverage(cols, rows, function (x) {
       x.fillRect(20, 44, 260, 122);
       x.globalCompositeOperation = "destination-out";
@@ -242,7 +271,12 @@
 
   // ── NIH embargo: an open padlock; the lifted shackle in the pop color, the body spelled "PMC". ──
   function padlock(svg) {
-    var cols = 30, rows = 21, g = el("g", {}, svg);
+    var cols = 30, rows = 21, bg = el("g", {}, svg), g = el("g", {}, svg);
+    [[-2.2, -1.75], [-1.55, -1.2], [-0.95, -0.55], [-0.35, 0.05]].forEach(function (w) {
+      var R = 190, cx = 150, cy = 92;
+      beam(bg, cx + " " + cy + " " + (cx + R * Math.cos(w[0])) + " " + (cy + R * Math.sin(w[0])) + " " + (cx + R * Math.cos(w[1])) + " " + (cy + R * Math.sin(w[1])),
+        cx, cy, cx + R * Math.cos((w[0] + w[1]) / 2), cy + R * Math.sin((w[0] + w[1]) / 2), 0.16);
+    });
     var body = coverage(cols, rows, function (x) {
       x.fillRect(84, 96, 132, 104);
       x.globalCompositeOperation = "destination-out";
@@ -261,9 +295,14 @@
 
   // ── NSF newcomers: ten doorways, three of them shut; light falls through the open ones. ──
   function doors(svg) {
-    var cols = 30, rows = 21, g = el("g", {}, svg), shut = [1, 5, 8];
+    var cols = 30, rows = 21, bg = el("g", {}, svg), g = el("g", {}, svg), shut = [1, 5, 8];
     for (var d = 0; d < 10; d++) {
       var q0 = 1 + (d % 5) * 6, r0 = d < 5 ? 1 : 11, closed = shut.indexOf(d) >= 0;
+      if (!closed) {
+        var x0 = q0 * S, x1 = (q0 + 4) * S, yb = (r0 + 9) * S;
+        beam(bg, x0 + " " + yb + " " + x1 + " " + yb + " " + (x1 + 9) + " " + (yb + 10) + " " + (x0 - 9) + " " + (yb + 10), 0, yb, 0, yb + 10, 0.3);
+        wash(bg, "rect", { x: x0 + 6, y: (r0 + 1) * S, width: 28, height: 80 }, 0.06);
+      }
       for (var r = r0; r < r0 + 9; r++) for (var q = q0; q < q0 + 4; q++) {
         var edge = q === q0 || q === q0 + 3 || r === r0, u = rnd(q, r, 111);
         if (closed) glyph(g, q, r, (q === q0 + 2 && r === r0 + 5) ? "dot" : "tile", "", false);
@@ -291,7 +330,7 @@
 
   // ── DHQ recommender: a constellation of articles; one in the pop color, linked to its five nearest. ──
   function stars(svg) {
-    var cols = 30, rows = 21, g = el("g", {}, svg), P = [], k, j;
+    var cols = 30, rows = 21, bg = el("g", {}, svg), g = el("g", {}, svg), P = [], k, j;
     for (k = 0; k < 40; k++) P.push([1 + Math.floor(rnd(k, 1, 131) * 28), 1 + Math.floor(rnd(k, 2, 131) * 19)]);
     var hub = 0, best = 1e9;
     P.forEach(function (p, i) { var d = Math.pow(p[0] - 15, 2) + Math.pow(p[1] - 10, 2); if (d < best) { best = d; hub = i; } });
@@ -307,6 +346,7 @@
     var hubNear = P.map(function (p, i) { return [Math.pow(p[0] - P[hub][0], 2) + Math.pow(p[1] - P[hub][1], 2), i]; })
       .filter(function (x) { return x[0] >= 16; }).sort(function (a, b) { return a[0] - b[0]; }).slice(0, 5).map(function (x) { return x[1]; });
     hubNear.forEach(function (i) { line(P[hub], P[i], true); });
+    glow(bg, P[hub][0] * S + 5, P[hub][1] * S + 5, 80, 0.16);
     P.forEach(function (p, i) {
       var u = rnd(i, 4, 131);
       if (i === hub) glyph(g, p[0], p[1], "tile", "", true);
@@ -317,7 +357,7 @@
 
   // ── Adversarial stylometry: a chameleon on a branch, spelled "obfuscate"; the curled tail in the pop color. ──
   function chameleon(svg) {
-    var cols = 30, rows = 21, g = el("g", {}, svg);
+    var cols = 30, rows = 21, bg = el("g", {}, svg), g = el("g", {}, svg);
     var body = coverage(cols, rows, function (x) {
       x.beginPath(); x.ellipse(150, 102, 70, 40, -0.05, 0, 7); x.fill();
       for (var c = 0; c < 6; c++) { x.beginPath(); x.moveTo(96 + c * 20, 72 - (c > 0 && c < 5 ? 6 : 0)); x.lineTo(106 + c * 20, 52 - (c > 0 && c < 5 ? 6 : 0)); x.lineTo(116 + c * 20, 72 - (c > 0 && c < 5 ? 6 : 0)); x.fill(); }
@@ -325,7 +365,7 @@
       x.beginPath(); x.moveTo(196, 70); x.lineTo(214, 46); x.lineTo(232, 80); x.closePath(); x.fill();
       x.lineWidth = 12; x.lineCap = "round";
       [[118, 134, 104, 170], [178, 134, 194, 170]].forEach(function (l) { x.beginPath(); x.moveTo(l[0], l[1]); x.lineTo(l[2], l[3]); x.stroke(); });
-      x.globalCompositeOperation = "destination-out"; x.beginPath(); x.arc(232, 94, 6, 0, 7); x.fill();
+      x.globalCompositeOperation = "destination-out"; x.beginPath(); x.arc(232, 94, 13, 0, 7); x.fill();
     });
     var tail = coverage(cols, rows, function (x) {
       x.lineWidth = 11; x.lineCap = "round"; x.beginPath(); x.moveTo(90, 112);
@@ -333,17 +373,23 @@
       x.stroke();
     });
     var branch = coverage(cols, rows, function (x) { x.fillRect(20, 172, 270, 10); });
+    [[40, 40, 26, 12, -0.5], [250, 30, 30, 13, 0.4], [282, 150, 22, 10, -0.3], [120, 196, 28, 10, 0.2]].forEach(function (l) {
+      wash(bg, "ellipse", { cx: l[0], cy: l[1], rx: l[2], ry: l[3], transform: "rotate(" + l[4] * 57 + " " + l[0] + " " + l[1] + ")" }, 0.08);
+    });
     mosaic(g, cols, rows, [
       { cov: tail, hi: true, edge: false, mix: [["tile", 60], ["disc", 40]] },
       { cov: body, chars: "obfuscate", mix: [["tile", 46], ["disc", 18], ["ring", 12], ["diamond", 8], ["plus", 8], ["dot", 8]] },
       { cov: branch, mix: [["dot", 50], ["plus", 25], ["ring", 25]] }
     ], 141);
+    el("circle", { cx: 232, cy: 94, r: 10, "class": "pl-rh", style: "stroke-width:3" }, g); // the turret eye
+    el("circle", { cx: 235, cy: 94, r: 3.6, "class": "pl-h" }, g);
     return { cols: cols, rows: rows };
   }
 
   // ── NovEval: a platypus, the classic odd combination; the bill in the pop color, the body spelled "surprise". ──
   function platypus(svg) {
-    var cols = 30, rows = 21, g = el("g", {}, svg);
+    var cols = 30, rows = 21, bg = el("g", {}, svg), g = el("g", {}, svg);
+    water(bg, 132, 300);
     var body = coverage(cols, rows, function (x) {
       x.beginPath(); x.ellipse(150, 110, 78, 36, 0, 0, 7); x.fill();
       x.beginPath(); x.arc(226, 102, 26, 0, 7); x.fill();
@@ -391,35 +437,39 @@
   }
 
   // ── K23: a mother duck leading three ducklings across the water; the ducklings in the pop color. ──
+  //    A finer 40 x 28 grid, so the heads and bills read.
   function ducks(svg) {
-    var cols = 30, rows = 21, g = el("g", {}, svg);
-    function duck(x, cx, cy, k) {
-      x.beginPath(); x.ellipse(cx, cy, 46 * k, 24 * k, 0, 0, 7); x.fill();
-      x.beginPath(); x.moveTo(cx - 44 * k, cy - 4 * k); x.lineTo(cx - 62 * k, cy - 22 * k); x.lineTo(cx - 34 * k, cy - 14 * k); x.fill();
-      x.fillRect(cx + 22 * k, cy - 46 * k, 16 * k, 36 * k);
-      x.beginPath(); x.arc(cx + 32 * k, cy - 50 * k, 18 * k, 0, 7); x.fill();
-      x.beginPath(); x.moveTo(cx + 46 * k, cy - 56 * k); x.lineTo(cx + 70 * k, cy - 48 * k); x.lineTo(cx + 46 * k, cy - 42 * k); x.fill();
+    var cols = 40, rows = 28, bg = el("g", {}, svg), g = el("g", {}, svg), wl = 222;
+    water(bg, wl, 400, 280);
+    function duck(x, cx, k) { // side view facing right, floating on the waterline
+      x.beginPath();
+      x.moveTo(cx - 52 * k, wl - 30 * k);
+      x.quadraticCurveTo(cx - 46 * k, wl, cx - 26 * k, wl);
+      x.lineTo(cx + 30 * k, wl);
+      x.quadraticCurveTo(cx + 46 * k, wl - 4 * k, cx + 36 * k, wl - 24 * k);
+      x.quadraticCurveTo(cx + 4 * k, wl - 30 * k, cx - 52 * k, wl - 30 * k);
+      x.fill();
+      x.fillRect(cx + 16 * k, wl - 44 * k, 18 * k, 24 * k);
+      x.beginPath(); x.arc(cx + 26 * k, wl - 50 * k, 16 * k, 0, 7); x.fill();
+      x.beginPath(); x.moveTo(cx + 38 * k, wl - 56 * k); x.quadraticCurveTo(cx + 66 * k, wl - 54 * k, cx + 64 * k, wl - 44 * k);
+      x.lineTo(cx + 38 * k, wl - 42 * k); x.closePath(); x.fill();
     }
     var mom = coverage(cols, rows, function (x) {
-      duck(x, 220, 130, 1.25);
-      x.globalCompositeOperation = "destination-out"; x.beginPath(); x.arc(262, 64, 4, 0, 7); x.fill();
+      duck(x, 296, 1.6);
+      x.globalCompositeOperation = "destination-out"; x.beginPath(); x.arc(296 + 30 * 1.6, wl - 54 * 1.6, 5, 0, 7); x.fill();
     });
-    var kids = coverage(cols, rows, function (x) { [48, 98, 148].forEach(function (cx) { duck(x, cx, 156, 0.55); }); });
-    var water = coverage(cols, rows, function (x) {
-      x.lineWidth = 6; x.beginPath();
-      for (var t = 0; t <= 300; t += 4) x.lineTo(t, 186 + 4 * Math.sin(t / 14)); x.stroke();
-    });
+    var kids = coverage(cols, rows, function (x) { [30, 96, 162].forEach(function (cx) { duck(x, cx, 0.64); }); });
     mosaic(g, cols, rows, [
-      { cov: kids, hi: true, edge: false, mix: [["tile", 55], ["disc", 45]] },
-      { cov: mom, chars: "K23", mix: [["tile", 46], ["disc", 18], ["ring", 12], ["diamond", 8], ["plus", 8], ["dot", 8]] },
-      { cov: water, mix: [["dot", 50], ["ring", 30], ["disc", 20]] }
+      { cov: kids, hi: true, edge: false, mix: [["tile", 64], ["disc", 36]] },
+      { cov: mom, chars: "K23", edge: false, mix: [["tile", 52], ["disc", 18], ["ring", 12], ["diamond", 6], ["plus", 6], ["dot", 6]] }
     ], 171);
     return { cols: cols, rows: rows };
   }
 
   // ── DualReasoning: the hare (fast) and the tortoise (slow); the tortoise's shell in the pop color. ──
   function tortoiseHare(svg) {
-    var cols = 30, rows = 21, g = el("g", {}, svg);
+    var cols = 30, rows = 21, bg = el("g", {}, svg), g = el("g", {}, svg);
+    [[14, 176, 12], [34, 182, 9], [4, 160, 7]].forEach(function (c) { wash(bg, "circle", { cx: c[0], cy: c[1], r: c[2] }, 0.1); });
     var hare = coverage(cols, rows, function (x) {
       x.beginPath(); x.ellipse(80, 108, 44, 24, -0.25, 0, 7); x.fill();
       x.beginPath(); x.arc(122, 80, 16, 0, 7); x.fill();
