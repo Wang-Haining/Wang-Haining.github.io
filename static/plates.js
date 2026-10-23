@@ -315,6 +315,137 @@
     return { cols: cols, rows: rows };
   }
 
+  // ── Adversarial stylometry: a chameleon on a branch, spelled "obfuscate"; the curled tail in the pop color. ──
+  function chameleon(svg) {
+    var cols = 30, rows = 21, g = el("g", {}, svg);
+    var body = coverage(cols, rows, function (x) {
+      x.beginPath(); x.ellipse(150, 102, 70, 40, -0.05, 0, 7); x.fill();
+      for (var c = 0; c < 6; c++) { x.beginPath(); x.moveTo(96 + c * 20, 72 - (c > 0 && c < 5 ? 6 : 0)); x.lineTo(106 + c * 20, 52 - (c > 0 && c < 5 ? 6 : 0)); x.lineTo(116 + c * 20, 72 - (c > 0 && c < 5 ? 6 : 0)); x.fill(); }
+      x.beginPath(); x.moveTo(200, 70); x.lineTo(268, 98); x.lineTo(214, 132); x.closePath(); x.fill();
+      x.beginPath(); x.moveTo(196, 70); x.lineTo(214, 46); x.lineTo(232, 80); x.closePath(); x.fill();
+      x.lineWidth = 12; x.lineCap = "round";
+      [[118, 134, 104, 170], [178, 134, 194, 170]].forEach(function (l) { x.beginPath(); x.moveTo(l[0], l[1]); x.lineTo(l[2], l[3]); x.stroke(); });
+      x.globalCompositeOperation = "destination-out"; x.beginPath(); x.arc(232, 94, 6, 0, 7); x.fill();
+    });
+    var tail = coverage(cols, rows, function (x) {
+      x.lineWidth = 11; x.lineCap = "round"; x.beginPath(); x.moveTo(90, 112);
+      for (var a = 0; a <= 7.4; a += 0.08) { var r = 52 - a * 5.6; x.lineTo(62 + r * Math.cos(-0.35 - a), 150 + r * Math.sin(-0.35 - a)); }
+      x.stroke();
+    });
+    var branch = coverage(cols, rows, function (x) { x.fillRect(20, 172, 270, 10); });
+    mosaic(g, cols, rows, [
+      { cov: tail, hi: true, edge: false, mix: [["tile", 60], ["disc", 40]] },
+      { cov: body, chars: "obfuscate", mix: [["tile", 46], ["disc", 18], ["ring", 12], ["diamond", 8], ["plus", 8], ["dot", 8]] },
+      { cov: branch, mix: [["dot", 50], ["plus", 25], ["ring", 25]] }
+    ], 141);
+    return { cols: cols, rows: rows };
+  }
+
+  // ── NovEval: a platypus, the classic odd combination; the bill in the pop color, the body spelled "surprise". ──
+  function platypus(svg) {
+    var cols = 30, rows = 21, g = el("g", {}, svg);
+    var body = coverage(cols, rows, function (x) {
+      x.beginPath(); x.ellipse(150, 110, 78, 36, 0, 0, 7); x.fill();
+      x.beginPath(); x.arc(226, 102, 26, 0, 7); x.fill();
+      x.beginPath(); x.ellipse(60, 118, 38, 18, 0.1, 0, 7); x.fill();
+      [[104, 142], [128, 142], [178, 142], [202, 142]].forEach(function (f) { x.fillRect(f[0], f[1], 12, 18); x.fillRect(f[0] - 6, f[1] + 16, 24, 8); });
+      x.globalCompositeOperation = "destination-out"; x.beginPath(); x.arc(230, 92, 5, 0, 7); x.fill();
+    });
+    var bill = coverage(cols, rows, function (x) {
+      x.beginPath(); x.moveTo(246, 92); x.lineTo(286, 90); x.quadraticCurveTo(298, 104, 286, 118); x.lineTo(246, 116); x.closePath(); x.fill();
+    });
+    mosaic(g, cols, rows, [
+      { cov: bill, hi: true, edge: false, mix: [["tile", 1]] },
+      { cov: body, chars: "surprise", mix: [["tile", 46], ["disc", 18], ["ring", 12], ["diamond", 8], ["plus", 8], ["dot", 8]] }
+    ], 151);
+    return { cols: cols, rows: rows };
+  }
+
+  // ── Prestige before the prize: a peacock in full display; the eyes of the train in the pop color. ──
+  function peacock(svg) {
+    var cols = 30, rows = 21, g = el("g", {}, svg);
+    var fan = coverage(cols, rows, function (x) {
+      x.beginPath(); x.moveTo(150, 168); x.ellipse(150, 168, 140, 150, 0, Math.PI, 2 * Math.PI); x.closePath(); x.fill();
+    });
+    var eyes = coverage(cols, rows, function (x) {
+      [[124, 9], [88, 7], [54, 5]].forEach(function (ring) {
+        for (var i = 0; i < ring[1]; i++) {
+          var a = Math.PI + (i + 0.5) * Math.PI / ring[1];
+          x.beginPath(); x.arc(150 + Math.cos(a) * ring[0] * 1.05, 168 + Math.sin(a) * ring[0] * 1.05, 9, 0, 7); x.fill();
+        }
+      });
+    });
+    var bird = coverage(cols, rows, function (x) {
+      x.beginPath(); x.ellipse(150, 150, 18, 30, 0, 0, 7); x.fill();
+      x.fillRect(144, 92, 12, 40); x.beginPath(); x.arc(150, 86, 10, 0, 7); x.fill();
+      x.lineWidth = 5; x.beginPath(); x.moveTo(142, 178); x.lineTo(136, 204); x.moveTo(158, 178); x.lineTo(164, 204); x.stroke();
+    });
+    var crest = coverage(cols, rows, function (x) { [[140, 64], [150, 60], [160, 64]].forEach(function (c) { x.beginPath(); x.arc(c[0], c[1], 4, 0, 7); x.fill(); }); });
+    mosaic(g, cols, rows, [
+      { cov: bird, chars: "prestige", edge: false, mix: [["tile", 1]] },
+      { cov: crest, edge: false, mix: [["disc", 1]] },
+      { cov: eyes, hi: true, edge: false, mix: [["disc", 60], ["ring", 40]] },
+      { cov: fan, edge: false, mix: [["dot", 62], ["plus", 12], ["ring", 14], ["diamond", 6], ["disc", 6]] }
+    ], 161);
+    return { cols: cols, rows: rows };
+  }
+
+  // ── K23: a mother duck leading three ducklings across the water; the ducklings in the pop color. ──
+  function ducks(svg) {
+    var cols = 30, rows = 21, g = el("g", {}, svg);
+    function duck(x, cx, cy, k) {
+      x.beginPath(); x.ellipse(cx, cy, 46 * k, 24 * k, 0, 0, 7); x.fill();
+      x.beginPath(); x.moveTo(cx - 44 * k, cy - 4 * k); x.lineTo(cx - 62 * k, cy - 22 * k); x.lineTo(cx - 34 * k, cy - 14 * k); x.fill();
+      x.fillRect(cx + 22 * k, cy - 46 * k, 16 * k, 36 * k);
+      x.beginPath(); x.arc(cx + 32 * k, cy - 50 * k, 18 * k, 0, 7); x.fill();
+      x.beginPath(); x.moveTo(cx + 46 * k, cy - 56 * k); x.lineTo(cx + 70 * k, cy - 48 * k); x.lineTo(cx + 46 * k, cy - 42 * k); x.fill();
+    }
+    var mom = coverage(cols, rows, function (x) {
+      duck(x, 220, 130, 1.25);
+      x.globalCompositeOperation = "destination-out"; x.beginPath(); x.arc(262, 64, 4, 0, 7); x.fill();
+    });
+    var kids = coverage(cols, rows, function (x) { [48, 98, 148].forEach(function (cx) { duck(x, cx, 156, 0.55); }); });
+    var water = coverage(cols, rows, function (x) {
+      x.lineWidth = 6; x.beginPath();
+      for (var t = 0; t <= 300; t += 4) x.lineTo(t, 186 + 4 * Math.sin(t / 14)); x.stroke();
+    });
+    mosaic(g, cols, rows, [
+      { cov: kids, hi: true, edge: false, mix: [["tile", 55], ["disc", 45]] },
+      { cov: mom, chars: "K23", mix: [["tile", 46], ["disc", 18], ["ring", 12], ["diamond", 8], ["plus", 8], ["dot", 8]] },
+      { cov: water, mix: [["dot", 50], ["ring", 30], ["disc", 20]] }
+    ], 171);
+    return { cols: cols, rows: rows };
+  }
+
+  // ── DualReasoning: the hare (fast) and the tortoise (slow); the tortoise's shell in the pop color. ──
+  function tortoiseHare(svg) {
+    var cols = 30, rows = 21, g = el("g", {}, svg);
+    var hare = coverage(cols, rows, function (x) {
+      x.beginPath(); x.ellipse(80, 108, 44, 24, -0.25, 0, 7); x.fill();
+      x.beginPath(); x.arc(122, 80, 16, 0, 7); x.fill();
+      x.lineWidth = 10; x.lineCap = "round";
+      x.beginPath(); x.moveTo(118, 66); x.lineTo(104, 22); x.moveTo(128, 66); x.lineTo(132, 20); x.stroke();
+      x.beginPath(); x.moveTo(52, 118); x.lineTo(20, 140); x.moveTo(104, 116); x.lineTo(132, 136); x.stroke();
+      x.beginPath(); x.arc(38, 100, 9, 0, 7); x.fill();
+      x.globalCompositeOperation = "destination-out"; x.beginPath(); x.arc(126, 76, 3.5, 0, 7); x.fill();
+    });
+    var shell = coverage(cols, rows, function (x) { x.beginPath(); x.ellipse(214, 168, 54, 40, 0, Math.PI, 2 * Math.PI); x.closePath(); x.fill(); });
+    var tortoise = coverage(cols, rows, function (x) {
+      x.beginPath(); x.ellipse(276, 160, 14, 11, 0, 0, 7); x.fill();
+      x.fillRect(254, 158, 14, 10);
+      [172, 200, 228, 252].forEach(function (lx) { x.fillRect(lx - 6, 166, 12, 20); });
+      x.beginPath(); x.moveTo(160, 166); x.lineTo(146, 174); x.lineTo(162, 174); x.fill();
+    });
+    var ground = coverage(cols, rows, function (x) { x.fillRect(0, 194, 300, 8); });
+    mosaic(g, cols, rows, [
+      { cov: shell, hi: true, chars: "slow", edge: false, mix: [["tile", 70], ["disc", 30]] },
+      { cov: tortoise, edge: false, mix: [["tile", 50], ["disc", 50]] },
+      { cov: hare, chars: "fast", mix: [["tile", 46], ["disc", 18], ["ring", 12], ["diamond", 8], ["plus", 8], ["dot", 8]] },
+      { cov: ground, mix: [["dot", 60], ["ring", 20], ["disc", 20]] }
+    ], 181);
+    return { cols: cols, rows: rows };
+  }
+
   // ── Plate 2: a year of new bioRxiv preprints, one mark per day; NIH R01 due dates in the pop color. ──
   var CAL = null; // filled from /static/plates-data.json
   function calendar(svg) {
@@ -358,6 +489,16 @@
       note: 'NIH&rsquo;s minority health label stayed on 99.4% of projects with unchanged summaries, but on 15.7% of those that no longer named a population; the funding stayed. <a href="https://arxiv.org/abs/2610.03443">Uncounted</a>' },
     { draw: stars, label: "A constellation of articles, one linked to its five nearest",
       note: 'Over 750 articles in <i>Digital Humanities Quarterly</i>, each now shown with its nearest neighbors, found three ways. <a href="https://journal.code4lib.org/articles/18501">DHQ recommender</a>' },
+    { draw: chameleon, label: "A chameleon on a branch, spelled in the letters of obfuscate",
+      note: 'Writers can disguise their style by hand. Replicating Brennan et al. (2012), we reached the same conclusion, but the disguises may work less well than first reported. <a href="https://doi.org/10.17879/replicationresearch-2026-9414">Replication</a>' },
+    { draw: platypus, label: "A platypus spelled in the letters of surprise, its bill highlighted",
+      note: 'Novelty as an atypical combination of existing knowledge, measured by how surprised a language model is. Think duck bill on a beaver tail. <a href="https://doi.org/10.1007/978-3-031-57867-0_31">NovEval</a>' },
+    { draw: peacock, label: "A peacock in full display, the eyes of its train highlighted",
+      note: 'Top-journal papers were followed by a new NIH or NSF award twice as often (55.3 vs 26.3 per 1,000), but the gap was as large two years before publication. <a href="https://doi.org/10.31235/osf.io/cf5u8_v1">Prestige</a>' },
+    { draw: ducks, label: "A mother duck leading three ducklings across the water",
+      note: 'After NIH&rsquo;s 2018 K23 trial pathway, awardees led their award&rsquo;s own trial more often (13.7 percentage points), with no detectable gain in leading new trials. <a href="https://doi.org/10.64898/2026.10.09.758109">K23</a>' },
+    { draw: tortoiseHare, label: "A hare and a tortoise, the tortoise's shell highlighted",
+      note: 'Thinking, fast and slow: DualReasoning pulls clinical knowledge out of messy medication records with LLMs. A distinguished poster nominee at AMIA 2025. <a href="https://drive.google.com/file/d/1r9FAD9tLjCtWvCUjI-enLxQ4FxUeflFd/view?usp=sharing">Poster</a>' },
     { draw: calendar, needs: "cal", label: "A year of bioRxiv preprints, one mark per day",
       note: 'Every new bioRxiv preprint of 2025, one mark per day; bigger marks, busier days. Crosses: NIH R01 due dates. In the four weeks before each (colored), the US share of preprints rises 2.3 to 2.7 percentage points. <a href="https://doi.org/10.64898/2026.10.10.758253">Zeitgeber</a>' }
   ];
