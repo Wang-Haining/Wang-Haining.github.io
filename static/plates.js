@@ -436,7 +436,7 @@
   }
 
   // ── Adversarial stylometry: a chameleon on a branch, spelled "obfuscate"; the curled tail in the pop color. ──
-  function chameleon(svg) {
+  function chameleon(svg, t) {
     var cols = 30, rows = 21, bg = el("g", {}, svg), g = el("g", {}, svg);
     var body = coverage(cols, rows, function (x) {
       x.beginPath(); x.ellipse(150, 102, 70, 40, -0.05, 0, 7); x.fill();
@@ -461,8 +461,13 @@
       { cov: body, chars: "obfuscate", mix: [["tile", 46], ["disc", 18], ["ring", 12], ["diamond", 8], ["plus", 8], ["dot", 8]] },
       { cov: branch, mix: [["dot", 50], ["plus", 25], ["ring", 25]] }
     ], 141);
-    el("circle", { cx: 232, cy: 94, r: 10, "class": "pl-rh", style: "stroke-width:3" }, g); // the turret eye
-    el("circle", { cx: 235, cy: 94, r: 3.6, "class": "pl-h" }, g);
+    // The turret eye: the pupil darts to a new spot every so often, and the eye blinks now and then.
+    var f = frame(t), look = Math.floor(f / 9), ang = t ? rnd(look, 7, 142) * 6.283 : 0, blink = t && f % 47 < 2;
+    if (blink) el("ellipse", { cx: 232, cy: 94, rx: 10, ry: 2.2, "class": "pl-h" }, g);
+    else {
+      el("circle", { cx: 232, cy: 94, r: 10, "class": "pl-rh", style: "stroke-width:3" }, g);
+      el("circle", { cx: 232 + 4.6 * Math.cos(ang), cy: 94 + 4.6 * Math.sin(ang), r: 3.6, "class": "pl-h" }, g);
+    }
     return { cols: cols, rows: rows };
   }
 
@@ -641,7 +646,7 @@
       note: 'NIH&rsquo;s minority health label stayed on 99.4% of projects with unchanged summaries, but on 15.7% of those that no longer named a population; the funding stayed. <a href="https://arxiv.org/abs/2610.03443">Uncounted</a>' },
     { draw: stars, animate: true, label: "A constellation of articles, one linked to its five nearest",
       note: 'Over 750 articles in <i>Digital Humanities Quarterly</i>, each now shown with its nearest neighbors, found three ways. <a href="https://journal.code4lib.org/articles/18501">DHQ recommender</a>' },
-    { draw: chameleon, label: "A chameleon on a branch, spelled in the letters of obfuscate",
+    { draw: chameleon, animate: true, label: "A chameleon on a branch, spelled in the letters of obfuscate",
       note: 'Writers can disguise their style by hand. Replicating Brennan et al. (2012), we reached the same conclusion, but the disguises may work less well than first reported. <a href="https://doi.org/10.17879/replicationresearch-2026-9414">Replication</a>' },
     { draw: platypus, label: "A platypus spelled in the letters of surprise, its bill highlighted",
       note: 'Novelty as an atypical combination of existing knowledge, measured by how surprised a language model is. Think duck bill on a beaver tail. <a href="https://doi.org/10.1007/978-3-031-57867-0_31">NovEval</a>' },
