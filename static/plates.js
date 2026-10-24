@@ -90,6 +90,8 @@
     }
   }
 
+  function frame(t) { return Math.round((t || 0) / 0.35); } // animation frame, about 6 per second
+
   function pick(u, mix) { // mix: [[kind, weight], ...]
     var s = 0, i;
     for (i = 0; i < mix.length; i++) s += mix[i][1];
@@ -108,7 +110,7 @@
         var ly = layers[L], c = ly.cov[r][q];
         if (c >= 0.5) {
           var kind = pick(u, ly.mix || BODY), ch = "";
-          if (kind === "tile" && ly.chars) { ch = ly.chars[n % ly.chars.length]; n++; }
+          if (kind === "tile" && ly.chars) { ch = ly.charFn ? ly.charFn(n, q, r) : ly.chars[n % ly.chars.length]; n++; }
           glyph(g, q, r, kind, ch, ly.hi);
           done = true;
         } else if (ly.edge !== false && c > 0.12 && u < 0.55) { glyph(g, q, r, "dot", "", ly.hi); done = true; }
@@ -145,9 +147,10 @@
     return { cols: cols, rows: rows };
   }
 
-  // ── Ivory tower: built from the letters of "jargon"; six lit steps come down to the door. ──
-  function tower(svg) {
-    var cols = 30, rows = 21, bg = el("g", {}, svg), g = el("g", {}, svg);
+  // ── Ivory tower: built from the letters of "jargon"; six steps light up one by one, coming down to the door. ──
+  function tower(svg, t) {
+    var cols = 30, rows = 21, bg = el("g", {}, svg), g = el("g", {}, svg), f = frame(t);
+    var lit = t ? Math.floor(f / 4) % 9 : 9; // still frame: all six lit
     glow(bg, 236, 52, 70, 0.16); wash(bg, "circle", { cx: 236, cy: 52, r: 24 }, 0.1);
     var body = coverage(cols, rows, function (x) {
       x.fillRect(110, 52, 82, 146);
@@ -157,12 +160,12 @@
       x.fillRect(140, 162, 22, 36);
       x.fillRect(142, 78, 18, 22); x.fillRect(142, 116, 18, 22);
     });
-    var steps = coverage(cols, rows, function (x) {
-      for (var k = 0; k < 6; k++) x.fillRect(84 - k * 14, 62 + k * 24, 26, 10);
-    });
+    var on = coverage(cols, rows, function (x) { for (var k = 0; k < 6; k++) if (k < lit) x.fillRect(84 - k * 14, 62 + k * 24, 26, 10); });
+    var off = coverage(cols, rows, function (x) { for (var k = 0; k < 6; k++) if (k >= lit) x.fillRect(84 - k * 14, 62 + k * 24, 26, 10); });
     var ground = coverage(cols, rows, function (x) { x.fillRect(0, 200, 300, 10); });
     mosaic(g, cols, rows, [
-      { cov: steps, hi: true, mix: [["tile", 1]] },
+      { cov: on, hi: true, edge: false, mix: [["tile", 1]] },
+      { cov: off, edge: false, mix: [["ring", 1]] },
       { cov: body, chars: "jargon", mix: [["tile", 50], ["disc", 16], ["ring", 12], ["diamond", 8], ["plus", 6], ["dot", 8]] },
       { cov: ground, mix: [["dot", 60], ["ring", 20], ["disc", 20]] }
     ], 31);
@@ -297,9 +300,10 @@
     return { cols: COLS, rows: ROWS };
   }
 
-  // ── Golden ticket: a ticket in the pop color, spelled "lottery", with notched sides and a perforated stub. ──
-  function ticket(svg) {
-    var cols = 30, rows = 21, bg = el("g", {}, svg), g = el("g", {}, svg);
+  // ── Golden ticket: a ticket in the pop color; its letters spin like a lottery reel and settle on "lottery". ──
+  function ticket(svg, t) {
+    var cols = 30, rows = 21, bg = el("g", {}, svg), g = el("g", {}, svg), f = frame(t), word = "lottery";
+    var p = t ? f % 70 : 69; // still frame: settled
     beam(bg, "130 0 170 0 290 210 10 210", 150, 0, 150, 210, 0.14);
     var body = coverage(cols, rows, function (x) {
       x.fillRect(20, 44, 260, 122);
@@ -311,32 +315,46 @@
     var perf = coverage(cols, rows, function (x) { x.fillRect(210, 44, 10, 122); });
     mosaic(g, cols, rows, [
       { cov: perf, edge: false, mix: [["dot", 1]] },
-      { cov: body, hi: true, chars: "lottery", edge: false, mix: [["tile", 70], ["disc", 14], ["ring", 6], ["dot", 10]] }
+      { cov: body, hi: true, chars: word, edge: false, mix: [["tile", 70], ["disc", 14], ["ring", 6], ["dot", 10]],
+        charFn: function (n, q) { // each column stops spinning a little later than the one to its left
+          return p < 8 + q * 1.3 ? "abcdefghijklmnopqrstuvwxyz"[Math.floor(rnd(n, f, 93) * 26)] : word[n % word.length]; } }
     ], 91);
+    if (t) for (var k = 0; k < 14; k++) { // sparkle in the spotlight
+      var u = rnd(k, f, 94), r = Math.floor(rnd(k, f, 95) * 4), q = 13 + Math.round((u - 0.5) * (4 + r * 2));
+      glyph(g, q, r, u < 0.5 ? "dot" : "plus", "", false);
+    }
     return { cols: cols, rows: rows };
   }
 
-  // ── NIH embargo: an open padlock; the lifted shackle in the pop color, the body spelled "PMC". ──
-  function padlock(svg) {
-    var cols = 30, rows = 21, bg = el("g", {}, svg), g = el("g", {}, svg);
-    [[-2.2, -1.75], [-1.55, -1.2], [-0.95, -0.55], [-0.35, 0.05]].forEach(function (w) {
-      var R = 190, cx = 150, cy = 92;
-      beam(bg, cx + " " + cy + " " + (cx + R * Math.cos(w[0])) + " " + (cy + R * Math.sin(w[0])) + " " + (cx + R * Math.cos(w[1])) + " " + (cy + R * Math.sin(w[1])),
-        cx, cy, cx + R * Math.cos((w[0] + w[1]) / 2), cy + R * Math.sin((w[0] + w[1]) / 2), 0.16);
-    });
+  // ── NIH embargo: a padlock whose body spells "PMC"; the shackle (pop color) springs open and glyph rays spread out. ──
+  function padlock(svg, t) {
+    var cols = 30, rows = 21, bg = el("g", {}, svg), g = el("g", {}, svg), f = frame(t);
+    var p = t ? f % 48 : 47, lift = p < 10 ? 0 : Math.min(1, (p - 10) / 4); // closed, then open
     var body = coverage(cols, rows, function (x) {
       x.fillRect(84, 96, 132, 104);
       x.globalCompositeOperation = "destination-out";
       x.beginPath(); x.arc(150, 136, 11, 0, 7); x.fill(); x.fillRect(145, 136, 10, 34);
     });
     var shackle = coverage(cols, rows, function (x) {
+      var up = 18 * lift;
       x.lineWidth = 18; x.lineCap = "butt"; x.beginPath();
-      x.moveTo(110, 96); x.lineTo(110, 52); x.arc(150, 52, 40, Math.PI, 0); x.lineTo(190, 70); x.stroke();
+      x.moveTo(110, 96); x.lineTo(110, 52 - up); x.arc(150, 52 - up, 40, Math.PI, 0); x.lineTo(190, lift ? 70 - up : 96); x.stroke();
     });
     mosaic(g, cols, rows, [
       { cov: shackle, hi: true, mix: [["tile", 50], ["disc", 30], ["dot", 20]] },
       { cov: body, chars: "PMC", mix: [["tile", 48], ["disc", 18], ["ring", 12], ["diamond", 8], ["plus", 6], ["dot", 8]] }
     ], 101);
+    if (lift === 1) { // rays: glyphs moving outward along five directions
+      var reach = t ? (p - 14) * 9 : 200;
+      [-2.6, -2.05, -1.57, -1.09, -0.54].forEach(function (a, k) {
+        for (var d = 70; d < Math.min(reach + 70, 230); d += 14) {
+          var x = 150 + Math.cos(a) * d, y = 92 + Math.sin(a) * d, q = Math.floor(x / S), r = Math.floor(y / S);
+          if (q < 0 || q >= cols || r < 0) continue;
+          var tip = t && d + 14 >= reach + 70;
+          glyph(g, q, r, tip ? "plus" : (d / 14 + k) % 2 ? "dot" : "ring", "", tip);
+        }
+      });
+    }
     return { cols: cols, rows: rows };
   }
 
@@ -360,14 +378,17 @@
     return { cols: cols, rows: rows };
   }
 
-  // ── Still funded, no longer counted: five-bar tally gates; three gates are still there, but hollow. ──
-  function tally(svg) {
-    var cols = 30, rows = 21, g = el("g", {}, svg), lost = [1, 5, 6];
-    for (var t = 0; t < 9; t++) {
-      var q0 = 1 + (t % 3) * 10, r0 = 1 + Math.floor(t / 3) * 7, gone = lost.indexOf(t) >= 0, slash = {};
+  // ── Still funded, no longer counted: five-bar tally gates drawn stroke by stroke; once all are counted, three gates
+  //    turn hollow: still there, no longer counted. ──
+  function tally(svg, t) {
+    var cols = 30, rows = 21, g = el("g", {}, svg), lost = [1, 5, 6], f = frame(t);
+    var p = t ? f % 96 : 95, drawn = Math.floor(p / 1.5), done = p >= 72;
+    for (var k = 0; k < 9; k++) {
+      var q0 = 1 + (k % 3) * 10, r0 = 1 + Math.floor(k / 3) * 7, gone = done && lost.indexOf(k) >= 0, slash = {};
+      var have = Math.max(0, Math.min(5, drawn - k * 5)); // strokes of this gate drawn so far (4 bars, then the slash)
       for (var m = 0; m <= 8; m++) slash[(q0 + m) + "," + Math.round(r0 + 5 - m * 5 / 8)] = 1;
       for (var q = q0; q <= q0 + 8; q++) for (var r = r0; r <= r0 + 5; r++) {
-        var bar = (q - q0) % 2 === 1 && q - q0 <= 7, onSlash = slash[q + "," + r];
+        var b = (q - q0 - 1) / 2, bar = (q - q0) % 2 === 1 && q - q0 <= 7 && b < have, onSlash = slash[q + "," + r] && have === 5;
         if (onSlash) glyph(g, q, r, gone ? "ring" : "tile", "", gone);
         else if (bar) glyph(g, q, r, gone ? "ring" : (rnd(q, r, 121) < 0.55 ? "tile" : "disc"), "", gone);
       }
@@ -485,8 +506,8 @@
 
   // ── K23: a mother duck leading three ducklings across the water; the ducklings in the pop color. ──
   //    A finer 40 x 28 grid, so the heads and bills read.
-  function ducks(svg) {
-    var cols = 40, rows = 28, bg = el("g", {}, svg), g = el("g", {}, svg), wl = 222;
+  function ducks(svg, t) {
+    var cols = 40, rows = 28, bg = el("g", {}, svg), g = el("g", {}, svg), wl = 222, W = wl, f = frame(t);
     water(bg, wl, 400, 280);
     function duck(x, cx, k) { // side view facing right, floating on the waterline
       x.beginPath();
@@ -505,11 +526,16 @@
       duck(x, 296, 1.6);
       x.globalCompositeOperation = "destination-out"; x.beginPath(); x.arc(296 + 30 * 1.6, wl - 54 * 1.6, 5, 0, 7); x.fill();
     });
-    var kids = coverage(cols, rows, function (x) { [30, 96, 162].forEach(function (cx) { duck(x, cx, 0.64); }); });
+    var kids = coverage(cols, rows, function (x) { // each duckling bobs a little, in turn
+      [30, 96, 162].forEach(function (cx, i) { wl = W - (t ? 6 * Math.max(0, Math.sin(t * 1.2 - i * 1.1)) : 0); duck(x, cx, 0.64); });
+      wl = W;
+    });
     mosaic(g, cols, rows, [
       { cov: kids, hi: true, edge: false, mix: [["tile", 64], ["disc", 36]] },
       { cov: mom, chars: "K23", edge: false, mix: [["tile", 52], ["disc", 18], ["ring", 12], ["diamond", 6], ["plus", 6], ["dot", 6]] }
     ], 171);
+    for (var r = 23; r < rows; r += 2) for (var q = 0; q < cols; q++) // ripples drifting left
+      if ((q + f + r * 3) % 9 === 0) glyph(g, q, r, "char", "~", false);
     return { cols: cols, rows: rows };
   }
 
@@ -543,22 +569,35 @@
     return { cols: cols, rows: rows };
   }
 
-  // ── Plate 2: a year of new bioRxiv preprints, one mark per day; NIH R01 due dates in the pop color. ──
+  // ── Zeitgeber: a year of new bioRxiv preprints, one mark per day (bigger marks, busier days). The four weeks before
+  //    each NIH R01 due date are bright and the rest of the year is dimmed; a cursor races through ordinary weeks,
+  //    slows down through each four-week window, and the due date (a cross) flashes as it arrives. ──
   var CAL = null; // filled from /static/plates-data.json
-  function calendar(svg) {
-    var g = el("g", {}, svg), year = CAL.year, counts = CAL.counts, due = CAL.due;
+  function calendar(svg, t) {
+    var dim = el("g", { opacity: 0.38 }, svg), g = el("g", {}, svg), year = CAL.year, counts = CAL.counts, due = CAL.due, f = frame(t);
     var vals = counts.slice().sort(function (a, b) { return a - b; });
     function qt(v) { var lo = 0, hi = vals.length; while (lo < hi) { var m = (lo + hi) >> 1; if (vals[m] < v) lo = m + 1; else hi = m; } return lo / vals.length; }
-    var cols = 4 * 7 + 3, rows = 3 * 6 + 2;
-    for (var d = 0; d < counts.length; d++) {
+    var cols = 4 * 7 + 3, rows = 3 * 6 + 2, info = [], total = 0, d;
+    for (d = 0; d < counts.length; d++) {
       var date = new Date(year, 0, 1 + d), m = date.getMonth(), wd = (date.getDay() + 6) % 7;
       var first = (new Date(year, m, 1).getDay() + 6) % 7, wk = Math.floor((date.getDate() - 1 + first) / 7);
-      var q = (m % 4) * 8 + wd, r = Math.floor(m / 4) * 7 + wk;
       var iso = year + "-" + ("0" + (m + 1)).slice(-2) + "-" + ("0" + date.getDate()).slice(-2);
-      if (due.indexOf(iso) >= 0) { glyph(g, q, r, "plus", "", true); continue; }
+      var isDue = due.indexOf(iso) >= 0;
       var near = due.some(function (x) { var k = (new Date(x + "T00:00") - date) / 86400000; return k > 0 && k <= CAL.window; });
-      var p = qt(counts[d]);
-      glyph(g, q, r, p >= 0.9 ? "tile" : p >= 0.65 ? "disc" : p >= 0.35 ? "ring" : "dot", "", near);
+      var w = isDue ? 14 : near ? 1.6 : 0.22; // time the cursor spends on each day
+      info.push({ q: (m % 4) * 8 + wd, r: Math.floor(m / 4) * 7 + wk, due: isDue, near: near, at: total, w: w });
+      total += w;
+    }
+    var pos = t ? (f * 0.9) % (total + 8) : -1, cur = -1;
+    for (d = 0; d < info.length; d++) if (pos >= info[d].at && pos < info[d].at + info[d].w) cur = d;
+    for (d = 0; d < info.length; d++) {
+      var c = info[d], p = qt(counts[d]), kind = p >= 0.9 ? "tile" : p >= 0.65 ? "disc" : p >= 0.35 ? "ring" : "dot";
+      if (c.due) {
+        var flash = cur === d && f % 2 === 0;
+        glyph(g, c.q, c.r, flash || cur > d && cur < d + 6 ? "tile" : "plus", "", true);
+      } else if (d === cur || d === cur - 1) glyph(g, c.q, c.r, "tile", "", true);
+      else if (c.near) glyph(g, c.q, c.r, kind, "", true);
+      else glyph(dim, c.q, c.r, kind, "", false);
     }
     return { cols: cols, rows: rows };
   }
@@ -566,7 +605,7 @@
   var PLATES = [
     { draw: elephant, animate: true, label: "An elephant drawn in glyphs; its trunk wiggles",
       note: 'Four parameters fit an elephant; the fifth wiggles its trunk. <a href="/teaching/">Under Five</a>' },
-    { draw: tower, label: "An ivory tower built from the letters of jargon, with six lit steps down to the door",
+    { draw: tower, animate: true, label: "An ivory tower built from the letters of jargon, with six lit steps down to the door",
       note: 'Rewritten by a language model, scholarly abstracts come down about six US grade levels, from postgraduate to high school. <a href="https://doi.org/10.1007/s11192-025-05386-z">Ivory tower</a>' },
     { draw: capsule, label: "A capsule spelled from the letters of medication list",
       note: 'From the medication list alone, DualR flagged alcohol use disorder more than 300 days before diagnosis, across more than 1.3 million people. <a href="https://dualr.hainingwang.org">DualR</a>' },
@@ -576,13 +615,13 @@
       note: 'Signed 独应 (Du Ying) in 1912, &lsquo;Looking at the Country of China&rsquo; was written by Lu Xun. <a href="https://doi.org/10.1093/llc/fqae084">Du Ying</a>' },
     { draw: fingerprint, label: "A fingerprint spelled in the words the, of, and, to, a",
       note: 'The, of, and: small words no one chooses on purpose add up to a writer&rsquo;s fingerprint. <a href="/teaching/stylometry/">Stylometry lab</a>' },
-    { draw: ticket, label: "A golden ticket spelled in the letters of lottery",
+    { draw: ticket, animate: true, label: "A golden ticket spelled in the letters of lottery",
       note: 'On 10,625 rejected conference submissions, the golden ticket picked like a lottery; ranking by the panel mean picked papers cited 7.75 percentile points higher. <a href="https://arxiv.org/abs/2609.19552">Golden ticket</a>' },
-    { draw: padlock, label: "An open padlock whose body spells PMC",
+    { draw: padlock, animate: true, label: "An open padlock whose body spells PMC",
       note: 'After NIH ended its 12-month embargo, NIH-funded papers in PubMed Central within a week of publication doubled from 11% to 22% in journals outside DOAJ. <a href="https://arxiv.org/abs/2609.14842">Embargo</a>' },
     { draw: doors, label: "Ten doorways, three of them shut",
       note: 'In FY2026 NSF made 30% fewer new research projects; newcomers kept the same share (34.5% to 34.3%), through fewer doors. <a href="https://doi.org/10.31235/osf.io/9qpb7_v1">Newcomers</a>' },
-    { draw: tally, label: "Nine five-bar tally gates, three of them hollow",
+    { draw: tally, animate: true, label: "Nine five-bar tally gates, three of them hollow",
       note: 'NIH&rsquo;s minority health label stayed on 99.4% of projects with unchanged summaries, but on 15.7% of those that no longer named a population; the funding stayed. <a href="https://arxiv.org/abs/2610.03443">Uncounted</a>' },
     { draw: stars, label: "A constellation of articles, one linked to its five nearest",
       note: 'Over 750 articles in <i>Digital Humanities Quarterly</i>, each now shown with its nearest neighbors, found three ways. <a href="https://journal.code4lib.org/articles/18501">DHQ recommender</a>' },
@@ -592,12 +631,12 @@
       note: 'Novelty as an atypical combination of existing knowledge, measured by how surprised a language model is. Think duck bill on a beaver tail. <a href="https://doi.org/10.1007/978-3-031-57867-0_31">NovEval</a>' },
     { draw: peacock, label: "A peacock in full display, the eyes of its train highlighted",
       note: 'Top-journal papers were followed by a new NIH or NSF award twice as often (55.3 vs 26.3 per 1,000), but the gap was as large two years before publication. <a href="https://doi.org/10.31235/osf.io/cf5u8_v1">Prestige</a>' },
-    { draw: ducks, label: "A mother duck leading three ducklings across the water",
+    { draw: ducks, animate: true, label: "A mother duck leading three ducklings across the water",
       note: 'After NIH&rsquo;s 2018 K23 trial pathway, awardees led their award&rsquo;s own trial more often (13.7 percentage points), with no detectable gain in leading new trials. <a href="https://doi.org/10.64898/2026.10.09.758109">K23</a>' },
     { draw: tortoiseHare, label: "A hare and a tortoise, the tortoise's shell highlighted",
       note: 'Thinking, fast and slow: DualReasoning pulls clinical knowledge out of messy medication records with LLMs. A distinguished poster nominee at AMIA 2025. <a href="https://drive.google.com/file/d/1r9FAD9tLjCtWvCUjI-enLxQ4FxUeflFd/view?usp=sharing">Poster</a>' },
-    { draw: calendar, needs: "cal", label: "A year of bioRxiv preprints, one mark per day",
-      note: 'Every new bioRxiv preprint of 2025, one mark per day; bigger marks, busier days. Crosses: NIH R01 due dates. In the four weeks before each (colored), the US share of preprints rises 2.3 to 2.7 percentage points. <a href="https://doi.org/10.64898/2026.10.10.758253">Zeitgeber</a>' }
+    { draw: calendar, animate: true, needs: "cal", label: "A year of bioRxiv preprints, one mark per day",
+      note: 'Every new bioRxiv preprint of 2025, one mark per day. Crosses: NIH R01 due dates. In the four weeks before each (bright), the US share of preprints rises 2.3 to 2.7 percentage points. <a href="https://doi.org/10.64898/2026.10.10.758253">Zeitgeber</a>' }
   ];
 
   function mount() {
