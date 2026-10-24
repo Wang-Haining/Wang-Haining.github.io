@@ -471,24 +471,33 @@
     return { cols: cols, rows: rows };
   }
 
-  // ── NovEval: a platypus, the classic odd combination; the bill in the pop color, the body spelled "surprise". ──
-  function platypus(svg) {
-    var cols = 30, rows = 21, bg = el("g", {}, svg), g = el("g", {}, svg);
+  // ── NovEval: a platypus, the classic odd combination; the bill in the pop color, the body spelled "surprise".
+  //    It swims: bobs on the water, drifts forward and back, paddles its tail and feet, and leaves ripples behind. ──
+  function platypus(svg, t) {
+    var cols = 30, rows = 21, bg = el("g", {}, svg), g = el("g", {}, svg), f = frame(t);
+    var dx = t ? 10 * Math.sin(t * 0.35) : 0, dy = t ? 3.5 * Math.sin(t * 1.3) : 0, tail = t ? 0.28 * Math.sin(t * 2.2) : 0.1;
+    var kick = t ? Math.round(5 * Math.sin(t * 2.6)) : 0;
     water(bg, 132, 300);
     var body = coverage(cols, rows, function (x) {
+      x.translate(dx, dy);
       x.beginPath(); x.ellipse(150, 110, 78, 36, 0, 0, 7); x.fill();
       x.beginPath(); x.arc(226, 102, 26, 0, 7); x.fill();
-      x.beginPath(); x.ellipse(60, 118, 38, 18, 0.1, 0, 7); x.fill();
-      [[104, 142], [128, 142], [178, 142], [202, 142]].forEach(function (f) { x.fillRect(f[0], f[1], 12, 18); x.fillRect(f[0] - 6, f[1] + 16, 24, 8); });
+      x.beginPath(); x.ellipse(60, 118, 38, 18, tail, 0, 7); x.fill();
+      [[104, 142], [128, 142], [178, 142], [202, 142]].forEach(function (p, k) {
+        var s2 = k % 2 ? kick : -kick; x.fillRect(p[0] + s2, p[1], 12, 18); x.fillRect(p[0] - 6 + s2, p[1] + 16, 24, 8);
+      });
       x.globalCompositeOperation = "destination-out"; x.beginPath(); x.arc(230, 92, 5, 0, 7); x.fill();
     });
     var bill = coverage(cols, rows, function (x) {
+      x.translate(dx, dy);
       x.beginPath(); x.moveTo(246, 92); x.lineTo(286, 90); x.quadraticCurveTo(298, 104, 286, 118); x.lineTo(246, 116); x.closePath(); x.fill();
     });
     mosaic(g, cols, rows, [
       { cov: bill, hi: true, edge: false, mix: [["tile", 1]] },
       { cov: body, chars: "surprise", mix: [["tile", 46], ["disc", 18], ["ring", 12], ["diamond", 8], ["plus", 8], ["dot", 8]] }
     ], 151);
+    if (t) for (var r = 15; r < rows; r += 2) for (var q = 0; q < 10; q++) // a wake of ripples drifting back from the tail
+      if ((q + f + r * 2) % 6 === 0) glyph(g, q, r, "char", "~", false);
     return { cols: cols, rows: rows };
   }
 
@@ -648,7 +657,7 @@
       note: 'Over 750 articles in <i>Digital Humanities Quarterly</i>, each now shown with its nearest neighbors, found three ways. <a href="https://journal.code4lib.org/articles/18501">DHQ recommender</a>' },
     { draw: chameleon, animate: true, label: "A chameleon on a branch, spelled in the letters of obfuscate",
       note: 'Writers can disguise their style by hand. Replicating Brennan et al. (2012), we reached the same conclusion, but the disguises may work less well than first reported. <a href="https://doi.org/10.17879/replicationresearch-2026-9414">Replication</a>' },
-    { draw: platypus, label: "A platypus spelled in the letters of surprise, its bill highlighted",
+    { draw: platypus, animate: true, label: "A platypus spelled in the letters of surprise, its bill highlighted",
       note: 'Novelty as an atypical combination of existing knowledge, measured by how surprised a language model is. Think duck bill on a beaver tail. <a href="https://doi.org/10.1007/978-3-031-57867-0_31">NovEval</a>' },
     { draw: peacock, label: "A peacock in full display, the eyes of its train highlighted",
       note: 'Top-journal papers were followed by a new NIH or NSF award twice as often (55.3 vs 26.3 per 1,000), but the gap was as large two years before publication. <a href="https://doi.org/10.31235/osf.io/cf5u8_v1">Prestige</a>' },
