@@ -501,17 +501,21 @@
     return { cols: cols, rows: rows };
   }
 
-  // ── Prestige before the prize: a peacock in full display; the eyes of the train in the pop color. ──
-  function peacock(svg) {
-    var cols = 30, rows = 21, g = el("g", {}, svg);
+  // ── Prestige before the prize: a peacock; the eyes of the train in the pop color. The train fans open, holds its
+  //    display while the eyes shimmer and rattle, then folds down and opens again. ──
+  function peacock(svg, t) {
+    var cols = 30, rows = 21, g = el("g", {}, svg), f = frame(t), p = t ? f % 100 : 50;
+    var open = p < 18 ? p / 18 : p < 84 ? 1 : 1 - (p - 84) / 16;   // 0 = folded, 1 = full display
+    open = 0.5 - 0.5 * Math.cos(Math.PI * open);                       // ease in and out
+    var hs = 0.12 * Math.PI + open * 0.38 * Math.PI, R = 0.55 + 0.45 * open, rattle = p >= 60 && p < 70 && f % 2;
     var fan = coverage(cols, rows, function (x) {
-      x.beginPath(); x.moveTo(150, 168); x.ellipse(150, 168, 140, 150, 0, Math.PI, 2 * Math.PI); x.closePath(); x.fill();
+      x.beginPath(); x.moveTo(150, 168); x.ellipse(150, 168, 140 * R, 150 * R, 0, -Math.PI / 2 - hs, -Math.PI / 2 + hs); x.closePath(); x.fill();
     });
     var eyes = coverage(cols, rows, function (x) {
       [[124, 9], [88, 7], [54, 5]].forEach(function (ring) {
         for (var i = 0; i < ring[1]; i++) {
-          var a = Math.PI + (i + 0.5) * Math.PI / ring[1];
-          x.beginPath(); x.arc(150 + Math.cos(a) * ring[0] * 1.05, 168 + Math.sin(a) * ring[0] * 1.05, 9, 0, 7); x.fill();
+          var a = -Math.PI / 2 - hs + (i + 0.5) * 2 * hs / ring[1] + (rattle ? 0.04 : 0);
+          x.beginPath(); x.arc(150 + Math.cos(a) * ring[0] * 1.05 * R, 168 + Math.sin(a) * ring[0] * 1.05 * R, 9 * (0.6 + 0.4 * open), 0, 7); x.fill();
         }
       });
     });
@@ -524,9 +528,9 @@
     mosaic(g, cols, rows, [
       { cov: bird, chars: "prestige", edge: false, mix: [["tile", 1]] },
       { cov: crest, edge: false, mix: [["disc", 1]] },
-      { cov: eyes, hi: true, edge: false, mix: [["disc", 60], ["ring", 40]] },
+      { cov: eyes, hi: true, edge: false, mix: t && open === 1 ? [["disc", 50 + 20 * Math.sin(f * 0.7)], ["ring", 50 - 20 * Math.sin(f * 0.7)]] : [["disc", 60], ["ring", 40]] },
       { cov: fan, edge: false, mix: [["dot", 62], ["plus", 12], ["ring", 14], ["diamond", 6], ["disc", 6]] }
-    ], 161);
+    ], t && open === 1 ? 161 + (f % 3) : 161); // a different glyph draw each frame makes the open train shimmer
     return { cols: cols, rows: rows };
   }
 
@@ -659,7 +663,7 @@
       note: 'Writers can disguise their style by hand. Replicating Brennan et al. (2012), we reached the same conclusion, but the disguises may work less well than first reported. <a href="https://doi.org/10.17879/replicationresearch-2026-9414">Replication</a>' },
     { draw: platypus, animate: true, label: "A platypus spelled in the letters of surprise, its bill highlighted",
       note: 'Novelty as an atypical combination of existing knowledge, measured by how surprised a language model is. Think duck bill on a beaver tail. <a href="https://doi.org/10.1007/978-3-031-57867-0_31">NovEval</a>' },
-    { draw: peacock, label: "A peacock in full display, the eyes of its train highlighted",
+    { draw: peacock, animate: true, label: "A peacock in full display, the eyes of its train highlighted",
       note: 'Top-journal papers were followed by a new NIH or NSF award twice as often (55.3 vs 26.3 per 1,000), but the gap was as large two years before publication. <a href="https://doi.org/10.31235/osf.io/cf5u8_v1">Prestige</a>' },
     { draw: ducks, animate: true, label: "A mother duck leading three ducklings across the water",
       note: 'After NIH&rsquo;s 2018 K23 trial pathway, awardees led their award&rsquo;s own trial more often (13.7 percentage points), with no detectable gain in leading new trials. <a href="https://doi.org/10.64898/2026.10.09.758109">K23</a>' },
