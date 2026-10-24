@@ -189,39 +189,47 @@
     return { cols: cols, rows: rows };
   }
 
-  // ── Library fairness: a level balance; six weights, one per model, three on each pan. ──
-  function scale(svg) {
-    var cols = 30, rows = 21, g = el("g", {}, svg);
-    var frame = coverage(cols, rows, function (x) {
+  // ── Library fairness: a balance with three weights (one per model) on each pan; it wobbles, then settles level. ──
+  function scale(svg, t) {
+    var cols = 30, rows = 21, g = el("g", {}, svg), f = frame(t), p = f % 64;
+    var a = t ? 0.16 * Math.exp(-p / 14) * Math.sin(p * 0.75) : 0; // beam angle: a damped wobble that comes to rest
+    function at(dx) { return [150 + dx * Math.cos(a), 45 + dx * Math.sin(a)]; }
+    var stand = coverage(cols, rows, function (x) {
       x.fillRect(144, 44, 12, 146);
       x.beginPath(); x.moveTo(104, 202); x.lineTo(196, 202); x.lineTo(170, 184); x.lineTo(130, 184); x.closePath(); x.fill();
-      x.fillRect(40, 40, 220, 10);
       x.beginPath(); x.arc(150, 34, 9, 0, 7); x.fill();
+    });
+    var arms = coverage(cols, rows, function (x) {
+      x.save(); x.translate(150, 45); x.rotate(a); x.fillRect(-110, -5, 220, 10); x.restore();
       x.lineWidth = 8; x.lineCap = "round";
-      [50, 250].forEach(function (c) {
-        x.beginPath(); x.moveTo(c, 50); x.lineTo(c - 30, 122); x.moveTo(c, 50); x.lineTo(c + 30, 122); x.stroke();
+      [-100, 100].forEach(function (dx) {
+        var e = at(dx);
+        x.beginPath(); x.moveTo(e[0], e[1]); x.lineTo(e[0] - 30, e[1] + 72); x.moveTo(e[0], e[1]); x.lineTo(e[0] + 30, e[1] + 72); x.stroke();
+        x.beginPath(); x.moveTo(e[0] - 48, e[1] + 72); x.lineTo(e[0] + 48, e[1] + 72); x.lineTo(e[0] + 30, e[1] + 92); x.lineTo(e[0] - 30, e[1] + 92); x.closePath(); x.fill();
       });
-      [50, 250].forEach(function (cx) { x.beginPath(); x.moveTo(cx - 48, 122); x.lineTo(cx + 48, 122); x.lineTo(cx + 30, 142); x.lineTo(cx - 30, 142); x.closePath(); x.fill(); });
     });
     var weights = coverage(cols, rows, function (x) {
-      [50, 250].forEach(function (cx) { [[-12, 112], [12, 112], [0, 96]].forEach(function (o) { x.beginPath(); x.arc(cx + o[0], o[1], 7, 0, 7); x.fill(); }); });
+      [-100, 100].forEach(function (dx) { var e = at(dx); [[-12, 62], [12, 62], [0, 46]].forEach(function (o) { x.beginPath(); x.arc(e[0] + o[0], e[1] + o[1], 7, 0, 7); x.fill(); }); });
     });
     mosaic(g, cols, rows, [
       { cov: weights, hi: true, mix: [["disc", 1]] },
-      { cov: frame, mix: [["tile", 22], ["disc", 26], ["ring", 16], ["diamond", 12], ["plus", 12], ["dot", 12]] }
+      { cov: arms, mix: [["tile", 22], ["disc", 26], ["ring", 16], ["diamond", 12], ["plus", 12], ["dot", 12]] },
+      { cov: stand, mix: [["tile", 22], ["disc", 26], ["ring", 16], ["diamond", 12], ["plus", 12], ["dot", 12]] }
     ], 53);
     return { cols: cols, rows: rows };
   }
 
   // ── Du Ying: the 1912 newspaper page, set in vertical columns read right to left. The first column, in the pop
   //    color, is the title and signature (望华国篇, 独应); the rest are the function characters Lu Xun used more. ──
-  function paper(svg) {
-    var cols = 30, rows = 21, g = el("g", {}, svg), body = "之而不于则是矣", n = 0;
+  function paper(svg, t) {
+    var cols = 30, rows = 21, g = el("g", {}, svg), body = "之而不于则是矣", n = 0, idx = 0;
+    var shown = t ? (frame(t) % 110) * 2.4 : 1e9; // cells typeset so far, column by column from the right
     var title = "望华国篇", sign = "独应", len = [19, 17, 19, 18, 19, 14, 19, 19, 16, 19, 12];
     for (var c = 0; c < len.length; c++) {
       var q = 25 - c * 2;
       for (var r = 1; r <= len[c]; r++) {
         var u = rnd(q, r, 81);
+        if (idx++ > shown) continue;
         if (c === 0) {
           if (r <= title.length) glyph(g, q, r, "tile", title[r - 1], true);
           else if (r >= 7 && r < 7 + sign.length) glyph(g, q, r, "tile", sign[r - 7], true);
@@ -239,7 +247,7 @@
 
   // ── Authorship: a tilted loop fingerprint, every ridge spelled out in glyphs (the, of, and, to, a), core in the pop color.
   //    Ridges follow a core-and-delta orientation field (evenly spaced streamlines), two grid cells apart on a 53 x 37 grid. ──
-  function fingerprint(svg) {
+  function fingerprint(svg, t) {
     var COLS = 53, ROWS = 37, K = 1.325, OX = 265, OY = 188, SEP = 15;
     var bg = el("g", {}, svg), g = el("g", {}, svg), ridges = [], bins = {}, seeds = [], seen = {};
     var ca = Math.cos(25 * Math.PI / 180), sa = Math.sin(25 * Math.PI / 180), core = [8, -30], delta = [-44, 48];
@@ -287,14 +295,14 @@
     for (var i = 0; i < seeds.length; i++) plant(seeds[i]);
     for (var yy = -120; yy <= 120; yy += 7) for (var xx = -96; xx <= 96; xx += 7) plant([xx, yy]);
     wash(bg, "ellipse", { cx: OX, cy: OY, rx: 100 * K, ry: 128 * K, transform: "rotate(25 " + OX + " " + OY + ")" }, 0.05);
-    var words = "theofandtoa", n = 0;
+    var words = "theofandtoa", n = 0, scan = (frame(t) % 52) - 4; // the scan line's row
     var c0 = turn(core), cq = Math.floor(c0[0] / S), cr = Math.floor(c0[1] / S);
     [[0, 0], [1, 0], [0, 1], [1, 1]].forEach(function (o) { seen[(cq + o[0]) + "," + (cr + o[1])] = 1; glyph(g, cq + o[0], cr + o[1], "tile", "", true); });
     ridges.forEach(function (pts, k) {
       pts.forEach(function (p) {
         var q = turn(p), c = Math.floor(q[0] / S), r = Math.floor(q[1] / S), key = c + "," + r;
         if (seen[key]) return; seen[key] = 1;
-        glyph(g, c, r, k % 2 ? "char" : "tile", words[n++ % words.length], false); // one style per ridge, so each reads as a line
+        glyph(g, c, r, k % 2 ? "char" : "tile", words[n++ % words.length], t > 0 && Math.abs(r - scan) <= 1); // one style per ridge
       });
     });
     return { cols: COLS, rows: ROWS };
@@ -397,7 +405,7 @@
   }
 
   // ── DHQ recommender: a constellation of articles; one in the pop color, linked to its five nearest. ──
-  function stars(svg) {
+  function stars(svg, t) {
     var cols = 30, rows = 21, bg = el("g", {}, svg), g = el("g", {}, svg), P = [], k, j;
     for (k = 0; k < 40; k++) P.push([1 + Math.floor(rnd(k, 1, 131) * 28), 1 + Math.floor(rnd(k, 2, 131) * 19)]);
     var hub = 0, best = 1e9;
@@ -413,12 +421,16 @@
     }
     var hubNear = P.map(function (p, i) { return [Math.pow(p[0] - P[hub][0], 2) + Math.pow(p[1] - P[hub][1], 2), i]; })
       .filter(function (x) { return x[0] >= 16; }).sort(function (a, b) { return a[0] - b[0]; }).slice(0, 5).map(function (x) { return x[1]; });
-    hubNear.forEach(function (i) { line(P[hub], P[i], true); });
+    var links = t ? Math.min(5, Math.floor((frame(t) % 48) / 6)) : 5;
+    hubNear.forEach(function (i, m) { if (m < links) line(P[hub], P[i], true); });
     glow(bg, P[hub][0] * S + 5, P[hub][1] * S + 5, 80, 0.16);
     P.forEach(function (p, i) {
       var u = rnd(i, 4, 131);
       if (i === hub) glyph(g, p[0], p[1], "tile", "", true);
-      else glyph(g, p[0], p[1], hubNear.indexOf(i) >= 0 ? "disc" : u < 0.35 ? "plus" : u < 0.7 ? "disc" : "ring", "", hubNear.indexOf(i) >= 0);
+      else {
+        var lit = hubNear.indexOf(i) >= 0 && hubNear.indexOf(i) < links, tw = t && rnd(i, frame(t), 132) < 0.12; // twinkle
+        glyph(g, p[0], p[1], tw ? "dot" : lit ? "disc" : u < 0.35 ? "plus" : u < 0.7 ? "disc" : "ring", "", lit);
+      }
     });
     return { cols: cols, rows: rows };
   }
@@ -540,10 +552,13 @@
   }
 
   // ── DualReasoning: the hare (fast) and the tortoise (slow); the tortoise's shell in the pop color. ──
-  function tortoiseHare(svg) {
-    var cols = 30, rows = 21, bg = el("g", {}, svg), g = el("g", {}, svg);
+  function tortoiseHare(svg, t) {
+    var cols = 30, rows = 21, bg = el("g", {}, svg), g = el("g", {}, svg), f = frame(t);
+    var hop = t && f % 24 < 8 ? 18 * Math.sin((f % 24) / 8 * Math.PI) : 0; // a quick hop, then a long rest
+    var creep = t ? 4 * Math.floor((f % 72) / 8) - 16 : 0;              // the tortoise, step by step
     [[14, 176, 12], [34, 182, 9], [4, 160, 7]].forEach(function (c) { wash(bg, "circle", { cx: c[0], cy: c[1], r: c[2] }, 0.1); });
     var hare = coverage(cols, rows, function (x) {
+      x.translate(0, -hop);
       x.beginPath(); x.ellipse(80, 108, 44, 24, -0.25, 0, 7); x.fill();
       x.beginPath(); x.arc(122, 80, 16, 0, 7); x.fill();
       x.lineWidth = 10; x.lineCap = "round";
@@ -552,8 +567,9 @@
       x.beginPath(); x.arc(38, 100, 9, 0, 7); x.fill();
       x.globalCompositeOperation = "destination-out"; x.beginPath(); x.arc(126, 76, 3.5, 0, 7); x.fill();
     });
-    var shell = coverage(cols, rows, function (x) { x.beginPath(); x.ellipse(214, 168, 54, 40, 0, Math.PI, 2 * Math.PI); x.closePath(); x.fill(); });
+    var shell = coverage(cols, rows, function (x) { x.translate(creep, 0); x.beginPath(); x.ellipse(214, 168, 54, 40, 0, Math.PI, 2 * Math.PI); x.closePath(); x.fill(); });
     var tortoise = coverage(cols, rows, function (x) {
+      x.translate(creep, 0);
       x.beginPath(); x.ellipse(276, 160, 14, 11, 0, 0, 7); x.fill();
       x.fillRect(254, 158, 14, 10);
       [172, 200, 228, 252].forEach(function (lx) { x.fillRect(lx - 6, 166, 12, 20); });
@@ -609,11 +625,11 @@
       note: 'Rewritten by a language model, scholarly abstracts come down about six US grade levels, from postgraduate to high school. <a href="https://doi.org/10.1007/s11192-025-05386-z">Ivory tower</a>' },
     { draw: capsule, label: "A capsule spelled from the letters of medication list",
       note: 'From the medication list alone, DualR flagged alcohol use disorder more than 300 days before diagnosis, across more than 1.3 million people. <a href="https://dualr.hainingwang.org">DualR</a>' },
-    { draw: scale, label: "A level balance with three weights on each pan",
+    { draw: scale, animate: true, label: "A level balance with three weights on each pan",
       note: 'Six LLMs answered library patrons who differed in race, sex and role: no differentiation by race or ethnicity, minor bias against women in one model. <a href="https://doi.org/10.1057/s41599-026-08465-5">Fairness audit</a>' },
-    { draw: paper, label: "A 1912 newspaper page in vertical columns of Chinese characters, titled 望华国篇 and signed 独应",
+    { draw: paper, animate: true, label: "A 1912 newspaper page in vertical columns of Chinese characters, titled 望华国篇 and signed 独应",
       note: 'Signed 独应 (Du Ying) in 1912, &lsquo;Looking at the Country of China&rsquo; was written by Lu Xun. <a href="https://doi.org/10.1093/llc/fqae084">Du Ying</a>' },
-    { draw: fingerprint, label: "A fingerprint spelled in the words the, of, and, to, a",
+    { draw: fingerprint, animate: true, label: "A fingerprint spelled in the words the, of, and, to, a",
       note: 'The, of, and: small words no one chooses on purpose add up to a writer&rsquo;s fingerprint. <a href="/teaching/stylometry/">Stylometry lab</a>' },
     { draw: ticket, animate: true, label: "A golden ticket spelled in the letters of lottery",
       note: 'On 10,625 rejected conference submissions, the golden ticket picked like a lottery; ranking by the panel mean picked papers cited 7.75 percentile points higher. <a href="https://arxiv.org/abs/2609.19552">Golden ticket</a>' },
@@ -623,7 +639,7 @@
       note: 'In FY2026 NSF made 30% fewer new research projects; newcomers kept the same share (34.5% to 34.3%), through fewer doors. <a href="https://doi.org/10.31235/osf.io/9qpb7_v1">Newcomers</a>' },
     { draw: tally, animate: true, label: "Nine five-bar tally gates, three of them hollow",
       note: 'NIH&rsquo;s minority health label stayed on 99.4% of projects with unchanged summaries, but on 15.7% of those that no longer named a population; the funding stayed. <a href="https://arxiv.org/abs/2610.03443">Uncounted</a>' },
-    { draw: stars, label: "A constellation of articles, one linked to its five nearest",
+    { draw: stars, animate: true, label: "A constellation of articles, one linked to its five nearest",
       note: 'Over 750 articles in <i>Digital Humanities Quarterly</i>, each now shown with its nearest neighbors, found three ways. <a href="https://journal.code4lib.org/articles/18501">DHQ recommender</a>' },
     { draw: chameleon, label: "A chameleon on a branch, spelled in the letters of obfuscate",
       note: 'Writers can disguise their style by hand. Replicating Brennan et al. (2012), we reached the same conclusion, but the disguises may work less well than first reported. <a href="https://doi.org/10.17879/replicationresearch-2026-9414">Replication</a>' },
@@ -633,7 +649,7 @@
       note: 'Top-journal papers were followed by a new NIH or NSF award twice as often (55.3 vs 26.3 per 1,000), but the gap was as large two years before publication. <a href="https://doi.org/10.31235/osf.io/cf5u8_v1">Prestige</a>' },
     { draw: ducks, animate: true, label: "A mother duck leading three ducklings across the water",
       note: 'After NIH&rsquo;s 2018 K23 trial pathway, awardees led their award&rsquo;s own trial more often (13.7 percentage points), with no detectable gain in leading new trials. <a href="https://doi.org/10.64898/2026.10.09.758109">K23</a>' },
-    { draw: tortoiseHare, label: "A hare and a tortoise, the tortoise's shell highlighted",
+    { draw: tortoiseHare, animate: true, label: "A hare and a tortoise, the tortoise's shell highlighted",
       note: 'Thinking, fast and slow: DualReasoning pulls clinical knowledge out of messy medication records with LLMs. A distinguished poster nominee at AMIA 2025. <a href="https://drive.google.com/file/d/1r9FAD9tLjCtWvCUjI-enLxQ4FxUeflFd/view?usp=sharing">Poster</a>' },
     { draw: calendar, animate: true, needs: "cal", label: "A year of bioRxiv preprints, one mark per day",
       note: 'Every new bioRxiv preprint of 2025, one mark per day. Crosses: NIH R01 due dates. In the four weeks before each (bright), the US share of preprints rises 2.3 to 2.7 percentage points. <a href="https://doi.org/10.64898/2026.10.10.758253">Zeitgeber</a>' }

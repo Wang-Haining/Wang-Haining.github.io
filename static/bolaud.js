@@ -60,7 +60,7 @@
     "....OBBBOCCOBBBBBBBO......",
     ".....OOOOOOOOOOOOOO......."
   ];
-  var GROOM_PAC = { x: 12, y: 9, rows: [
+  var GROOM_PAW = { x: 12, y: 9, rows: [
     ".OOO..",
     "OCCCO.",
     "OCPCO.",
