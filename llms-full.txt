@@ -105,7 +105,7 @@ Haining does NLP with real-world data. A common thread: building computational m
 
 # Website: home and news
 
-Hi 👋, I'm a postdoctoral fellow in Biostatistics and Health Data Science at the Indiana University School of Medicine, with a PhD in Information Science from Indiana University. With language models and causal inference, I measure what records miss or misstate, and how those gaps shape care, access, and policy: [early signs of alcohol use disorder in medication lists](https://dualr.hainingwang.org), [how NIH and NSF fund and count science](/research#metasci), [fairness of AI in library services](https://doi.org/10.1057/s41599-026-08465-5), and [authorship attribution and author privacy](https://hdl.handle.net/2022/33626).
+Hi 👋, I'm a postdoctoral fellow in Biostatistics and Health Data Science at the Indiana University School of Medicine, with a PhD in Information Science from Indiana University. I study how AI and data shape care, access, and policy, and who gets left out. Institutions decide in words: prescriptions, grant abstracts, papers, answers to library patrons. I use language models to turn those words into measurements, and causal inference to test what changes them. That has meant finding [early signs of alcohol use disorder in medication lists](https://dualr.hainingwang.org), testing [whether AI serves library patrons fairly](https://doi.org/10.1057/s41599-026-08465-5), tracing [how NIH and NSF fund and count science](/research#metasci), and asking [whether writers can stay anonymous](https://hdl.handle.net/2022/33626).
 
 ### What's New
 
