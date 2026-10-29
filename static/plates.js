@@ -308,28 +308,49 @@
     return { cols: COLS, rows: ROWS };
   }
 
-  // ── Golden ticket: a ticket in the pop color; its letters spin like a lottery reel and settle on "lottery". ──
+  // ── Golden ticket: an admission ticket in the pop color, notched at the perforation, with a "$" badge; the body's
+  // letters spin like a lottery reel and settle on "lottery" while the stub's vertical text rolls "GOLDEN TICKET".
+  // Laid out square to the grid, then the whole ticket is tilted as one piece. ──
   function ticket(svg, t) {
-    var cols = 30, rows = 21, bg = el("g", {}, svg), g = el("g", {}, svg), f = frame(t), word = "lottery";
+    var cols = 30, rows = 21, bg = el("g", {}, svg), f = frame(t), word = "lottery", txt = "GOLDEN TICKET \u00b7 ";
+    var g = el("g", { transform: "rotate(-8 150 105)" }, svg);
     var p = t ? f % 70 : 69; // still frame: settled
-    beam(bg, "130 0 170 0 290 210 10 210", 150, 0, 150, 210, 0.14);
-    var body = coverage(cols, rows, function (x) {
-      x.fillRect(20, 44, 260, 122);
+    wash(bg, "ellipse", { cx: 150, cy: 108, rx: 140, ry: 90 }, 0.06);
+    function card(x) { // rounded card, x 30-270, y 40-170, notched top and bottom at the perforation (x = 205)
+      var r = 14, L = 30, R = 270, T = 40, B = 170;
+      x.beginPath(); x.moveTo(L + r, T); x.arcTo(R, T, R, B, r); x.arcTo(R, B, L, B, r);
+      x.arcTo(L, B, L, T, r); x.arcTo(L, T, R, T, r); x.fill();
       x.globalCompositeOperation = "destination-out";
-      [[20, 105], [280, 105]].forEach(function (c) { x.beginPath(); x.arc(c[0], c[1], 24, 0, 7); x.fill(); });
-      x.fillRect(210, 44, 10, 122);
-      x.fillRect(50, 74, 140, 2);
+      [T, B].forEach(function (y) { x.beginPath(); x.arc(205, y, 13, 0, 7); x.fill(); });
+    }
+    var body = coverage(cols, rows, function (x) {
+      card(x); x.fillRect(200, 0, 100, 210); x.beginPath(); x.arc(80, 105, 29, 0, 7); x.fill();
     });
-    var perf = coverage(cols, rows, function (x) { x.fillRect(210, 44, 10, 122); });
+    var stub = coverage(cols, rows, function (x) { card(x); x.fillRect(0, 0, 210, 210); });
+    var badge = coverage(cols, rows, function (x) {
+      x.beginPath(); x.arc(80, 105, 26, 0, 7); x.fill();
+      x.globalCompositeOperation = "destination-out"; x.beginPath(); x.arc(80, 105, 17, 0, 7); x.fill();
+    });
+    var perf = coverage(cols, rows, function (x) { card(x); x.globalCompositeOperation = "source-in"; x.fillRect(200, 0, 10, 210); });
+    var TC = 23; // the stub's text column
     mosaic(g, cols, rows, [
       { cov: perf, edge: false, mix: [["dot", 1]] },
+      { cov: badge, edge: false, mix: [["ring", 60], ["disc", 25], ["dot", 15]] },
       { cov: body, hi: true, chars: word, edge: false, mix: [["tile", 70], ["disc", 14], ["ring", 6], ["dot", 10]],
         charFn: function (n, q) { // each column stops spinning a little later than the one to its left
           return p < 8 + q * 1.3 ? "abcdefghijklmnopqrstuvwxyz"[Math.floor(rnd(n, f, 93) * 26)] : word[n % word.length]; } }
     ], 91);
-    if (t) for (var k = 0; k < 14; k++) { // sparkle in the spotlight
-      var u = rnd(k, f, 94), r = Math.floor(rnd(k, f, 95) * 4), q = 13 + Math.round((u - 0.5) * (4 + r * 2));
-      glyph(g, q, r, u < 0.5 ? "dot" : "plus", "", false);
+    var dl = el("text", { x: 80, y: 112, fill: "rgba(255,255,255,0.95)", style: "font-size:20px" }, g);
+    dl.textContent = "$";
+    // The stub: textured like the body; one column carries vertical text that reads upward and rolls like a ticker.
+    var off = t ? Math.floor(f / 2) % txt.length : 0, i = 0; // one letter every two frames
+    for (var r = rows - 1; r >= 0; r--) for (var q = 0; q < cols; q++) {
+      if (stub[r][q] < 0.5) continue;
+      if (q !== TC) { glyph(g, q, r, pick(rnd(q, r, 96), [["tile", 60], ["disc", 22], ["ring", 8], ["dot", 10]]), "", true); continue; }
+      glyph(g, q, r, "tile", "", true);
+      var cx = q * S + S / 2, cy = r * S + S / 2, e = el("text", { x: cx, y: cy + 3.2, "class": "pl-th",
+        transform: "rotate(-90 " + cx + " " + cy + ")", style: "font-size:9px" }, g);
+      e.textContent = txt[(i++ + off) % txt.length];
     }
     return { cols: cols, rows: rows };
   }
@@ -649,7 +670,7 @@
       note: 'Signed 独应 (Du Ying) in 1912, &lsquo;Looking at the Country of China&rsquo; was written by Lu Xun. <a href="https://doi.org/10.1093/llc/fqae084">Du Ying</a>' },
     { draw: fingerprint, animate: true, label: "A fingerprint spelled in the words the, of, and, to, a",
       note: 'The, of, and: small words no one chooses on purpose add up to a writer&rsquo;s fingerprint. <a href="/teaching/stylometry/">Stylometry lab</a>' },
-    { draw: ticket, animate: true, label: "A golden ticket spelled in the letters of lottery",
+    { draw: ticket, animate: true, label: "A tilted golden ticket spelled in the letters of lottery; its stub reads GOLDEN TICKET",
       note: 'On 10,625 rejected conference submissions, the golden ticket picked like a lottery; ranking by the panel mean picked papers cited 7.75 percentile points higher. <a href="https://arxiv.org/abs/2609.19552">Golden ticket</a>' },
     { draw: padlock, animate: true, label: "An open padlock whose body spells PMC",
       note: 'After NIH ended its 12-month embargo, NIH-funded papers in PubMed Central within a week of publication doubled from 11% to 22% in journals outside DOAJ. <a href="https://arxiv.org/abs/2609.14842">Embargo</a>' },
