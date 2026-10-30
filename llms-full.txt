@@ -109,6 +109,8 @@ Hi 👋, I'm a postdoctoral fellow in Biostatistics and Health Data Science at t
 
 ### What's New
 
+* (Oct 29, 2026) Our poster, ["Agentic Delphi for Phenotyping Immune-Related Acute Kidney Injury in Cancer Patients with Immunotherapies"](https://drive.google.com/file/d/1_7QAk8PAkIo2ASaMTJuSQrUSyqX8Kyd8/view?usp=sharing), will be at *AMIA 2026* in Dallas: seven AI agents debate like a clinical Delphi panel over whether immunotherapy caused a patient's kidney injury. Come find us at Poster 178 on Tue, Nov 10, 5:00–6:30 pm 👋
+
 * (Oct 15, 2026) I gave a guest lecture on stylometry, ["Who Wrote This? Fingerprints and Disguises in the Age of LLMs"](https://claude.ai/artifact/1dbZhF4BwfGHwRs6nkYbDF), in Dr. Allen Riddell's *Digital Humanities* course at Indiana University. The [stylometry lab](/teaching/stylometry/) that goes with it is free and open to anyone: four real cases you can run in your browser 🔍 The full lecture is now [on YouTube](https://youtu.be/PBQCpIYYFSo) too 🎬
 
 * (Oct 14, 2026) Three more preprints on federal funding and research careers 📈
