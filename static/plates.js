@@ -81,15 +81,6 @@
     el("stop", { offset: "1", "stop-color": "#fff", "stop-opacity": 0 }, rg);
     return el("circle", { cx: cx, cy: cy, r: r, fill: "url(#" + id + ")" }, g);
   }
-  function water(g, y, W, H) { // a water band from y down, with a few ripple lines
-    wash(g, "rect", { x: 0, y: y, width: W, height: (H || 210) - y }, 0.07);
-    for (var k = 0; k < 4; k++) {
-      var yy = y + 8 + k * 11, d = "M0 " + yy;
-      for (var t = 0; t <= W; t += 10) d += " L" + t + " " + (yy + 2 * Math.sin(t / 12 + k));
-      el("path", { d: d, fill: "none", stroke: "rgba(255,255,255," + (0.16 - k * 0.03) + ")", "stroke-width": 1.2 }, g);
-    }
-  }
-
   function frame(t) { return Math.round((t || 0) / 0.35); } // animation frame, about 6 per second
 
   function pick(u, mix) { // mix: [[kind, weight], ...]
@@ -493,12 +484,11 @@
   }
 
   // ── NovEval: a platypus, the classic odd combination; the bill in the pop color, the body spelled "surprise".
-  //    It swims: bobs on the water, drifts forward and back, paddles its tail and feet, and leaves ripples behind. ──
+  //    It swims: bobs, drifts forward and back, and paddles its tail and feet. ──
   function platypus(svg, t) {
-    var cols = 30, rows = 21, bg = el("g", {}, svg), g = el("g", {}, svg), f = frame(t);
+    var cols = 30, rows = 21, g = el("g", {}, svg);
     var dx = t ? 10 * Math.sin(t * 0.35) : 0, dy = t ? 3.5 * Math.sin(t * 1.3) : 0, tail = t ? 0.28 * Math.sin(t * 2.2) : 0.1;
     var kick = t ? Math.round(5 * Math.sin(t * 2.6)) : 0;
-    water(bg, 132, 300);
     var body = coverage(cols, rows, function (x) {
       x.translate(dx, dy);
       x.beginPath(); x.ellipse(150, 110, 78, 36, 0, 0, 7); x.fill();
@@ -517,8 +507,6 @@
       { cov: bill, hi: true, edge: false, mix: [["tile", 1]] },
       { cov: body, chars: "surprise", mix: [["tile", 46], ["disc", 18], ["ring", 12], ["diamond", 8], ["plus", 8], ["dot", 8]] }
     ], 151);
-    if (t) for (var r = 15; r < rows; r += 2) for (var q = 0; q < 10; q++) // a wake of ripples drifting back from the tail
-      if ((q + f + r * 2) % 6 === 0) glyph(g, q, r, "char", "~", false);
     return { cols: cols, rows: rows };
   }
 
@@ -555,11 +543,10 @@
     return { cols: cols, rows: rows };
   }
 
-  // ── K23: a mother duck leading three ducklings across the water; the ducklings in the pop color. ──
+  // ── K23: a mother duck leading three ducklings; the ducklings in the pop color. ──
   //    A finer 40 x 28 grid, so the heads and bills read.
   function ducks(svg, t) {
-    var cols = 40, rows = 28, bg = el("g", {}, svg), g = el("g", {}, svg), wl = 222, W = wl, f = frame(t);
-    water(bg, wl, 400, 280);
+    var cols = 40, rows = 28, g = el("g", {}, svg), wl = 222, W = wl;
     function duck(x, cx, k) { // side view facing right, floating on the waterline
       x.beginPath();
       x.moveTo(cx - 52 * k, wl - 30 * k);
@@ -585,8 +572,6 @@
       { cov: kids, hi: true, edge: false, mix: [["tile", 64], ["disc", 36]] },
       { cov: mom, chars: "K23", edge: false, mix: [["tile", 52], ["disc", 18], ["ring", 12], ["diamond", 6], ["plus", 6], ["dot", 6]] }
     ], 171);
-    for (var r = 23; r < rows; r += 2) for (var q = 0; q < cols; q++) // ripples drifting left
-      if ((q + f + r * 3) % 9 === 0) glyph(g, q, r, "char", "~", false);
     return { cols: cols, rows: rows };
   }
 
@@ -686,7 +671,7 @@
       note: 'Novelty as an atypical combination of existing knowledge, measured by how surprised a language model is. Think duck bill on a beaver tail. <a href="https://doi.org/10.1007/978-3-031-57867-0_31">NovEval</a>' },
     { draw: peacock, animate: true, label: "A peacock in full display, the eyes of its train highlighted",
       note: 'Top-journal papers were followed by a new NIH or NSF award twice as often (55.3 vs 26.3 per 1,000), but the gap was as large two years before publication. <a href="https://doi.org/10.31235/osf.io/cf5u8_v1">Prestige</a>' },
-    { draw: ducks, animate: true, label: "A mother duck leading three ducklings across the water",
+    { draw: ducks, animate: true, label: "A mother duck leading three ducklings",
       note: 'After NIH&rsquo;s 2018 K23 trial pathway, awardees led their award&rsquo;s own trial more often (13.7 percentage points), with no detectable gain in leading new trials. <a href="https://doi.org/10.64898/2026.10.09.758109">K23</a>' },
     { draw: tortoiseHare, animate: true, label: "A hare and a tortoise, the tortoise's shell highlighted",
       note: 'Thinking, fast and slow: DualReasoning pulls clinical knowledge out of messy medication records with LLMs. A distinguished poster nominee at AMIA 2025. <a href="https://drive.google.com/file/d/1r9FAD9tLjCtWvCUjI-enLxQ4FxUeflFd/view?usp=sharing">Poster</a>' },
