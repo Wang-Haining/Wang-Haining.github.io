@@ -651,13 +651,13 @@
     { draw: fingerprint, animate: true, label: "A fingerprint spelled in the words the, of, and, to, a",
       note: 'The, of, and: small words no one chooses on purpose add up to a writer&rsquo;s fingerprint. <a href="/teaching/stylometry/">Stylometry lab</a>' },
     { draw: ticket, animate: true, label: "A tilted golden ticket spelled in the letters of lottery; its stub reads GOLDEN TICKET",
-      note: 'On 10,625 rejected conference submissions, the golden ticket picked like a lottery; ranking by the panel mean picked papers cited 7.75 percentile points higher. <a href="https://arxiv.org/abs/2609.19552">Golden ticket</a>' },
+      note: 'On more than 10,000 rejected conference papers, the golden ticket picked like a lottery. The panel&rsquo;s plain average picked papers that went on to be cited more. <a href="https://arxiv.org/abs/2609.19552">Golden ticket</a>' },
     { draw: padlock, animate: true, label: "An open padlock whose body spells PMC",
-      note: 'After NIH ended its 12-month embargo, availability in PubMed Central four months after publication rose 19.4 percentage points more for NIH-funded articles than for matched articles. Within a week of publication, the effect was 0.3 points. <a href="https://arxiv.org/abs/2609.14842">Embargo</a>' },
+      note: 'Ending NIH&rsquo;s 12-month embargo opened about one in five more funded papers to the public within four months, compared with similar papers. In the first week, almost nothing changed. <a href="https://arxiv.org/abs/2609.14842">Embargo</a>' },
     { draw: doors, label: "Ten doorways, three of them shut",
-      note: 'In FY2026 NSF made 30% fewer new research projects; newcomers kept the same share (34.5% to 34.3%), through fewer doors. <a href="https://doi.org/10.31235/osf.io/9qpb7_v1">Newcomers</a>' },
+      note: 'In FY2026 NSF funded about 30% fewer new research projects. Newcomers kept their share, about a third, through fewer doors. <a href="https://doi.org/10.31235/osf.io/9qpb7_v1">Newcomers</a>' },
     { draw: tally, animate: true, label: "Nine five-bar tally gates, three of them hollow",
-      note: 'NIH&rsquo;s minority health label stayed on 99.4% of projects with unchanged summaries, but on 15.7% of those that no longer named a population; the funding stayed. <a href="https://arxiv.org/abs/2610.03443">Uncounted</a>' },
+      note: 'NIH&rsquo;s minority health label stayed on nearly every project with an unchanged summary, but on only about one in six that stopped naming a population. The funding stayed. <a href="https://arxiv.org/abs/2610.03443">Uncounted</a>' },
     { draw: stars, animate: true, label: "A constellation of articles, one linked to its five nearest",
       note: 'Over 750 articles in <i>Digital Humanities Quarterly</i>, each now shown with its nearest neighbors, found three ways. <a href="https://journal.code4lib.org/articles/18501">DHQ recommender</a>' },
     { draw: chameleon, animate: true, label: "A chameleon on a branch, spelled in the letters of obfuscate",
@@ -665,13 +665,13 @@
     { draw: platypus, label: "A platypus spelled in the letters of surprise, its bill highlighted",
       note: 'Novelty as an atypical combination of existing knowledge, measured by how surprised a language model is. Think duck bill on a beaver tail. <a href="https://doi.org/10.1007/978-3-031-57867-0_31">NovEval</a>' },
     { draw: peacock, animate: true, label: "A peacock in full display, the eyes of its train highlighted",
-      note: 'Top-journal papers were followed by a new NIH or NSF award twice as often (55.3 vs 26.3 per 1,000), but the gap was as large two years before publication. <a href="https://doi.org/10.31235/osf.io/cf5u8_v1">Prestige</a>' },
+      note: 'Top-journal papers were followed by a new NIH or NSF award twice as often, but the gap was just as large two years before publication. <a href="https://doi.org/10.31235/osf.io/cf5u8_v1">Prestige</a>' },
     { draw: ducks, animate: true, label: "A mother duck leading three ducklings",
-      note: 'After NIH&rsquo;s 2018 K23 trial pathway, awardees led their award&rsquo;s own trial more often (13.7 percentage points), with no detectable gain in leading new trials. <a href="https://doi.org/10.64898/2026.10.09.758109">K23</a>' },
+      note: 'After NIH&rsquo;s 2018 K23 trial pathway, awardees led their award&rsquo;s own trial more often, with no clear gain in leading new trials. <a href="https://doi.org/10.64898/2026.10.09.758109">K23</a>' },
     { draw: tortoiseHare, animate: true, label: "A hare and a tortoise, the tortoise's shell highlighted",
       note: 'Thinking, fast and slow: DualReasoning pulls clinical knowledge out of messy medication records with LLMs. A distinguished poster nominee at AMIA 2025. <a href="https://drive.google.com/file/d/1r9FAD9tLjCtWvCUjI-enLxQ4FxUeflFd/view?usp=sharing">Poster</a>' },
     { draw: calendar, animate: true, needs: "cal", label: "A year of bioRxiv preprints, one mark per day",
-      note: 'Every new bioRxiv preprint of 2025, one mark per day. Crosses: NIH R01 due dates. In the four weeks before each (bright), the US share of preprints rises 2.3 to 2.7 percentage points. <a href="https://doi.org/10.64898/2026.10.10.758253">Zeitgeber</a>' }
+      note: 'Every new bioRxiv preprint of 2025, one mark per day. Crosses: NIH R01 due dates. In the four weeks before each (bright), the US share of preprints ticks up. <a href="https://doi.org/10.64898/2026.10.10.758253">Zeitgeber</a>' }
   ];
 
   function mount() {
