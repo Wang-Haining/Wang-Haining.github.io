@@ -653,7 +653,7 @@
     { draw: ticket, animate: true, label: "A tilted golden ticket spelled in the letters of lottery; its stub reads GOLDEN TICKET",
       note: 'On 10,625 rejected conference submissions, the golden ticket picked like a lottery; ranking by the panel mean picked papers cited 7.75 percentile points higher. <a href="https://arxiv.org/abs/2609.19552">Golden ticket</a>' },
     { draw: padlock, animate: true, label: "An open padlock whose body spells PMC",
-      note: 'After NIH ended its 12-month embargo, NIH-funded papers in PubMed Central within a week of publication doubled from 11% to 22% in journals outside DOAJ. <a href="https://arxiv.org/abs/2609.14842">Embargo</a>' },
+      note: 'After NIH ended its 12-month embargo, availability in PubMed Central four months after publication rose 19.4 percentage points more for NIH-funded articles than for matched articles. Within a week of publication, the effect was 0.3 points. <a href="https://arxiv.org/abs/2609.14842">Embargo</a>' },
     { draw: doors, label: "Ten doorways, three of them shut",
       note: 'In FY2026 NSF made 30% fewer new research projects; newcomers kept the same share (34.5% to 34.3%), through fewer doors. <a href="https://doi.org/10.31235/osf.io/9qpb7_v1">Newcomers</a>' },
     { draw: tally, animate: true, label: "Nine five-bar tally gates, three of them hollow",
