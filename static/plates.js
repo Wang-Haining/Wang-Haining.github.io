@@ -643,7 +643,7 @@
     { draw: tower, animate: true, label: "An ivory tower built from the letters of jargon, with six lit steps down to the door",
       note: 'Rewritten by a language model, scholarly abstracts come down about six US grade levels, from postgraduate to high school. <a href="https://doi.org/10.1007/s11192-025-05386-z">Ivory tower</a>' },
     { draw: capsule, label: "A capsule spelled from the letters of medication list",
-      note: 'From the medication list alone, DualR flagged alcohol use disorder more than 300 days before diagnosis, across more than 1.3 million people. <a href="https://dualr.hainingwang.org">DualR</a>' },
+      note: 'From the medication list alone, DualR flagged alcohol use disorder months before diagnosis, across more than 1.3 million people. <a href="https://dualr.hainingwang.org">DualR</a>' },
     { draw: scale, animate: true, label: "A level balance with three weights on each pan",
       note: 'Six LLMs answered library patrons who differed in race, sex and role: no differentiation by race or ethnicity, minor bias against women in one model. <a href="https://doi.org/10.1057/s41599-026-08465-5">Fairness audit</a>' },
     { draw: paper, animate: true, label: "A 1912 newspaper page in vertical columns of Chinese characters, titled 望华国篇 and signed 独应",
