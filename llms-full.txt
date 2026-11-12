@@ -93,7 +93,7 @@ Haining does NLP with real-world data. A common thread: building computational m
 ## Service
 - Data Analytics Editor, Digital Humanities Quarterly (2024-present); co-editor of a forthcoming DHQ special issue, "AI for Digital Humanities: Research Problems and Critical Approaches."
 - Research Affiliate, Center for Rare Book Conservation and Restoration Research, Wuhan University.
-- Reviewer for journals including Nature Communications, Artificial Intelligence, Humanities & Social Sciences Communications, Digital Scholarship in the Humanities, College & Research Libraries, Journal of Academic Librarianship, IEEE JBHI, Scientific Reports; and for AMIA, ACL Rolling Review, iConference, DH, ASIS&T, RANLP.
+- Reviewer for journals including Nature Communications, Artificial Intelligence, Research Evaluation, Humanities & Social Sciences Communications, Digital Scholarship in the Humanities, College & Research Libraries, Journal of Academic Librarianship, IEEE JBHI, Scientific Reports; and for AMIA, ACL Rolling Review, iConference, DH, ASIS&T, RANLP.
 
 ## Book
 - "Defending Against Authorship Identification Attacks" (Synthesis Lectures on Human Language Technologies, Springer Nature): full manuscript under external review.
