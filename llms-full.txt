@@ -91,7 +91,7 @@ Haining does NLP with real-world data. A common thread: building computational m
 - AMIA 2025 Distinguished Poster Award nominee; iConference 2025 Best Paper Finalist; ACM SIGIR Student Travel Grant (2024); LEADING Fellowship, IMLS (2022); HASTAC Scholar, IU (2022).
 
 ## Service
-- Data Analytics Editor, Digital Humanities Quarterly (2024-present); co-editor of a forthcoming DHQ special issue, "AI for Digital Humanities: Research Problems and Critical Approaches"; guest co-editor of the DHQ special issue "AI in Research" (2026, with Ben Lee and Julia Flanders), drafting author feedback letters from peer reviews and advising the editors on decisions; on the editorial team of the DHQ special issue "AI Pedagogy" (2026-present, with Julia Flanders and Amanda Licastro), triaging and selecting among 38 proposals.
+- Data Analytics Editor, Digital Humanities Quarterly (2024-present); co-editor of a forthcoming DHQ special issue, "AI for Digital Humanities: Research Problems and Critical Approaches"; on the editorial team of the DHQ special issue "AI Pedagogy" (2026-present, with Julia Flanders and Amanda Licastro).
 - Research Affiliate, Center for Rare Book Conservation and Restoration Research, Wuhan University.
 - Reviewer for journals including Nature Communications, Artificial Intelligence, Research Evaluation, Humanities & Social Sciences Communications, Digital Scholarship in the Humanities, College & Research Libraries, Journal of Academic Librarianship, IEEE JBHI, Scientific Reports; and for AMIA, ACL Rolling Review, iConference, DH, ASIS&T, RANLP.
 
