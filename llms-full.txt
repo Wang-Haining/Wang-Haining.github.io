@@ -109,7 +109,7 @@ Hi 👋, I'm a postdoctoral fellow in Biostatistics and Health Data Science at t
 
 ### What's New
 
-* (Nov 19, 2026) I gave the "Who Wrote This?" lecture again, this time online for Dr. Xiaojun Yuan's *Information in the 21st Century* course at the University at Albany.
+* (Nov 19, 2026) I gave the ["Who Wrote This?"](https://claude.ai/artifact/1dbZhF4BwfGHwRs6nkYbDF) lecture again, this time online for Dr. Xiaojun Yuan's *Information in the 21st Century* course at the University at Albany.
 
 * (Nov 10, 2026) Our poster, ["Agentic Delphi for Phenotyping Immune-Related Acute Kidney Injury in Cancer Patients with Immunotherapies"](https://drive.google.com/file/d/1_7QAk8PAkIo2ASaMTJuSQrUSyqX8Kyd8/view?usp=sharing), was nominated as a distinguished poster at *AMIA 2026* in Dallas! 🎉 Seven AI agents debate like a cancer panel over whether immunotherapy caused a patient's kidney injury. Thanks to everyone who stopped by 👋
 
